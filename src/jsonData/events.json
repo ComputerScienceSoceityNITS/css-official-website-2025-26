@@ -19,10 +19,13 @@
             "date": "",
             "venue": "",
             "organizer":"Computer Science Society",
+            "registrationLink": "@",
+            "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757495059/Abacus_az0bsl.png",
             "more-events":[
                 {
                     "name":"CSS Hacks",
                     "slug": "css-hacks",
+                    "description":"CSS Hacks, the ultimate web development hackathon under ABACUS, and this time, the grid is charged with cyberpunk energy.Brainstorm. Break into the mainframe of creativity and pitch your most innovative ideas.",
                     "status":"upcoming",
                     "date": "",
                     "venue": "",
@@ -32,6 +35,7 @@
                 {
                     "name":"Datathon",
                     "slug":"datathon",
+                     "description":"Jack into the mainframe, sync your neural uplink, and brace yourself for a high-stakes descent into the raw pulse of data. The Neon Grid Datathon isn’t just a contest—it’s a warzone of intellect, where cyber-sleuths, AI tacticians, and code-warriors decrypt the future one dataset at a time.",
                     "status":"upcoming",
                     "date": "",
                     "venue": "",
@@ -41,11 +45,56 @@
                 {
                     "name":"Open Source Marathon",
                     "slug":"open source marathon",
+                    "description":"With the Open Source Marathon, the Computer Science Society sets their sights on helping students explore the dark back-alleys of open-source software development, in the process, having them gang-up with their peers, and enabling them to build their empire in open-source software.",
                     "status":"upcoming",
                     "date": "",
                     "venue": "",
                     "registration-link": null,
                     "poster-url":  null
+                },
+                {
+                    "name": "Treasure Hunt",
+                   " slug": "treasure-hunt",
+                    "description":"Get ready for the ultimate test of wit, teamwork, and strategy! Are you ready to decipher cryptic clues and claim The Final Paycheque? CSS brings you the most thrilling treasure hunt across the campus!",
+                    "status": "upcoming",
+                    "organizer": "Computer Science Society",
+                    "date": "",
+                    "venue": "",
+                    "registrationLink": null,
+                    "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png"
+                },
+                {
+                    "name": "Abacus Got Latent",
+                    "slug": "abacus-got-latent",
+                    "description":"Aspiring to become Samay Raina but don’t want to go to JAIL! Welcome to ‘ABACUS Got LATENT’, the ultimate talent showdown where self-awareness meets creativity! This is your chance to showcase your hidden talent- whether it’s dark comedy, mimicry, singing, acting, or any unique skill.",
+                    "status": "upcoming",
+                    "organizer": "Computer Science Society",
+                    "date": "",
+                    "venue": "",
+                    "registrationLink": null,
+                    "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501445/Screenshot_2025-09-10_162215_w81bsa.png"
+                },
+                {
+                    "name": "Chase Cloud 9",
+                    "slug": "chase-cloud-9",
+                    "description":"Chase Cloud 9, an intense challenge brought by the Computer Science Society. It’s the ultimate test to find the next tech masterminds—designed to simulate the most rigorous real-world recruitment processes.",
+                    "status": "upcoming",
+                    "organizer": "Computer Science Society",
+                    "date": "",
+                    "venue": "",
+                    "registrationLink": null,
+                    "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png"
+                },
+                {
+                    "name": "Riddlex",
+                    "slug": "riddlex",
+                    "description":"Riddlex is here to put your wits to the test! No DSA, no CP—just pure mind-bending fun. Crack the code, claim the prize, and show the system who’s boss! Are you up for the challenge?",
+                    "status": "upcoming",
+                    "organizer": "Computer Science Society",
+                    "date": "",
+                    "venue": "",
+                    "registrationLink": null,
+                    "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501771/Screenshot_2025-09-10_162735_jjocgt.png"
                 }
             ]
         
