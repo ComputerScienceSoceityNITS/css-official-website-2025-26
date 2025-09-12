@@ -17,7 +17,7 @@ const eventsContent = {
         date: "",
         venue: "",
         organizer: "Computer Science Society",
-        registrationLink: "@",
+        registrationLink: "",
         "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757495059/Abacus_az0bsl.png",
         
         moreEvents: [
@@ -113,7 +113,7 @@ const eventsContent = {
         venue: "",
         organizer: "CP Wing",
         "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498092/Screenshot_2025-09-10_152620_zjn6hp.png",
-        registrationLink: "@",
+        registrationLink: "",
         moreEvents: null,
       },
 
