@@ -6,18 +6,22 @@ import Layout from './components/Layout'
 import Developers from './pages/Developers'
 import Events from './pages/Events'
 import MoreEvents from './pages/MoreEvents'
+import  Wings from './pages/Wings'
+import EditorialsComingSoon from './pages/Editorials'
+
 const App = () => {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/members" element={<Member />} />
-          <Route path="/developers" element={<Developers />} />
-          <Route path= "/events" element={<Events />}/>
-          <Route path="/events/:slug" element={<MoreEvents />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/members" element={<Member />} />
+        <Route path="/developers" element={<Developers />} />
+        <Route path="/wings" element={<Wings />} />
+        <Route path="/editorials" element={<EditorialsComingSoon />} />
+        <Route path= "/events" element={<Events />}/>
+        <Route path="/events/:slug" element={<MoreEvents />} />
+      </Routes>
+
     </BrowserRouter>
   )
 }
