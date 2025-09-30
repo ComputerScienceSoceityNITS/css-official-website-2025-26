@@ -4,9 +4,10 @@ import Member from './pages/Member'
 import Home from './pages/Home'  
 import Layout from './components/Layout'
 import Developers from './pages/Developers'
+import Events from './pages/Events'
+import MoreEvents from './pages/MoreEvents'
 import  Wings from './pages/Wings'
 import EditorialsComingSoon from './pages/Editorials'
-
 
 const App = () => {
   return (
@@ -17,7 +18,10 @@ const App = () => {
         <Route path="/developers" element={<Developers />} />
         <Route path="/wings" element={<Wings />} />
         <Route path="/editorials" element={<EditorialsComingSoon />} />
+        <Route path= "/events" element={<Events />}/>
+        <Route path="/events/:slug" element={<MoreEvents />} />
       </Routes>
+
     </BrowserRouter>
   )
 }
