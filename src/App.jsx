@@ -12,16 +12,72 @@ import MoreEvents from './pages/MoreEvents'
 const App = () => {
   return (
     <BrowserRouter>
-      <NavbarDemo />
+      {/* Render NavbarDemo for all routes except Home */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/members" element={<Member />} />
-        <Route path="/developers" element={<Developers />} />
-        <Route path="/wings" element={<Wings />} />
-        <Route path="/events" element={<Events />} />
-        <Route path="/events/:slug" element={<MoreEvents />} />
-        <Route path="/editorials" element={<EditorialsComingSoon />} />
-        <Route path="/login" element={<Login />} /> {/* Added Login route */}
+        <Route
+          path="/members"
+          element={
+            <>
+              <NavbarDemo />
+              <Member />
+            </>
+          }
+        />
+        <Route
+          path="/developers"
+          element={
+            <>
+              <NavbarDemo />
+              <Developers />
+            </>
+          }
+        />
+        <Route
+          path="/wings"
+          element={
+            <>
+              <NavbarDemo />
+              <Wings />
+            </>
+          }
+        />
+        <Route
+          path="/events"
+          element={
+            <>
+              <NavbarDemo />
+              <Events />
+            </>
+          }
+        />
+        <Route
+          path="/events/:slug"
+          element={
+            <>
+              <NavbarDemo />
+              <MoreEvents />
+            </>
+          }
+        />
+        <Route
+          path="/editorials"
+          element={
+            <>
+              <NavbarDemo />
+              <EditorialsComingSoon />
+            </>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <>
+              <NavbarDemo />
+              <Login />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )
