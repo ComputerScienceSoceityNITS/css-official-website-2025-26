@@ -53,15 +53,15 @@ const Wings = () => {
     "font-bold font-['Goldman']", // Literature Wing
   ]
 
-  // Image URLs for each wing
+  // Emojis for each wing
   const wingImages = [
-    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177346/xxztrtw9kj747xt64jd8.png', // Executive Wing
-    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177845/x8g8su8k952wrli3eosb.png', // Dev Wing
-    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177573/iad8qjgrxxo0yhovypsk.jpg', // CP Wing
-    'https://i.pinimg.com/736x/71/b8/4f/71b84f6710433f6b81d533766fa2d78b.jpg', // ML Wing
-    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177714/opwjrjl0xqauc16exzrj.jpg', // PR Wing
-    '/images/design-wing.png', // Design Wing
-    '/images/literature-wing.png', // Literature Wing
+    '👑', // Executive Wing
+    '💻', // Dev Wing
+    '🧠', // CP Wing
+    '🤖', // ML Wing
+    '📢', // PR Wing
+    '🎨', // Design Wing
+    '📝', // Literature Wing
   ]
 
   // Animation variants for timeline markers
@@ -700,7 +700,7 @@ const Wings = () => {
             key={index}
             className="flex justify-start pt-10 md:pt-40 md:gap-10"
           >
-            <div className="sticky flex flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
+            <div className="hidden md:flex sticky flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
               <motion.div
                 className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-black flex items-center justify-center border border-cyan-500/50"
                 variants={markerVariants}
@@ -714,14 +714,7 @@ const Wings = () => {
                   whileHover={{ scale: 1.2 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
-                  <div className="hidden md:block">
-                    <img
-                      src={wingImages[index]}
-                      alt={`${item.title} icon`}
-                      className="h-6 w-6 object-contain rounded-full"
-                    />
-                  </div>
-                  <div className="md:hidden h-6 w-6 bg-cyan-500/50 rounded-full"></div>
+                  <span className="text-lg">{wingImages[index]}</span>
                 </motion.div>
               </motion.div>
               <h3
@@ -756,7 +749,7 @@ const Wings = () => {
                       particleColor="#38BDF8"
                     />
                   </div>
-                  {item.title}
+                  {item.title} {wingImages[index]}
                 </h3>
                 {item.content}
               </div>
@@ -764,10 +757,10 @@ const Wings = () => {
           </div>
         ))}
         <div
+          className="hidden md:block absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-cyan-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
           style={{
             height: height + 'px',
           }}
-          className="absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-cyan-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
         >
           <motion.div
             style={{
