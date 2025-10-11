@@ -6,6 +6,7 @@ import Developers from './pages/Developers'
 import Wings from './pages/Wings'
 import EditorialsComingSoon from './pages/Editorials'
 import { NavbarDemo } from './components/Navbar'
+import Footer from './components/Footer'
 import Events from './pages/Events'
 import MoreEvents from './pages/MoreEvents'
 
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/editorials" element={<EditorialsComingSoon />} />
         <Route path="/login" element={<Login />} /> {/* Added Login route */}
       </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }
