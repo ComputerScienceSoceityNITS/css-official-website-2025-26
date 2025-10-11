@@ -13,7 +13,6 @@ function Home() {
   const [input, setInput] = useState('')
   const svgRef = useRef(null)
   const animationRef = useRef(null)
-  const navbarRef = useRef(null)
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -60,13 +59,13 @@ function Home() {
       finalScale = 15
     }
 
-    // Set initial state for video animation
+    // Set initial state
     gsap.set('.vi-mask-group', {
       scale: initialScale,
       transformOrigin: 'center center',
     })
 
-    // Create the video animation
+    // Create the animation
     animationRef.current = gsap.to('.vi-mask-group', {
       rotate: 10,
       scale: finalScale,
@@ -103,20 +102,6 @@ function Home() {
         start: 'top center', // Starts when the top of ".about" hits the viewport center
         toggleActions: 'play none none reverse', // Fades in on scroll down, fades out on scroll up
       },
-    })
-
-    // Navbar animation: Slide in from bottom on initial load
-    gsap.set(navbarRef.current, {
-      yPercent: 100, // Start off-screen at the bottom (relative to its own height)
-      autoAlpha: 0, // Initially invisible
-    })
-
-    gsap.to(navbarRef.current, {
-      yPercent: 0, // Slide to its normal position
-      autoAlpha: 1, // Fade in
-      duration: 1, // Smooth animation duration
-      ease: 'power3.out', // Smoother easing for a polished effect
-      delay: 0.3, // Slight delay to ensure page load stability
     })
 
     // Add resize event listener to refresh ScrollTrigger on orientation changes
@@ -171,10 +156,8 @@ function Home() {
           </foreignObject>
         </svg>
       </div>
-      {/* NavbarDemo with ref for animation, sticky positioning */}
-      <div ref={navbarRef} className="sticky top-0 z-[200]">
-        <NavbarDemo />
-      </div>
+      {/* Add NavbarDemo after the video section */}
+      <NavbarDemo />
       {/* Add a simple fallback for mobile if video doesn't play */}
       <div className="mobile-fallback hidden absolute inset-0 bg-gradient-to-b from-blue-900 to-purple-900">
         <div className="flex items-center justify-center h-full">
@@ -282,6 +265,7 @@ function Home() {
         </div>
         {/* Foreground Terminal Box */}
         <div className="relative z-10 w-full max-w-[1200px] bg-black/70 rounded-xl border border-cyan-500/20 p-3 md:p-10 backdrop-blur-md shadow-lg shadow-cyan-500/10">
+          {/* Terminal Header */}
           <div className="flex items-center mb-4">
             <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
             <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
@@ -290,12 +274,14 @@ function Home() {
               ANNOUNCEMENTS_TERMINAL
             </span>
           </div>
+          {/* Terminal Title */}
           <h2 className="text-2xl md:text-3xl font-mono font-bold text-green-400 mb-4">
             <span className="text-cyan-400">$~ </span> Announcements
           </h2>
+          {/* Carousel */}
           <div className="w-full flex justify-center">
             <Carousel
-              baseWidth={650}
+              baseWidth={650} // bigger images
               autoplay={true}
               autoplayDelay={3000}
               pauseOnHover={true}

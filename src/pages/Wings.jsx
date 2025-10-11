@@ -1,5 +1,5 @@
 'use client'
-import { useScroll, useTransform, motion, useInView } from 'framer-motion'
+import { useScroll, useTransform, motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import { SparklesCore } from '../components/ui/sparkles'
 
@@ -9,7 +9,6 @@ const Wings = () => {
   const [height, setHeight] = useState(0)
   const [activeTerminal, setActiveTerminal] = useState(null)
   const [scrollDirection, setScrollDirection] = useState('down')
-  const terminalRefs = useRef([])
   const lastScrollY = useRef(0)
 
   useEffect(() => {
@@ -54,19 +53,18 @@ const Wings = () => {
     "font-bold font-['Goldman']", // Literature Wing
   ]
 
-  // Icons for each wing
-  const wingIcons = [
-    '👑', // Executive Wing - crown
-    '💻', // Dev Wing - laptop
-    '⚡', // CP Wing - lightning bolt
-    '🤖', // ML Wing - robot
-    '📢', // PR Wing - megaphone
-    '🎨', // Design Wing - artist palette
-    '📚', // Literature Wing - books
+  // Image URLs for each wing
+  const wingImages = [
+    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177346/xxztrtw9kj747xt64jd8.png', // Executive Wing
+    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177845/x8g8su8k952wrli3eosb.png', // Dev Wing
+    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177573/iad8qjgrxxo0yhovypsk.jpg', // CP Wing
+    'https://i.pinimg.com/736x/71/b8/4f/71b84f6710433f6b81d533766fa2d78b.jpg', // ML Wing
+    'https://res.cloudinary.com/dgechlqls/image/upload/v1760177714/opwjrjl0xqauc16exzrj.jpg', // PR Wing
+    '/images/design-wing.png', // Design Wing
+    '/images/literature-wing.png', // Literature Wing
   ]
 
   // Animation variants for timeline markers
-  // Update your marker variants
   const markerVariants = {
     hidden: { scale: 0, opacity: 0 },
     visible: {
@@ -86,19 +84,6 @@ const Wings = () => {
         duration: 0.3,
         repeat: Infinity,
         repeatType: 'reverse',
-      },
-    },
-  }
-
-  // Add connection lines between markers
-  const connectionVariants = {
-    hidden: { scaleY: 0, opacity: 0 },
-    visible: {
-      scaleY: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: 'easeOut',
       },
     },
   }
@@ -132,6 +117,20 @@ const Wings = () => {
     },
   }
 
+  // Header animation
+  const headerVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: 'easeOut',
+        delay: 0.2,
+      },
+    },
+  }
+
   // Data for the 7 wings of the Computer Science Society
   const wingsData = [
     {
@@ -155,11 +154,8 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          {/* Animated background elements */}
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute top-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-
-          {/* Terminal header */}
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -171,8 +167,6 @@ const Wings = () => {
             </div>
             <span className="text-cyan-400 text-xs">EXECUTIVE_TERMINAL</span>
           </motion.div>
-
-          {/* Terminal content */}
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
             $ executive --about
           </motion.p>
@@ -191,8 +185,6 @@ const Wings = () => {
             wings. The wing thus forms the binding force between the various
             sub-wings, thereby making every inch of hard work a grand success.
           </motion.p>
-
-          {/* Command prompt */}
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -204,8 +196,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
-          {/* Cyberpunk corner indicators */}
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -236,7 +226,6 @@ const Wings = () => {
         >
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute bottom-2 left-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-1000"></div>
-
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -248,7 +237,6 @@ const Wings = () => {
             </div>
             <span className="text-cyan-400 text-xs">DEV_TERMINAL</span>
           </motion.div>
-
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
             $ dev --about
           </motion.p>
@@ -269,7 +257,6 @@ const Wings = () => {
             real-world projects and contributing to the proper functioning of
             our society.
           </motion.p>
-
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -281,7 +268,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -312,7 +298,6 @@ const Wings = () => {
         >
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute top-2 left-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-1500"></div>
-
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -324,7 +309,6 @@ const Wings = () => {
             </div>
             <span className="text-cyan-400 text-xs">CP_TERMINAL</span>
           </motion.div>
-
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
             $ cp --about
           </motion.p>
@@ -343,7 +327,6 @@ const Wings = () => {
             the world to even greater heights, exclusively for the benefit of
             our students.
           </motion.p>
-
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -355,7 +338,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -386,7 +368,6 @@ const Wings = () => {
         >
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute bottom-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
-
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -398,7 +379,6 @@ const Wings = () => {
             </div>
             <span className="text-cyan-400 text-xs">ML_TERMINAL</span>
           </motion.div>
-
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
             $ ml --about
           </motion.p>
@@ -417,7 +397,6 @@ const Wings = () => {
             motivated and enthusiastic to work towards the greater good of the
             CSS society.
           </motion.p>
-
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -429,7 +408,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -460,7 +438,6 @@ const Wings = () => {
         >
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute bottom-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
-
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -472,7 +449,6 @@ const Wings = () => {
             </div>
             <span className="text-cyan-400 text-xs">PR_TERMINAL</span>
           </motion.div>
-
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
             $ pr --about
           </motion.p>
@@ -491,7 +467,6 @@ const Wings = () => {
             activities are effectively carried out and hereby make an impression
             on the image of the Society holistically.
           </motion.p>
-
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -503,7 +478,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -534,7 +508,6 @@ const Wings = () => {
         >
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2500 transform -translate-x-1/2 -translate-y-1/2"></div>
-
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -546,7 +519,6 @@ const Wings = () => {
             </div>
             <span className="text-cyan-400 text-xs">DESIGN_TERMINAL</span>
           </motion.div>
-
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
             $ design --about
           </motion.p>
@@ -566,7 +538,6 @@ const Wings = () => {
             Effects, Figma, etc. The wing believes in the fact that everyone can
             be a designer with just a little bit of practice and dedication.
           </motion.p>
-
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -578,7 +549,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -609,7 +579,6 @@ const Wings = () => {
         >
           <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
           <div className="absolute bottom-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
-
           <motion.div
             className="flex mb-4 items-center"
             variants={contentVariants}
@@ -619,11 +588,10 @@ const Wings = () => {
               <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
               <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
             </div>
-            <span className="text-cyan-400 text-xs">Literature_TERMINAL</span>
+            <span className="text-cyan-400 text-xs">LITERATURE_TERMINAL</span>
           </motion.div>
-
           <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ Literature --about
+            $ literature --about
           </motion.p>
           <motion.p
             className="text-cyan-200/80 mb-2"
@@ -640,7 +608,6 @@ const Wings = () => {
             BITSCRIBE, the annual magazine of the Computer Science Society, is
             also compiled and published by the literary wing.
           </motion.p>
-
           <motion.div
             className="flex items-center mt-4"
             variants={contentVariants}
@@ -652,7 +619,6 @@ const Wings = () => {
               transition={{ duration: 1, repeat: Infinity }}
             ></motion.div>
           </motion.div>
-
           <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
           <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
           <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
@@ -669,12 +635,11 @@ const Wings = () => {
     >
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Binary rain animation */}
         <div className="absolute inset-0 opacity-20">
           {[...Array(30)].map((_, i) => (
             <div
               key={i}
-              className="absolute text-green-400 text-xs animate-[fall_5s_linear_infinite]"
+              className="absolute text-green-400/70 text-xs animate-[fall_6s_linear_infinite] font-mono"
               style={{
                 left: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 5}s`,
@@ -685,47 +650,48 @@ const Wings = () => {
             </div>
           ))}
         </div>
-
-        {/* Grid lines */}
         <div className="absolute inset-0 bg-grid-pattern bg-[length:50px_50px] opacity-10"></div>
-
-        {/* Pulsing circles */}
         <div className="absolute w-72 h-72 bg-cyan-600/10 rounded-full blur-xl animate-[pulse_4s_ease-in-out_infinite] top-10 left-10"></div>
         <div className="absolute w-96 h-96 bg-purple-600/10 rounded-full blur-xl animate-[pulse_5s_ease-in-out_infinite_1s] bottom-20 right-10"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto py-10 px-4 md:px-8 lg:px-10 z-10 mt-15">
-        {/* Header with centered WINGS title and sparkle effect */}
-        <div className="text-center mb-5 relative">
+      <div className="relative max-w-7xl mx-auto py-12 px-4 md:px-8 lg:px-10 z-10 mt-15">
+        {/* Enhanced Header Section */}
+        <motion.div
+          className="text-center mb-8 relative"
+          initial="hidden"
+          animate="visible"
+          variants={headerVariants}
+        >
           <div className="relative inline-block">
             <h1
-              className="text-7xl font-bold mb-2 text-white"
+              className="text-6xl md:text-8xl font-extrabold mb-3 text-white tracking-tight drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]"
               style={{ fontFamily: 'Goldman, sans-serif' }}
             >
               WINGS
             </h1>
-            {/* Sparkle effect */}
-            <div className="absolute -inset-10 -z-10">
+            <div className="absolute -inset-12 -z-10">
               <SparklesCore
                 background="transparent"
-                minSize={0.4}
-                maxSize={1}
-                particleDensity={100}
+                minSize={0.5}
+                maxSize={1.2}
+                particleDensity={120}
                 className="w-full h-full"
-                particleColor="#FFFFFF"
+                particleColor="#38BDF8"
               />
             </div>
           </div>
-          <p className="text-cyan-300/80 text-sm md:text-base max-w-sm mx-auto font-mono">
-            The specialized divisions of our Computer Science Society
+          <p className="text-cyan-300/90 text-base md:text-lg max-w-md mx-auto font-mono leading-relaxed">
+            Discover the specialized divisions powering our Computer Science
+            Society
           </p>
-          <div className="relative flex justify-center items-center mt-4">
-            <div className="absolute inset-x-20  bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-            <div className="absolute inset-x-20  bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-            <div className="absolute inset-x-60  bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-            <div className="absolute inset-x-60  bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+          <div className="relative flex justify-center items-center mt-6">
+            <div className="absolute inset-x-10 bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-[3px] w-5/6 blur-sm" />
+            <div className="absolute inset-x-10 bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-px w-5/6" />
+            <div className="absolute inset-x-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent h-[6px] w-2/5 blur-sm" />
+            <div className="absolute inset-x-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px w-2/5" />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div ref={ref} className="relative max-w-7xl mx-auto pb-20 z-10">
@@ -744,17 +710,23 @@ const Wings = () => {
                 animate={activeTerminal === index ? 'active' : ''}
               >
                 <motion.div
-                  className="h-8 w-8 rounded-full bg-cyan-900/30 border border-cyan-500/30 flex items-center justify-center text-xl shadow-lg shadow-cyan-400/20"
+                  className="h-8 w-8 rounded-full bg-cyan-900/30 border border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-400/20"
                   whileHover={{ scale: 1.2 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                 >
-                  {wingIcons[index]}
+                  <div className="hidden md:block">
+                    <img
+                      src={wingImages[index]}
+                      alt={`${item.title} icon`}
+                      className="h-6 w-6 object-contain rounded-full"
+                    />
+                  </div>
+                  <div className="md:hidden h-6 w-6 bg-cyan-500/50 rounded-full"></div>
                 </motion.div>
               </motion.div>
               <h3
                 className={`hidden md:block text-xl md:pl-20 md:text-5xl text-cyan-300/90 relative ${wingFonts[index]}`}
               >
-                {/* Sparkles effect for each wing title */}
                 <div className="absolute -inset-6 -z-10">
                   <SparklesCore
                     background="transparent"
@@ -769,24 +741,25 @@ const Wings = () => {
               </h3>
             </div>
 
-            <div className="relative pl-20 pr-4 md:pl-4 w-full">
-              <h3
-                className={`md:hidden block text-2xl mb-4 text-left text-cyan-300/90 relative ${wingFonts[index]}`}
-              >
-                {/* Sparkles effect for mobile view */}
-                <div className="absolute -inset-4 -z-10">
-                  <SparklesCore
-                    background="transparent"
-                    minSize={0.2}
-                    maxSize={0.6}
-                    particleDensity={30}
-                    className="w-full h-full"
-                    particleColor="#38BDF8"
-                  />
-                </div>
-                {item.title}
-              </h3>
-              {item.content}
+            <div className="flex justify-center md:justify-start px-4 md:pl-4 md:pr-4 w-full">
+              <div className="w-full max-w-md md:max-w-none">
+                <h3
+                  className={`md:hidden block text-2xl mb-4 text-center md:text-left text-cyan-300/90 relative ${wingFonts[index]}`}
+                >
+                  <div className="absolute -inset-4 -z-10">
+                    <SparklesCore
+                      background="transparent"
+                      minSize={0.2}
+                      maxSize={0.6}
+                      particleDensity={30}
+                      className="w-full h-full"
+                      particleColor="#38BDF8"
+                    />
+                  </div>
+                  {item.title}
+                </h3>
+                {item.content}
+              </div>
             </div>
           </div>
         ))}
