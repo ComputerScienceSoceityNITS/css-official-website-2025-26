@@ -30,6 +30,7 @@ import ChatSystem from './pages/ChatSystem';
 import EmailMigration from './pages/EmailMigration';
 import MigrationCallback from './pages/MigrationCallBack';
 import FreshersEvents from './pages/FreshersEvents';
+import EventsRegistration from './pages/EventsRegistration';
 
 
 
@@ -211,6 +212,12 @@ const App = () => {
                   <EditorialsComingSoon />
                 </PageWrapper>
               } />
+
+              <Route path="/events/freshers/register" element={
+                <PageWrapper>
+                  <EventsRegistration />
+                </PageWrapper>
+              } />
               
               <Route path="/materials" element={
                 <PageWrapper>
@@ -283,6 +290,8 @@ const App = () => {
                   </ProtectedRoute>
                 } 
               /> 
+
+              
               
               <Route path="*" element={
                 <PageWrapper>
