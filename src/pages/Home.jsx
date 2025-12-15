@@ -557,7 +557,7 @@ const [sponsorPopupShown, setSponsorPopupShown] = useState(false);
         }
       }}
     >
-      <source src="https://res.cloudinary.com/dx8jytou0/video/upload/v1760209325/techVid_az70rq.mp4" type="video/mp4" />
+      <source src="https://res.cloudinary.com/dp4sknsba/video/upload/v1765811525/WhatsApp_Video_2025-12-15_at_20.29.46_61490805_my0otm.mp4" type="video/mp4" />
       <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-purple-900 flex items-center justify-center">
         <h1 className="text-4xl font-bold text-white">CSS</h1>
       </div>
