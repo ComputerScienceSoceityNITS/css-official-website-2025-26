@@ -162,39 +162,38 @@ const ChatSystem = () => {
         }
     }, [isNearBottom]);
 
-    useEffect(()=>{
-        if(user && profile){
-            if(profile.verified_college_email){
-                const nameFromEmail = profile.verified_college_email.split('@')[0];
-                setUsername(nameFromEmail);
-            } else if(profile.email){
-                const nameFromEmail = profile.email.split('@')[0];
-                setUsername(nameFromEmail);
-            } else {
-                setUsername(profile.full_name || 'User');
-            }
-        } else {
-            const adjectives = ['Swift', 'Clever', 'Mysterious', 'Digital', 'Cyber', 'Quantum', 'Neon', 'Cosmic'];
-            const nouns = ['Phoenix', 'Wolf', 'Dragon', 'Tiger', 'Eagle', 'Fox', 'Hawk', 'Panther'];
-            const randomName = `${adjectives[Math.floor(Math.random() * adjectives.length)]}${nouns[Math.floor(Math.random() * nouns.length)]}`;
-            setUsername(randomName);
-        }
-        checkAdminStatus();
-        loadMessages();
-        setupRealtimeSubscription();
-        
-        return () => {
-            if (subscriptionRef.current) {
-                supabase.removeChannel(subscriptionRef.current);
-            }
-            if (adminSubscriptionRef.current) {
-                supabase.removeChannel(adminSubscriptionRef.current);
-            }
-            if (scrollTimeoutRef.current) {
-                clearTimeout(scrollTimeoutRef.current);
-            }
-        };
-    }, [user, profile]);
+    useEffect(() => {
+  if(user && profile){
+    // Always use email username if available
+    if(profile.verified_college_email){
+      setUsername(profile.verified_college_email.split('@')[0]);
+    } else if(profile.email){
+      setUsername(profile.email.split('@')[0]);
+    } else {
+      setUsername(profile.full_name || 'User');
+    }
+  } else {
+    const adjectives = ['Swift', 'Clever', 'Mysterious', 'Digital', 'Cyber', 'Quantum', 'Neon', 'Cosmic'];
+    const nouns = ['Phoenix', 'Wolf', 'Dragon', 'Tiger', 'Eagle', 'Fox', 'Hawk', 'Panther'];
+    const randomName = `${adjectives[Math.floor(Math.random() * adjectives.length)]}${nouns[Math.floor(Math.random() * nouns.length)]}`;
+    setUsername(randomName);
+  }
+  checkAdminStatus();
+  loadMessages();
+  setupRealtimeSubscription();
+  
+  return () => {
+    if (subscriptionRef.current) {
+      supabase.removeChannel(subscriptionRef.current);
+    }
+    if (adminSubscriptionRef.current) {
+      supabase.removeChannel(adminSubscriptionRef.current);
+    }
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+  };
+}, [user, profile]);
 
     const checkAdminStatus = async () => {
         if (!user) {
@@ -239,7 +238,22 @@ const ChatSystem = () => {
             setLoading(true);
             const { data, error } = await supabase
                 .from('chat_messages')
-                .select('*')
+                .select(`
+                    id,
+                    message,
+                    room,
+                    created_at,
+                  
+                    profiles (
+                        user_id,
+                        full_name,
+                        email,
+                        avatar_url,
+                        is_admin,
+                        college_email_verified
+                    )
+                    `)
+
                 .eq('room', room)
                 .order('created_at', { ascending: true })
                 .limit(100);
@@ -249,67 +263,111 @@ const ChatSystem = () => {
                 return;
             }
 
-            setMessages(data || []);
+            setMessages((data || []).map(normalizeMessage));
+
         } catch (error) {
             console.error('Error in loadMessages:', error);
         } finally {
             setLoading(false);
         }
     };
+    const normalizeMessage = (msg) => {
+  // Get username from joined profiles table
+  const profile = msg.profiles || {};
+  
+  // Get the email to extract username from
+  const email = profile.verified_college_email || profile.email || '';
+  
+  // Always use the email username (part before @) if email exists
+  // Otherwise use full_name as fallback
+  const username = email 
+    ? email.split('@')[0]  // Always take the part before @
+    : profile.full_name || 'User';
+  
+  // Check if this message belongs to current user
+  const isOwnMessage = msg.user_id === user?.id;
+
+  return {
+    ...msg,
+    username,
+    isOwnMessage,
+    // Keep the original email for display if needed
+    email: email || null
+  };
+};
 
     const setupRealtimeSubscription = async () => {
-        try {
-            if (subscriptionRef.current) {
-                supabase.removeChannel(subscriptionRef.current);
-            }
+  try {
+    if (subscriptionRef.current) {
+      supabase.removeChannel(subscriptionRef.current);
+    }
 
-            const subscription = supabase
-                .channel(`public:chat_messages:room=eq.${room}`)
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'INSERT',
-                        schema: 'public',
-                        table: 'chat_messages',
-                        filter: `room=eq.${room}`
-                    },
-                    (payload) => {
-                        setMessages(prev => {
-                            const exists = prev.some(msg => msg.id === payload.new.id);
-                            if (!exists) {
-                                return [...prev, payload.new];
-                            }
-                            return prev;
-                        });
-                    }
-                )
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'DELETE',
-                        schema: 'public',
-                        table: 'chat_messages',
-                        filter: `room=eq.${room}`
-                    },
-                    (payload) => {
-                        setMessages(prev => prev.filter(msg => msg.id !== payload.old.id));
-                    }
-                )
-                .subscribe((status) => {
-                    console.log('Subscription status:', status);
-                    setIsConnected(status === 'SUBSCRIBED');
-                    if (status === 'CHANNEL_ERROR') {
-                        setTimeout(() => setupRealtimeSubscription(), 2000);
-                    }
-                });
+    const subscription = supabase
+      .channel(`public:chat_messages:room=eq.${room}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `room=eq.${room}`
+        },
+        async (payload) => {
+          // Fetch the full message with profile data
+          const { data: fullMessage, error } = await supabase
+            .from('chat_messages')
+            .select(`
+              id,
+              message,
+              room,
+              created_at,
+              user_id,
+              profiles (
+                user_id,
+                full_name,
+                email,
+                verified_college_email
+              )
+            `)
+            .eq('id', payload.new.id)
+            .single();
 
-            subscriptionRef.current = subscription;
-
-        } catch (error) {
-            console.error('Error setting up real-time subscription:', error);
-            setTimeout(() => setupRealtimeSubscription(), 3000);
+          if (!error && fullMessage) {
+            const normalizedMsg = normalizeMessage(fullMessage);
+            setMessages(prev => {
+              const exists = prev.some(m => m.id === normalizedMsg.id);
+              return exists ? prev : [...prev, normalizedMsg];
+            });
+          }
         }
-    };
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `room=eq.${room}`
+        },
+        (payload) => {
+          setMessages(prev => prev.filter(msg => msg.id !== payload.old.id));
+        }
+      )
+      .subscribe((status) => {
+        console.log('Subscription status:', status);
+        setIsConnected(status === 'SUBSCRIBED');
+        if (status === 'CHANNEL_ERROR') {
+          setTimeout(() => setupRealtimeSubscription(), 2000);
+        }
+      });
+
+    subscriptionRef.current = subscription;
+
+  } catch (error) {
+    console.error('Error setting up real-time subscription:', error);
+    setTimeout(() => setupRealtimeSubscription(), 3000);
+  }
+};
 
     const setupAdminRealtimeSubscription = async () => {
         if (!isAdmin) return;
@@ -354,65 +412,98 @@ const ChatSystem = () => {
     };
 
     const sendMessage = async (e) => {
-        e.preventDefault();
-        
-        if (!newMessage.trim()) return;
+  e.preventDefault();
+  
+  if (!newMessage.trim()) return;
 
-        setLoading(true);
-        const messageText = newMessage.trim();
-        const userIdentifier = user ? `user_${user.id}` : `anon_${Date.now()}`;
+  setLoading(true);
+  const messageText = newMessage.trim();
 
-        try {
-            const tempMessage = {
-                id: `temp_${Date.now()}`,
-                username: username,
-                message: messageText,
-                room: room,
-                user_id: userIdentifier,
-                created_at: new Date().toISOString(),
-                isSending: true
-            };
-
-            setMessages(prev => [...prev, tempMessage]);
-            setNewMessage('');
-
-            userHasScrolledRef.current = false;
-            setTimeout(() => scrollToBottom('smooth'), 100);
-
-            const { data, error } = await supabase
-                .from('chat_messages')
-                .insert([
-                    {
-                        username: username,
-                        message: messageText,
-                        room: room,
-                        user_id: userIdentifier,
-                        is_verified: true
-                    }
-                ])
-                .select();
-
-            if (error) {
-                setMessages(prev => prev.filter(msg => msg.id !== tempMessage.id));
-                alert('Failed to send message: ' + error.message);
-                return;
-            }
-
-            if (data && data[0]) {
-                setMessages(prev => 
-                    prev.map(msg => 
-                        msg.id === tempMessage.id ? { ...data[0], isSending: false } : msg
-                    )
-                );
-            }
-
-        } catch (error) {
-            console.error('Error sending message:', error);
-            alert('Failed to send message. Please try again.');
-        } finally {
-            setLoading(false);
-        }
+  try {
+    const tempMessage = {
+      id: `temp_${Date.now()}`,
+      message: messageText,
+      room,
+      created_at: new Date().toISOString(),
+      username, // Use the local username as placeholder
+      isOwnMessage: true,
+      isSending: true,
+      user_id: user?.id // Add user_id for temp message
     };
+
+    setMessages(prev => [...prev, tempMessage]);
+    setNewMessage('');
+
+    userHasScrolledRef.current = false;
+    setTimeout(() => scrollToBottom('smooth'), 100);
+
+    // Insert message
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .insert([
+        {
+          message: messageText,
+          room: room,
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      setMessages(prev => prev.filter(msg => msg.id !== tempMessage.id));
+      alert('Failed to send message: ' + error.message);
+      return;
+    }
+
+    // Fetch the full message with profile data
+    if (data) {
+      const { data: fullMessage, error: fetchError } = await supabase
+        .from('chat_messages')
+        .select(`
+          id,
+          message,
+          room,
+          created_at,
+          user_id,
+          profiles (
+            user_id,
+            full_name,
+            email,
+            verified_college_email
+          )
+        `)
+        .eq('id', data.id)
+        .single();
+
+      if (!fetchError && fullMessage) {
+        const normalizedMsg = normalizeMessage(fullMessage);
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === tempMessage.id ? { ...normalizedMsg, isSending: false } : msg
+          )
+        );
+      } else {
+        // Fallback: use temp message without profile data
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === tempMessage.id ? { 
+              ...data, 
+              username,
+              isOwnMessage: true,
+              isSending: false 
+            } : msg
+          )
+        );
+      }
+    }
+
+  } catch (error) {
+    console.error('Error sending message:', error);
+    alert('Failed to send message. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
     const deleteMessage = async (messageId) => {
         if (!isAdmin) {
@@ -690,55 +781,55 @@ const ChatSystem = () => {
                                     </div>
                                 ) : (
                                     messages.map((msg) => (
-                                        <div
-                                            key={msg.id}
-                                            className={`group p-3 rounded-lg border transition-all relative ${
-                                                msg.username === username
-                                                    ? 'bg-cyan-900/20 border-cyan-500/30 md:ml-8'
-                                                    : 'bg-gray-800/20 border-gray-600/30 md:mr-8'
-                                            } ${msg.isSending ? 'opacity-70 animate-pulse' : ''}`}
-                                        >
-                                            {/* Admin Delete Button */}
-                                            {isAdmin && !msg.isSending && (
-                                                <button
-                                                    onClick={() => deleteMessage(msg.id)}
-                                                    className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs border border-red-400 shadow-lg transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
-                                                    title="Delete message (Admin)"
-                                                >
-                                                    ×
-                                                </button>
-                                            )}
-                                            
-                                            <div className="flex justify-between items-start mb-1">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`font-bold text-sm md:text-base ${
-                                                        msg.username === username 
-                                                            ? 'text-cyan-300' 
-                                                            : msg.username === 'System'
-                                                            ? 'text-purple-300'
-                                                            : 'text-green-300'
-                                                    }`}>
-                                                        {msg.username}
-                                                    </span>
-                                                    {msg.username === username && (
-                                                        <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
-                                                            {msg.isSending ? 'Sending...' : 'You'}
-                                                        </span>
-                                                    )}
-                                                    {msg.room !== room && (
-                                                        <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded border border-purple-500/30">
-                                                            {rooms.find(r => r.id === msg.room)?.icon} {msg.room}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <span className="text-xs text-gray-400">
-                                                    {formatTime(msg.created_at)}
-                                                </span>
-                                            </div>
-                                            <p className="text-gray-200 text-sm whitespace-pre-wrap break-words">
-                                                {msg.message}
-                                            </p>
-                                        </div>
+                                       <div
+  key={msg.id}
+  className={`group p-3 rounded-lg border transition-all relative ${
+    msg.isOwnMessage
+      ? 'bg-cyan-900/20 border-cyan-500/30 md:ml-8'
+      : 'bg-gray-800/20 border-gray-600/30 md:mr-8'
+  } ${msg.isSending ? 'opacity-70 animate-pulse' : ''}`}
+>
+  {/* Admin Delete Button */}
+  {isAdmin && !msg.isSending && !msg.isOwnMessage && (
+    <button
+      onClick={() => deleteMessage(msg.id)}
+      className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs border border-red-400 shadow-lg transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
+      title="Delete message (Admin)"
+    >
+      ×
+    </button>
+  )}
+  
+  <div className="flex justify-between items-start mb-1">
+    <div className="flex items-center gap-2">
+      <span className={`font-bold text-sm md:text-base ${
+        msg.isOwnMessage
+          ? 'text-cyan-300' 
+          : msg.username === 'System'
+          ? 'text-purple-300'
+          : 'text-green-300'
+      }`}>
+        {msg.username}
+      </span>
+      {msg.isOwnMessage && (
+        <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
+          {msg.isSending ? 'Sending...' : 'You'}
+        </span>
+      )}
+      {msg.room !== room && (
+        <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded border border-purple-500/30">
+          {rooms.find(r => r.id === msg.room)?.icon} {msg.room}
+        </span>
+      )}
+    </div>
+    <span className="text-xs text-gray-400">
+      {formatTime(msg.created_at)}
+    </span>
+  </div>
+  <p className="text-gray-200 text-sm whitespace-pre-wrap break-words">
+    {msg.message}
+  </p>
+</div>
                                     ))
                                 )}
                                 <div ref={messagesEndRef} style={{ height: '1px' }} />
