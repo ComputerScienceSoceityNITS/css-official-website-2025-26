@@ -12,7 +12,8 @@ const menuItems = [
   { path: '/events', label: 'Events' },
   { path: '/wings', label: 'Wings' },
   { path: '/chat', label: 'Chat' },
-  { path: '/materials', label: 'Materials' }
+  { path: '/materials', label: 'Materials' },
+  { path: '/certificates', label: 'Certificates' }
 ]
 
 export const NavbarDemo = () => {

@@ -36,7 +36,7 @@ import EmailMigration from './pages/EmailMigration'
 import MigrationCallback from './pages/MigrationCallBack'
 import FreshersEvents from './pages/FreshersEvents'
 import EventsRegistration from './pages/Esperanza'
-
+import Certificates from "./pages/Certificates";
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -239,6 +239,13 @@ const App = () => {
                 element={
                   <PageWrapper>
                     <Materials />
+                  </PageWrapper>
+                }
+              />
+
+              <Route path="/certificates" element={
+                  <PageWrapper>
+                    <Certificates />
                   </PageWrapper>
                 }
               />

@@ -1,0 +1,4 @@
+- [x] Remove date field from Certificates.jsx
+- [x] Remove date from CertificateGenerator.jsx
+- [x] Remove date from certificateService.js
+- [x] Remove date case from certificateUtils.js
