@@ -38,6 +38,8 @@ import FreshersEvents from './pages/FreshersEvents'
 import EventsRegistration from './pages/Esperanza'
 import Certificates from "./pages/Certificates";
 import SystemVerification from "./components/SystemVerification";
+import AppDownload from './pages/CSS-APP'
+
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -373,6 +375,7 @@ const App = () => {
                   </PageWrapper>
                 }
               />
+              <Route path='/app-download' element={<AppDownload />} />
             </Routes>
           </div>
           {/* <DiwaliWidget /> */}
