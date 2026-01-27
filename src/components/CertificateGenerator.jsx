@@ -17,13 +17,12 @@ const styles = StyleSheet.create({
   event: positionText("event"),
 });
 
-const CertificateGenerator = ({ name, event, date }) => (
+const CertificateGenerator = ({ name, event }) => (
   <Document>
     <Page size={[842, 595]} style={styles.page}>
       <Image src={certificateTemplate} style={styles.template} />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.event}>{event}</Text>
-      <Text style={styles.date}>{date}</Text>
     </Page>
   </Document>
 );

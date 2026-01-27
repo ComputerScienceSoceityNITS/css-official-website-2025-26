@@ -4,8 +4,8 @@ export const positionText = (field) => {
     case "name":
       return {
         position: "absolute",
-        top: 250,
-        left: 300,
+        top: 220,
+        left: 330,
         fontSize: 24,
         fontWeight: "bold",
         color: "#000",

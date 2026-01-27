@@ -37,6 +37,7 @@ import MigrationCallback from './pages/MigrationCallBack'
 import FreshersEvents from './pages/FreshersEvents'
 import EventsRegistration from './pages/Esperanza'
 import Certificates from "./pages/Certificates";
+import SystemVerification from "./components/SystemVerification";
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -246,6 +247,13 @@ const App = () => {
               <Route path="/certificates" element={
                   <PageWrapper>
                     <Certificates />
+                  </PageWrapper>
+                }
+              />
+
+              <Route path="/system-verification" element={
+                  <PageWrapper>
+                    <SystemVerification />
                   </PageWrapper>
                 }
               />
