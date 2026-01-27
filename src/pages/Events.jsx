@@ -112,7 +112,7 @@ function EventCard({
               )}
               
               {/* Auth required badge */}
-              {requiresAuth && !user && !isCompleted && (
+              {requiresAuth && !user && !isCompleted && slug !== "css-olympics" && (
                 <div className="bg-red-600/90 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
                   <FaLock className="text-xs" /> Login Required
                 </div>
