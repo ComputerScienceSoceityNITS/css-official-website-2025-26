@@ -36,6 +36,7 @@ import EmailMigration from './pages/EmailMigration'
 import MigrationCallback from './pages/MigrationCallBack'
 import FreshersEvents from './pages/FreshersEvents'
 import EventsRegistration from './pages/Esperanza'
+import CSSAppPage from './pages/CSS-APP'
 
 const ProtectedRoute = ({
   children,
@@ -358,6 +359,7 @@ const App = () => {
                   </PageWrapper>
                 }
               />
+              <Route path='/css-app' element={<CSSAppPage />} />
             </Routes>
           </div>
           {/* <DiwaliWidget /> */}
