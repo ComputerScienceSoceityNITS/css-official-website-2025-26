@@ -809,7 +809,8 @@ const ChatSystem = () => {
           ? 'text-purple-300'
           : 'text-green-300'
       }`}>
-        {msg.username}
+        {/* {msg.username} */}
+        Anonymous
       </span>
       {msg.isOwnMessage && (
         <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
