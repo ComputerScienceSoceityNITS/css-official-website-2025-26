@@ -36,8 +36,10 @@ import EmailMigration from './pages/EmailMigration'
 import MigrationCallback from './pages/MigrationCallBack'
 import FreshersEvents from './pages/FreshersEvents'
 import EventsRegistration from './pages/Esperanza'
+import Certificates from "./pages/Certificates";
+import SystemVerification from "./components/SystemVerification";
+import ErrorBoundary from './components/ErrorBoundary';
 import AppDownload from './pages/CSS-APP'
-
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -155,7 +157,8 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <ErrorBoundary>
+        <BrowserRouter>
         <AnalyticsTracker />
         <ScrollToTop />
 
@@ -240,6 +243,20 @@ const App = () => {
                 element={
                   <PageWrapper>
                     <Materials />
+                  </PageWrapper>
+                }
+              />
+
+              <Route path="/certificates" element={
+                  <PageWrapper>
+                    <Certificates />
+                  </PageWrapper>
+                }
+              />
+
+              <Route path="/system-verification" element={
+                  <PageWrapper>
+                    <SystemVerification />
                   </PageWrapper>
                 }
               />
@@ -366,6 +383,7 @@ const App = () => {
           <Footer />
         </div>
       </BrowserRouter>
+      </ErrorBoundary>
     </AuthProvider>
   )
 }

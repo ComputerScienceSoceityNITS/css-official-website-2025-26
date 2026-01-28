@@ -672,7 +672,7 @@ function Home() {
             {/* Image Container - Hidden on mobile, visible on medium screens and up */}
             <div className=" flex-1 justify-center">
               <img
-                src="images/about.png"
+                src="/images/about.png"
                 alt="About Us"
                 loading="lazy"
                 className="rounded-2xl shadow-lg shadow-cyan-500/20 border border-cyan-500/20 object-cover max-h-[300px] md:max-h-[400px] w-full"
