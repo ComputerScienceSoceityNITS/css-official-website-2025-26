@@ -1,35 +1,49 @@
 // components/CertificateSection.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import { supabase } from "../supabaseClient";
 
 const CertificateSection = () => {
   const [showCertificate, setShowCertificate] = useState(false);
+  const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const checkAttendanceStatus = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      try {
+        if (!user) return;
 
-      // Check if user has any attended events
-      const { data, error } = await supabase
-        .from("user_events")
-        .select("attendance_status")
-        .eq("user_id", user.id)
-        .eq("attendance_status", "attended");
+        // Check if user has any attended events
+        const { data, error } = await supabase
+          .from("user_events")
+          .select("attendance_status")
+          .eq("user_id", user.id)
+          .eq("attendance_status", "attended");
 
-      if (error) {
-        console.error("Error checking attendance:", error);
-        return;
-      }
+        if (error) {
+          console.error("Error checking attendance:", error);
+          setError("Failed to check certificate status");
+          return;
+        }
 
-      // Show certificate if user has attended any event
-      if (data && data.length > 0) {
-        setShowCertificate(true);
+        // Show certificate if user has attended any event
+        if (data && data.length > 0) {
+          setShowCertificate(true);
+        }
+      } catch (err) {
+        console.error("Error in checkAttendanceStatus:", err);
+        setError("An error occurred while checking certificates");
       }
     };
 
     checkAttendanceStatus();
-  }, []);
+  }, [user]);
+
+
+  if (error) {
+    console.error("Certificate error:", error);
+    return null; // Silently fail without breaking the component tree
+  }
 
   if (!showCertificate) {
     return (

@@ -38,6 +38,7 @@ import FreshersEvents from './pages/FreshersEvents'
 import EventsRegistration from './pages/Esperanza'
 import Certificates from "./pages/Certificates";
 import SystemVerification from "./components/SystemVerification";
+import ErrorBoundary from './components/ErrorBoundary';
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -155,7 +156,8 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <ErrorBoundary>
+        <BrowserRouter>
         <AnalyticsTracker />
         <ScrollToTop />
 
@@ -379,6 +381,7 @@ const App = () => {
           <Footer />
         </div>
       </BrowserRouter>
+      </ErrorBoundary>
     </AuthProvider>
   )
 }
