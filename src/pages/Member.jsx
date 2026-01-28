@@ -219,7 +219,7 @@ const Members = () => {
               <div className="relative overflow-hidden rounded-lg sm:rounded-lg md:rounded-xl border border-cyan-500/30 group bg-black/50">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5 pointer-events-none"></div>
                 <img
-                  src="images/member.png"
+                  src="/images/member.png"
                   alt="Team members"
                   className="relative w-full transform group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"

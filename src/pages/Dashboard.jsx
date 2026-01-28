@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '/src/context/AuthContext.jsx';
 import { supabase } from '/src/supabaseClient.js';
 import { Link, useNavigate } from 'react-router-dom';
+import CertificateSection from "../components/CertificateSection";
 
 // --- Badge Definitions ---
 const badges = [
@@ -456,6 +457,7 @@ const Dashboard = () => {
                         )}
                     </div>
                 </div>
+                <CertificateSection />
             </div>
         </div>
     );
