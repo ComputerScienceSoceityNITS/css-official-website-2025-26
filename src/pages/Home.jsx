@@ -1,5 +1,925 @@
-import React from 'react'
-
-export const Home = () => {
-  return <div>Home</div>
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  Suspense,
+} from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Carousel from '../components/ui/Carousel'
+import AnimatedTestimonials from '../components/ui/PillarsOfCSS'
+import Chatbot from '../components/ui/Chatbot'
+import { NavbarDemo } from '../components/Navbar'
+import useAnnouncementObserver from '../hooks/useAnnouncementObserver'
+// import DiwaliPopup from '../components/DiwaliPopup'
+// import SponsorPopup from '../components/SponsorPopup'
+// Register GSAP plugins only once
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
 }
+
+// Memoize testimonials data to prevent re-renders
+const PILLARS_TESTIMONIALS = [
+  {
+    src: 'https://cs.nits.ac.in/storage/FacultyDetails/IMG_175345198568838dd11b534.jpg',
+    name: 'Umakanta Majhi',
+    designation: 'Faculty Advisor',
+    quote:
+      'Promoting a culture of innovation and creativity. We encourage students to think outside the box, experiment with new ideas, and develop solutions that make a difference.',
+  },
+  {
+    src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760007735/Swapneel_Bhaiya_ltkb53.jpg',
+    name: 'Swapnil Dansana',
+    designation: 'President',
+    quote:
+      "Encouraging innovative thinking and research-oriented approach. We support projects in AI, ML, web development, and emerging technologies to push boundaries of what's possible.",
+  },
+  {
+    src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760007829/Amborish_xqum5s.jpg',
+    name: 'Amborish Sarmah',
+    designation: 'General Secretary',
+    quote:
+      'Creating a supportive network where students can learn, grow, and collaborate. We organize tech talks, networking events, and mentorship programs to foster meaningful connections.',
+  },
+
+  {
+    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757535079/WhatsApp_Image_2025-08-31_at_11.28.29_AM_-_002_RAJ_KUMAR_ROY_uopc4j.webp',
+    name: 'Raj Kumar Roy',
+    designation: 'Technical Head',
+    quote:
+      'Providing opportunities for professional development through interview preparation, resume building, and industry interactions. We bridge the gap between academia and industry.',
+  },
+  {
+    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757535268/IMG-20250510-WA0014_-_CSE_100_TARUN_CHANDAK_w0cny9.webp',
+    name: 'Tarun Chandak',
+    designation: 'Finance and Ops Co-ordinator',
+    quote:
+      'Fostering a culture of continuous learning and curiosity. We encourage students to explore new technologies, participate in hackathons, and stay updated with industry trends.',
+  },
+]
+
+const SPONSORS_DATA = [
+  {
+    name: 'Momo Magic Cafe',
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978633/download_iwxpso.png', // Replace with actual logo URL
+    href: 'https://momomagiccafe.in/', // Replace with actual website
+    type: 'Official Food Partner',
+  },
+  {
+    name: 'Campa Cola',
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978610/WhatsApp_Image_2025-10-31_at_17.10.58_722ac4a3_ar2y9k.jpg', // Replace with actual logo URL
+    href: 'https://campabeverages.com/', // Replace with actual website
+    type: 'Official Beverage Partner',
+  },
+]
+
+// Preload critical images
+const preloadImages = () => {
+  if (typeof window === 'undefined') return
+
+  const images = [
+    'images/about.png',
+    ...PILLARS_TESTIMONIALS.map((testimonial) => testimonial.src),
+  ]
+
+  images.forEach((src) => {
+    const img = new Image()
+    img.src = src
+  })
+}
+
+// Separate LoadingScreen component
+const LoadingScreen = React.memo(({ loadingProgress }) => (
+  <div className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center">
+    {/* Optimized Matrix background with reduced elements */}
+    <div className="absolute inset-0 overflow-hidden opacity-20">
+      {[...Array(25)].map((_, i) => (
+        <div
+          key={i}
+          className="absolute text-green-400 text-xs animate-[fall_3s_linear_infinite]"
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 3}s`,
+            top: '-20px',
+          }}
+        >
+          {Math.random() > 0.5 ? '1' : '0'}
+        </div>
+      ))}
+    </div>
+
+    {/* Main loader content */}
+    <div className="relative z-10 text-center">
+      {/* CSS Logo */}
+      <div className="mb-8">
+        <h1 className="text-6xl md:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400 font-mono mb-4">
+          CSS
+        </h1>
+        <p className="text-cyan-400 font-mono text-lg">
+          Computer Science Society
+        </p>
+      </div>
+
+      {/* Terminal-style loader */}
+      <div className="bg-black/80 border border-cyan-500/30 rounded-lg p-6 max-w-md mx-auto backdrop-blur-sm">
+        <div className="flex items-center mb-4">
+          <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+          <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+          <span className="text-cyan-400 font-mono text-sm">
+            LOADING_SYSTEM
+          </span>
+        </div>
+
+        <div className="space-y-2 font-mono text-left">
+          <p className="text-green-400 text-sm">
+            <span className="text-cyan-400">$~ </span>Initializing components...
+          </p>
+          <p className="text-green-400 text-sm">
+            <span className="text-cyan-400">$~ </span>Loading assets...
+          </p>
+          <p className="text-green-400 text-sm">
+            <span className="text-cyan-400">$~ </span>Starting services...
+          </p>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mt-4">
+          <div className="flex justify-between text-xs text-cyan-400 font-mono mb-1">
+            <span>Progress</span>
+            <span>{Math.min(100, Math.round(loadingProgress))}%</span>
+          </div>
+          <div className="w-full bg-gray-700 rounded-full h-2">
+            <div
+              className="bg-gradient-to-r from-cyan-400 to-green-400 h-2 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${Math.min(100, loadingProgress)}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Loading animation */}
+        <div className="flex justify-center mt-4">
+          <div className="flex space-x-1">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              ></div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer text */}
+      <p className="text-gray-400 text-sm mt-6 font-mono">
+        NIT Silchar • Computer Science & Engineering
+      </p>
+    </div>
+  </div>
+))
+
+function Home() {
+  const [showContent, setShowContent] = useState(false)
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [isMounted, setIsMounted] = useState(false)
+  const [showNavbar, setShowNavbar] = useState(false)
+  const svgRef = useRef(null)
+  const animationRef = useRef(null)
+  const videoRef = useRef(null)
+  const { showPopup, setShowPopup } = useAnnouncementObserver()
+  const [showSponsorPopup, setShowSponsorPopup] = useState(false)
+  const [showSecondSponsorPopup, setShowSecondSponsorPopup] = useState(false)
+  const [sponsorPopupShown, setSponsorPopupShown] = useState(false)
+  // Set mounted state
+  useEffect(() => {
+    setIsMounted(true)
+    return () => setIsMounted(false)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const aboutSection = document.getElementById('about')
+      if (aboutSection) {
+        const aboutSectionTop = aboutSection.offsetTop
+        const scrollPosition = window.scrollY + window.innerHeight / 2
+
+        // Show navbar when we reach about section
+        setShowNavbar(scrollPosition >= aboutSectionTop)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    // Initial check
+    handleScroll()
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sponsorsSection = document.getElementById('sponsors')
+      if (sponsorsSection && !sponsorPopupShown) {
+        const rect = sponsorsSection.getBoundingClientRect()
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+          setShowSponsorPopup(true)
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [sponsorPopupShown])
+  // Memoize event handlers
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      setInput('')
+    }
+  }, [])
+
+  const isMobileDevice = useCallback(() => {
+    if (typeof window === 'undefined') return false
+    return window.innerWidth < 768
+  }, [])
+
+  const getTextOrientation = useCallback(() => {
+    if (typeof window === 'undefined') return 'horizontal'
+
+    const isMobile = isMobileDevice()
+    if (!isMobile) return 'horizontal'
+
+    // For mobile, check if we should use vertical layout
+    return window.innerHeight > window.innerWidth ? 'vertical' : 'horizontal'
+  }, [isMobileDevice])
+
+  // Memoized text configuration
+  const textConfig = useMemo(() => {
+    const orientation = getTextOrientation()
+    const isMobile = isMobileDevice()
+    if (orientation === 'vertical') {
+      return {
+        fontSize: isMobile ? '300' : '220',
+        textAnchor: 'middle',
+        dominantBaseline: 'middle',
+        letterSpacing: '0',
+        writingMode: 'tb', // top to bottom (vertical)
+        glyphOrientationVertical: '0',
+      }
+    } else {
+      return {
+        fontSize: isMobile ? '200' : '320',
+        textAnchor: 'middle',
+        dominantBaseline: 'middle',
+        letterSpacing: '0',
+        writingMode: 'lr', // left to right (horizontal)
+      }
+    }
+  }, [getTextOrientation, isMobileDevice])
+  const getViewBox = useCallback(() => {
+    const isMobile = isMobileDevice()
+    const orientation = getTextOrientation()
+
+    if (isMobile && orientation === 'vertical') {
+      return '0 0 800 600' // Taller viewBox for vertical text
+    } else if (isMobile) {
+      return '0 0 1200 800' // Wider viewBox for mobile horizontal
+    }
+    return '0 0 800 600' // Default for desktop
+  }, [isMobileDevice, getTextOrientation])
+
+  const MaskText = useMemo(() => {
+    const orientation = getTextOrientation()
+    const fontFamily =
+      "goldman, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+
+    if (orientation === 'vertical') {
+      // Vertical text layout - each character on a new line
+      return (
+        <g className="vi-mask-group">
+          {/* C - Top of screen */}
+          <text
+            x="50%"
+            y="4%"
+            fontSize={textConfig.fontSize}
+            textAnchor="middle"
+            fill="white"
+            dominantBaseline="middle"
+            fontFamily={fontFamily}
+            fontWeight="1000"
+            stroke="white"
+            strokeWidth="20px"
+            paintOrder="stroke"
+          >
+            C
+          </text>
+          {/* S - Middle of screen */}
+          <text
+            x="50%"
+            y="56%"
+            fontSize={textConfig.fontSize}
+            textAnchor="middle"
+            fill="white"
+            fontFamily={fontFamily}
+            fontWeight="1000"
+            stroke="white"
+            strokeWidth="20px"
+            paintOrder="stroke"
+          >
+            S
+          </text>
+          {/* S - Bottom of screen */}
+          <text
+            x="50%"
+            y="97%"
+            fontSize={textConfig.fontSize}
+            textAnchor="middle"
+            fill="white"
+            fontFamily={fontFamily}
+            fontWeight="1000"
+            stroke="white"
+            strokeWidth="20px"
+            paintOrder="stroke"
+          >
+            S
+          </text>
+        </g>
+      )
+    } else {
+      // Horizontal text layout
+      return (
+        <g className="vi-mask-group">
+          <text
+            x="50%"
+            y="50%"
+            fontSize={textConfig.fontSize}
+            textAnchor={textConfig.textAnchor}
+            fill="white"
+            dominantBaseline={textConfig.dominantBaseline}
+            fontFamily="Arial Black"
+            letterSpacing={textConfig.letterSpacing}
+            z-index="1000"
+          >
+            CSS
+          </text>
+        </g>
+      )
+    }
+  }, [textConfig, getTextOrientation])
+  const cssFontSize = useMemo(
+    () => (isMobileDevice() ? '250' : '320'),
+    [isMobileDevice]
+  )
+
+  // Optimized loading simulation
+  useEffect(() => {
+    if (!isMounted) return
+
+    window.scrollTo(0, 0)
+
+    // Preload images early
+    preloadImages()
+
+    let progressInterval
+    let timer
+    let fallbackTimer
+
+    const simulateLoading = () => {
+      let progress = 0
+      progressInterval = setInterval(() => {
+        if (!isMounted) {
+          clearInterval(progressInterval)
+          return
+        }
+        progress += Math.random() * 15
+        if (progress >= 100) {
+          setLoadingProgress(100)
+          clearInterval(progressInterval)
+          // Give a small delay for smooth transition
+          setTimeout(() => {
+            if (isMounted) setIsLoading(false)
+          }, 200)
+        } else {
+          setLoadingProgress(progress)
+        }
+      }, 150)
+    }
+
+    // Start loading simulation
+    simulateLoading()
+
+    // Check if critical resources are loaded
+    const checkCriticalResources = () => {
+      const video = document.querySelector('.bg-video')
+      if (video && video.readyState >= 3) {
+        clearInterval(progressInterval)
+        setLoadingProgress(100)
+        setTimeout(() => {
+          if (isMounted) setIsLoading(false)
+        }, 200)
+      }
+    }
+
+    // Set up resource checking
+    const video = document.querySelector('.bg-video')
+    if (video) {
+      video.addEventListener('loadeddata', checkCriticalResources)
+      video.addEventListener('canplay', checkCriticalResources)
+    }
+
+    // ScrollTrigger refresh with debounce
+    timer = setTimeout(() => {
+      if (isMounted) {
+        ScrollTrigger.refresh()
+      }
+    }, 500)
+
+    // Fallback timeout
+    fallbackTimer = setTimeout(() => {
+      if (isMounted) {
+        setIsLoading(false)
+        clearInterval(progressInterval)
+      }
+    }, 2500)
+
+    return () => {
+      clearTimeout(timer)
+      clearTimeout(fallbackTimer)
+      clearInterval(progressInterval)
+
+      const video = document.querySelector('.bg-video')
+      if (video) {
+        video.removeEventListener('loadeddata', checkCriticalResources)
+        video.removeEventListener('canplay', checkCriticalResources)
+      }
+    }
+  }, [isMounted])
+
+  // Optimized GSAP animations with reduced dependencies
+  useGSAP(() => {
+    if (!isMounted) return
+
+    if (animationRef.current) {
+      animationRef.current.kill()
+    }
+
+    const isMobile = isMobileDevice()
+    const orientation = getTextOrientation()
+
+    let initialScale, finalScale
+
+    if (isMobile && orientation === 'vertical') {
+      // Adjust scales for vertical text on mobile
+      const screenRatio = window.innerHeight / window.innerWidth
+      initialScale = screenRatio > 1.6 ? 0.7 : 0.7
+      finalScale = 15 // Increased for better vertical coverage
+    } else if (isMobile) {
+      const screenRatio = window.innerHeight / window.innerWidth
+      initialScale = screenRatio > 1.6 ? 0.5 : 0.5
+      finalScale = 20
+    } else {
+      initialScale = 1.15
+      finalScale = 15
+    }
+
+    // Batch GSAP operations
+    gsap.set('.vi-mask-group', {
+      scale: initialScale,
+      transformOrigin: 'center center',
+    })
+
+    animationRef.current = gsap.to('.vi-mask-group', {
+      rotate: orientation === 'vertical' ? 0 : 10,
+      scale: finalScale,
+      transformOrigin: '50% 50%',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.svg-container',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        pin: true,
+        onEnter: () => setShowContent(true),
+        onLeaveBack: () => setShowContent(false),
+      },
+    })
+
+    gsap.to('.bg-video', {
+      opacity: 0.5,
+      scrollTrigger: {
+        trigger: '.about',
+        start: 'top center',
+        end: 'top top',
+        scrub: true,
+      },
+    })
+    gsap.to('.chat-launcher', {
+      autoAlpha: 1, // Fades in and handles visibility
+      scale: 1, // Scales it from its default 0.5 to 1
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: '.about', // The element that triggers the animation
+        start: 'top center', // Starts when the top of ".about" hits the viewport center
+        toggleActions: 'play none none reverse', // Fades in on scroll down, fades out on scroll up
+      },
+    })
+
+    // Throttled resize handler
+    let resizeTimeout
+    const handleResize = () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(() => {
+        if (isMounted) {
+          ScrollTrigger.refresh()
+        }
+      }, 250)
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      clearTimeout(resizeTimeout)
+      if (animationRef.current) {
+        animationRef.current.kill()
+      }
+    }
+  }, [isMobileDevice, isMounted, getTextOrientation])
+
+  // Optimized video element with preload and lazy loading
+  const VideoBackground = useMemo(
+    () => (
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="w-full h-full object-cover bg-video"
+        onLoadedData={() => {
+          // Video loaded callback for better loading detection
+          if (isLoading && loadingProgress < 90 && isMounted) {
+            setLoadingProgress(90)
+          }
+        }}
+      >
+        <source
+          src="https://res.cloudinary.com/dp4sknsba/video/upload/v1765811525/WhatsApp_Video_2025-12-15_at_20.29.46_61490805_my0otm.mp4"
+          type="video/mp4"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-purple-900 flex items-center justify-center">
+          <h1 className="text-4xl font-bold text-white">CSS</h1>
+        </div>
+      </video>
+    ),
+    [isLoading, loadingProgress, isMounted]
+  )
+
+  if (!isMounted) {
+    return null
+  }
+
+  return (
+    <>
+      {isLoading && <LoadingScreen loadingProgress={loadingProgress} />}
+
+      <div className={`w-full relative bg-black `}>
+        <Chatbot />
+
+        <div className="svg-container sticky top-0 z-[100] w-full h-screen flex items-center justify-center bg-red">
+          <svg
+            ref={svgRef}
+            viewBox={getViewBox()}
+            preserveAspectRatio="xMidYMid slice"
+            className="w-full h-full"
+          >
+            <defs>
+              <mask id="viMask">
+                <rect width="100%" height="100%" fill="black" />
+                {MaskText}
+              </mask>
+            </defs>
+
+            <foreignObject width="100%" height="100%" mask="url(#viMask)">
+              {VideoBackground}
+            </foreignObject>
+          </svg>
+        </div>
+
+        {showNavbar && <NavbarDemo />}
+
+        {/* About Section - Reduced padding for mobile */}
+        <section
+          id="about"
+          className="about relative min-h-[65vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-4 py-1 md:py-3.5 overflow-hidden"
+        >
+          <div className="relative z-10 max-w-6xl w-full flex flex-col md:flex-row items-center gap-6 md:gap-10">
+            <div className="flex-1 bg-black/70 rounded-xl border border-cyan-500/20 p-5 md:p-8 lg:p-12 backdrop-blur-md shadow-lg shadow-cyan-500/10">
+              <div className="flex items-center mb-3 md:mb-6">
+                <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full mr-2"></div>
+                <span className="text-cyan-400 font-mono text-sm md:text-md">
+                  ABOUT_TERMINAL
+                </span>
+              </div>
+              <div className="space-y-3 md:space-y-6 font-mono">
+                <p className="text-xl md:text-3xl font-bold text-green-400 tracking-wide">
+                  <span className="text-cyan-400">$~ </span> mkdir{' '}
+                  <span className="text-xl md:text-3xl">
+                    Computer-Science-Society
+                  </span>
+                </p>
+                <p className="text-sm md:text-xl text-gray-300 leading-relaxed">
+                  <span className="text-emerald-400 font-mono">$~</span> cat{' '}
+                  <span className="text-white">About.txt</span>
+                  <br />
+                  The{' '}
+                  <span className="highlight font-semibold text-base md:text-2xl text-white">
+                    Computer Science Society
+                  </span>
+                  , run by the CSE department of
+                  <span className="highlight font-semibold text-base md:text-2xl text-white">
+                    {' '}
+                    NIT Silchar
+                  </span>
+                  , aims to impart academic, technical, and socio-cultural
+                  awareness to the students of our college.
+                </p>
+              </div>
+              <div className="flex items-center mt-3 md:mt-6">
+                <span className="text-cyan-400 font-mono text-sm md:text-lg mr-2">
+                  $~
+                </span>
+                {/* <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="bg-transparent outline-none border-none text-sm md:text-lg font-mono text-white w-full caret-cyan-400"
+                  placeholder="type a command..."
+                  autoFocus
+                /> */}
+              </div>
+            </div>
+
+            {/* Image Container - Hidden on mobile, visible on medium screens and up */}
+            <div className=" flex-1 justify-center">
+              <img
+                src="/images/about.png"
+                alt="About Us"
+                loading="lazy"
+                className="rounded-2xl shadow-lg shadow-cyan-500/20 border border-cyan-500/20 object-cover max-h-[300px] md:max-h-[400px] w-full"
+                onLoad={() => {
+                  // Image loaded callback
+                  if (isLoading && loadingProgress < 80 && isMounted) {
+                    setLoadingProgress(80)
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Sponsors Section */}
+
+        {/* Sponsors Section */}
+        <section
+          id="sponsors"
+          className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-4 py-8 md:py-12 overflow-hidden"
+        >
+          {/* Main Content */}
+          <div className="relative z-10 w-full max-w-7xl mx-auto">
+            {/* Section Header */}
+            <div className="text-center mb-8 md:mb-16 px-2">
+              <div className="flex items-center justify-center mb-4 md:mb-6">
+                <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full mr-1 md:mr-2 animate-pulse"></div>
+                <div
+                  className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full mr-1 md:mr-2 animate-pulse"
+                  style={{ animationDelay: '0.2s' }}
+                ></div>
+                <div
+                  className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full mr-1 md:mr-2 animate-pulse"
+                  style={{ animationDelay: '0.4s' }}
+                ></div>
+                <span className="text-cyan-400 font-mono text-xs md:text-sm bg-cyan-900/30 px-2 md:px-3 py-1 rounded-full border border-cyan-500/30">
+                  SPONSORS_TERMINAL
+                </span>
+              </div>
+
+              <h2 className="text-3xl md:text-6xl font-bold text-white mb-4 md:mb-6 font-mono">
+                <span className="text-cyan-400">$~ </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-green-400">
+                  Our Valued Partners
+                </span>
+              </h2>
+
+              <p className="text-base md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed bg-black/30 px-4 py-3 md:px-6 md:py-3 rounded-lg border border-cyan-500/20">
+                We are grateful for the support from our partners who help us
+                empower the next generation of tech leaders.
+              </p>
+            </div>
+
+            {/* Sponsors Grid - Stack on mobile, side-by-side on desktop */}
+            <div className="bg-gradient-to-br from-black/60 to-cyan-900/20 rounded-xl md:rounded-3xl border border-cyan-500/30 backdrop-blur-md shadow-xl md:shadow-2xl shadow-cyan-500/10 overflow-hidden p-4 md:p-8 lg:p-12 relative">
+              {/* Animated background elements */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse"></div>
+              <div className="absolute -top-6 -right-6 w-16 h-16 md:-top-10 md:-right-10 md:w-20 md:h-20 bg-cyan-400/10 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-6 -left-6 w-16 h-16 md:-bottom-10 md:-left-10 md:w-20 md:h-20 bg-purple-400/10 rounded-full blur-xl"></div>
+
+              {/* Vertical layout for mobile, horizontal for desktop */}
+              <div className="flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 relative z-10">
+                {SPONSORS_DATA.map((sponsor, index) => (
+                  <a
+                    key={sponsor.name}
+                    href={sponsor.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative flex flex-col items-center justify-center p-4 md:p-6 lg:p-8 bg-gradient-to-br from-gray-900/80 to-cyan-900/20 rounded-xl md:rounded-2xl border border-cyan-500/30 hover:border-cyan-400 transition-all duration-300 transform hover:scale-[1.02] md:hover:scale-105 hover:shadow-lg md:hover:shadow-2xl hover:shadow-cyan-500/20"
+                  >
+                    {/* Hover glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                    {/* Sponsor Type Badge - Smaller on mobile */}
+                    <div className="absolute -top-2 md:-top-3 left-1/2 transform -translate-x-1/2">
+                      <span className="bg-cyan-500 text-white text-xs md:text-sm font-mono px-2 md:px-3 py-1 rounded-full border border-cyan-400/50 whitespace-nowrap">
+                        {sponsor.type}
+                      </span>
+                    </div>
+
+                    {/* Sponsor Logo - Responsive sizing */}
+                    <div className="relative z-10 p-3 md:p-4 lg:p-6 bg-white/5 rounded-xl md:rounded-2xl border border-cyan-500/20 group-hover:border-cyan-400/50 transition-all duration-300 w-full max-w-[280px] md:max-w-xs">
+                      <img
+                        src={sponsor.logo}
+                        alt={`${sponsor.name} logo`}
+                        loading="lazy"
+                        className="h-20 md:h-24 lg:h-32 w-full object-contain brightness-110"
+                      />
+                    </div>
+
+                    {/* Sponsor Name - Responsive text */}
+                    <p className="mt-4 md:mt-6 text-lg md:text-xl lg:text-2xl font-mono font-bold text-white text-center bg-black/30 px-4 py-2 md:px-6 md:py-2 rounded-full border border-cyan-500/20 group-hover:border-cyan-400 transition-colors duration-300">
+                      {sponsor.name}
+                    </p>
+
+                    {/* Visit Website Text - Smaller on mobile */}
+                    <div className="mt-3 md:mt-4 flex items-center text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300">
+                      <span className="text-xs md:text-sm lg:text-base font-mono mr-1 md:mr-2">
+                        Visit Website
+                      </span>
+                      <svg
+                        className="w-3 h-3 md:w-4 md:h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
+                      </svg>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA Section - Responsive layout */}
+            <div className="mt-8 md:mt-12 lg:mt-16 text-center">
+              <div className="inline-flex flex-col md:flex-row items-center gap-3 md:gap-4 lg:gap-6 px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-500/30 backdrop-blur-md">
+                <span className="text-cyan-400 font-mono text-xs md:text-sm lg:text-base">
+                  $~ become-a-sponsor --help
+                </span>
+                <button className="px-4 py-2 md:px-6 md:py-2 bg-cyan-500 hover:bg-cyan-400 text-white font-mono text-xs md:text-sm rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30">
+                  Join as Sponsor
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Announcement Section */}
+        <section
+          id="announcement"
+          className="relative min-h-[90vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex flex-col items-center justify-center px-3 py-1 md:py-7 overflow-hidden"
+        >
+          {/* Foreground Terminal Box */}
+          <div className="relative z-10 w-full max-w-[1200px] bg-black/70 rounded-xl border border-cyan-500/20 p-3 md:p-9 backdrop-blur-md shadow-lg shadow-cyan-500/10">
+            {/* Terminal Header */}
+            <div className="flex items-center mb-3 md:mb-4">
+              <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full mr-1 md:mr-2"></div>
+              <div className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full mr-1 md:mr-2"></div>
+              <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full mr-1 md:mr-2"></div>
+              <span className="text-cyan-400 font-mono text-xs md:text-sm">
+                ANNOUNCEMENTS_TERMINAL
+              </span>
+            </div>
+
+            {/* Terminal Title */}
+            <h2 className="text-lg md:text-3xl font-mono font-bold text-green-400 mb-0 md:mb-4">
+              <span className="text-cyan-400">$~ </span> Announcements
+            </h2>
+
+            {/* Carousel */}
+            <div className="w-full flex justify-center">
+              <Carousel />
+            </div>
+            <div className="flex items-center mt-4 md:mt-6">
+              <span className="text-cyan-400 font-mono text-sm md:text-lg mr-2">
+                $~
+              </span>
+              <div className="w-[2px] h-4 md:h-6 bg-cyan-400 animate-blink"></div>
+            </div>
+          </div>
+        </section>
+        {/* <SponsorPopup
+          isOpen={showSponsorPopup}
+          onClose={() => {
+            setShowSponsorPopup(false)
+            setSponsorPopupShown(true)
+            // Show second popup after a short delay
+            setTimeout(() => {
+              setShowSecondSponsorPopup(true)
+            }, 500) // 500ms delay between popups
+          }}
+          sponsorData={{
+            name: 'Campa Cola',
+            posterUrl:
+              'https://res.cloudinary.com/dp4sknsba/image/upload/v1761985648/Freshers_Beverage_1_icue0p.jpg',
+            websiteUrl: 'https://campabeverages.com/',
+            type: 'Official Beverage Partner',
+          }}
+        />
+
+        <SponsorPopup
+          isOpen={showSecondSponsorPopup}
+          onClose={() => setShowSecondSponsorPopup(false)}
+          sponsorData={{
+            name: 'Momo Magic Cafe',
+            posterUrl:
+              'https://res.cloudinary.com/dp4sknsba/image/upload/v1761996566/Freshers_Food_Final_znhgie.jpg',
+            websiteUrl: 'https://momomagiccafe.in/',
+            type: 'Official Food Partner',
+          }}
+        /> */}
+
+        {/* Pillars Section */}
+        <section className="relative min-h-[90vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-3 py-1 md:py-7 overflow-hidden">
+          {/* Main Content */}
+          <div className="relative z-10 w-full max-w-7xl">
+            {/* Section Header */}
+            <div className="text-center mb-6 md:mb-16 px-2">
+              <div className="flex items-center justify-center mb-3 md:mb-4">
+                <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full mr-1 md:mr-2"></div>
+                <div className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full mr-1 md:mr-2"></div>
+                <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full mr-1 md:mr-2"></div>
+                <span className="text-cyan-400 font-mono text-xs md:text-sm">
+                  PILLARS_OF_CSS_TERMINAL
+                </span>
+              </div>
+
+              <h2 className="text-xl md:text-5xl font-bold text-white mb-2 md:mb-4 font-mono">
+                <span className="text-cyan-400">$~ </span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400">
+                  Pillars of CSS
+                </span>
+              </h2>
+
+              <p className="text-xs md:text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                The five foundational pillars that define the Computer Science
+                Society and drive our mission forward.
+              </p>
+            </div>
+
+            {/* Testimonials Component */}
+            <div className="bg-black/50 rounded-xl md:rounded-2xl border border-cyan-500/30 backdrop-blur-md shadow-lg md:shadow-2xl shadow-cyan-500/10 overflow-hidden">
+              <AnimatedTestimonials
+                testimonials={PILLARS_TESTIMONIALS}
+                autoplay={true}
+              />
+            </div>
+
+            {/* Additional Info */}
+            <div className="mt-6 md:mt-12 text-center">
+              <div className="inline-flex items-center px-3 py-1 md:px-6 md:py-3 rounded-full bg-cyan-900/30 border border-cyan-500/50">
+                <span className="text-cyan-400 font-mono text-xs md:text-sm">
+                  $~ cat pillars.txt | more...
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  )
+}
+
+export default React.memo(Home)
