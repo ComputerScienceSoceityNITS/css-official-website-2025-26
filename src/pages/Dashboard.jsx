@@ -13,7 +13,7 @@ const badges = [
 ];
 
 const Dashboard = () => {
-    const { user, signOut, loading: authLoading, profile: authProfile } = useAuth();
+  const { user, signOut, loading: authLoading, profile: authProfile } = useAuth();
     const navigate = useNavigate();
     const [localProfile, setLocalProfile] = useState(null);
     const [attendedEvents, setAttendedEvents] = useState([]);

@@ -40,16 +40,24 @@ const CertificateSection = () => {
   }, [user]);
 
 
+  console.log("CertificateSection: Component rendered", { user: !!user, error, showCertificate });
+
   if (error) {
     console.error("Certificate error:", error);
-    return null; // Silently fail without breaking the component tree
+    return (
+      <div className="mt-6">
+        <p className="text-red-400 text-sm">
+          Certificate check failed: {error}
+        </p>
+      </div>
+    );
   }
 
   if (!showCertificate) {
     return (
       <div className="mt-6">
         <p className="text-gray-600 text-sm">
-          No certificates for download
+          No certificates for download 
         </p>
       </div>
     );
