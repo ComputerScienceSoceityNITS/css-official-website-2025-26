@@ -1,4 +1,4 @@
-import dialogflowLib from '@google-cloud/dialogflow';
+import { GoogleAuth } from 'google-auth-library';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,21 +20,24 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Session ID is required' });
     }
 
+    const projectId = process.env.GOOGLE_PROJECT_ID || 'whatever-ceyu';
     const credentialsString = process.env.GOOGLE_CREDENTIALS_JSON || '{}';
     const credentials = JSON.parse(credentialsString);
-    const projectId = process.env.GOOGLE_PROJECT_ID || 'whatever-ceyu';
 
-    const sessionClient = new dialogflowLib.SessionsClient({
-      credentials: credentials,
+    // Initialize Auth
+    const auth = new GoogleAuth({
+      credentials: Object.keys(credentials).length > 0 ? credentials : null,
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
     });
+    
+    // Fallback if credentials object is completely empty (useful for local if GOOGLE_APPLICATION_CREDENTIALS env var is somehow used)
+    const client = await auth.getClient();
+    const accessTokenObj = await client.getAccessToken();
+    const accessToken = accessTokenObj.token || accessTokenObj; // Depending on versions, it might return string or object
 
-    const sessionPath = sessionClient.projectAgentSessionPath(
-      projectId,
-      sessionId
-    );
-
-    const request = {
-      session: sessionPath,
+    const dialogflowUrl = `https://dialogflow.googleapis.com/v2/projects/${projectId}/agent/sessions/${sessionId}:detectIntent`;
+    
+    const requestBody = {
       queryInput: isEvent
         ? {
             event: {
@@ -50,8 +53,23 @@ export default async function handler(req, res) {
           },
     };
 
-    const responses = await sessionClient.detectIntent(request);
-    const result = responses[0].queryResult;
+    const response = await fetch(dialogflowUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Dialogflow REST API Error:', response.status, errorText);
+      throw new Error(`Dialogflow API responded with status ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    const result = data.queryResult;
 
     let responseText = result.fulfillmentText;
 
@@ -76,4 +94,4 @@ export default async function handler(req, res) {
       details: error.message,
     });
   }
-}
+}

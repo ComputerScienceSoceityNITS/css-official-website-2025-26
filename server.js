@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import dialogflowLib from '@google-cloud/dialogflow';
+import { GoogleAuth } from 'google-auth-library';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -21,10 +21,10 @@ const credentials = process.env.GOOGLE_CREDENTIALS_JSON
   ? JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON)
   : undefined;
 
-const sessionClient = new dialogflowLib.SessionsClient(
+const auth = new GoogleAuth(
   credentials 
-    ? { credentials } 
-    : { keyFilename: join(__dirname, 'whatever-ceyu-b622005692d5.json') }
+    ? { credentials: Object.keys(credentials).length > 0 ? credentials : null, scopes: 'https://www.googleapis.com/auth/cloud-platform' } 
+    : { keyFilename: join(__dirname, 'whatever-ceyu-b622005692d5.json'), scopes: 'https://www.googleapis.com/auth/cloud-platform' }
 );
 
 const projectId = process.env.GOOGLE_PROJECT_ID || 'whatever-ceyu';
@@ -37,16 +37,16 @@ app.post('/api/dialogflow', async (req, res) => {
       return res.status(400).json({ error: 'Session ID is required' });
     }
 
-    const sessionPath = sessionClient.projectAgentSessionPath(
-      projectId,
-      sessionId
-    );
+    const client = await auth.getClient();
+    const accessTokenObj = await client.getAccessToken();
+    const accessToken = accessTokenObj.token || accessTokenObj;
 
-    let request;
+    const dialogflowUrl = `https://dialogflow.googleapis.com/v2/projects/${projectId}/agent/sessions/${sessionId}:detectIntent`;
+
+    let requestBody;
 
     if (isEvent) {
-      request = {
-        session: sessionPath,
+      requestBody = {
         queryInput: {
           event: {
             name: message,
@@ -55,8 +55,7 @@ app.post('/api/dialogflow', async (req, res) => {
         },
       };
     } else {
-      request = {
-        session: sessionPath,
+      requestBody = {
         queryInput: {
           text: {
             text: message,
@@ -66,8 +65,23 @@ app.post('/api/dialogflow', async (req, res) => {
       };
     }
 
-    const responses = await sessionClient.detectIntent(request);
-    const result = responses[0].queryResult;
+    const response = await fetch(dialogflowUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Dialogflow REST API Error:', response.status, errorText);
+      throw new Error(`Dialogflow API responded with status ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    const result = data.queryResult;
 
     let responseText = result.fulfillmentText;
 
@@ -96,4 +110,4 @@ app.post('/api/dialogflow', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Dialogflow server running on http://localhost:${port}`);
-});
+});
