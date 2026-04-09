@@ -40,6 +40,7 @@ import Certificates from "./pages/Certificates";
 import SystemVerification from "./components/SystemVerification";
 import ErrorBoundary from './components/ErrorBoundary';
 import AppDownload from './pages/CSS-APP'
+import Abacus from './pages/Abacus'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -117,7 +118,7 @@ const GuestRoute = ({ children }) => {
   }
 
   if (user) {
-    return <Navigate to="/esperanza" replace />
+    return <Navigate to="/Abacus" replace />
   }
 
   return children
@@ -209,6 +210,16 @@ const App = () => {
                   <PageWrapper>
                     <Developers />
                   </PageWrapper>
+                }
+              />
+              <Route
+                path="/Abacus"
+                element={
+                  <ProtectedRoute requireProfileCompletion={true}>
+                    <PageWrapper>
+                      <Abacus />
+                    </PageWrapper>
+                  </ProtectedRoute>
                 }
               />
 
