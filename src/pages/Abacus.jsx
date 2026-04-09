@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { supabase } from '../supabaseClient';
+import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../context/AuthContext.jsx';
+import { supabase } from '../supabaseClient.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
 import { FaWhatsapp, FaInfoCircle, FaScroll, FaUserEdit, FaDownload, FaUsers, FaCheckCircle, FaExclamationTriangle, FaChevronRight } from 'react-icons/fa';
