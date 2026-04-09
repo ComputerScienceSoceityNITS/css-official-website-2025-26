@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gsap } from 'gsap';
-import { FaWhatsapp, FaInfoCircle, FaScroll, FaUserEdit, FaDownload, FaUsers, FaCheckCircle, FaExclamationTriangle, FaChevronRight, FaTerminal } from 'react-icons/fa';
+import { FaWhatsapp, FaInfoCircle, FaScroll, FaUserEdit, FaDownload, FaUsers, FaCheckCircle, FaExclamationTriangle, FaChevronRight } from 'react-icons/fa';
 import abacusEvents from '../jsonData/abacus.json';
 
 // --- UI Components ---
