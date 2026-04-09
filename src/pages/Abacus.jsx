@@ -37,7 +37,7 @@ const Toast = ({ message, type = 'success', onClose }) => {
 // --- Main Component ---
 
 const Abacus = () => {
-    const { user, profile, isCollegeEmail } = useAuth();
+    const { user, profile } = useAuth();
     const [selectedEvent, setSelectedEvent] = useState(abacusEvents[0]);
     const [activeTab, setActiveTab] = useState('description');
     const [toast, setToast] = useState(null);
@@ -96,7 +96,6 @@ const Abacus = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         if (!user) return setToast({ message: 'Authorization required.', type: 'error' });
-        if (!isCollegeEmail(user.email)) return setToast({ message: 'NIT Silchar email required.', type: 'error' });
 
         setLoading(true);
         try {
@@ -113,7 +112,7 @@ const Abacus = () => {
                 if (error.code === '23505') setToast({ message: 'Duplicate registration detected.', type: 'error' });
                 else throw error;
             } else {
-                setToast({ message: 'Neutral network updated. Registration complete.', type: 'success' });
+                setToast({ message: 'Registration complete.', type: 'success' });
                 setRegistrations(prev => [...prev, selectedEvent.slug]);
             }
         } catch (error) {
