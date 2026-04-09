@@ -104,7 +104,7 @@ const ProtectedRoute = ({
   return children
 }
 
-const GuestRoute = ({ children }) => {
+const GuestRoute =  ({ children }) => {
   const { user, loading } = useAuth()
   if (loading) {
     return (
