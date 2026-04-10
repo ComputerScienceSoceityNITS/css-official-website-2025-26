@@ -10,7 +10,6 @@ import Member from './pages/Member'
 import Home from './pages/Home'
 import { NavbarDemo } from './components/Navbar'
 import Events from './pages/Events'
-import MoreEvents from './pages/MoreEvents'
 import Auth from './pages/Auth'
 import OtpVerification from './pages/OtpVerification'
 import Dashboard from './pages/Dashboard'
@@ -30,7 +29,8 @@ import Leaderboard from './pages/Leaderboard'
 import ScrollToTop from './components/ScrolltoTop'
 
 import { initGA, logPageView } from './utils/analytics'
-import DiwaliWidget from './components/DiwaliWidget'
+
+
 import ChatSystem from './pages/ChatSystem'
 import EmailMigration from './pages/EmailMigration'
 import MigrationCallback from './pages/MigrationCallBack'
@@ -40,6 +40,7 @@ import Certificates from "./pages/Certificates";
 import SystemVerification from "./components/SystemVerification";
 import ErrorBoundary from './components/ErrorBoundary';
 import AppDownload from './pages/CSS-APP'
+import Abacus from './pages/Abacus'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -103,7 +104,7 @@ const ProtectedRoute = ({
   return children
 }
 
-const GuestRoute = ({ children }) => {
+const GuestRoute =  ({ children }) => {
   const { user, loading } = useAuth()
   if (loading) {
     return (
@@ -117,7 +118,7 @@ const GuestRoute = ({ children }) => {
   }
 
   if (user) {
-    return <Navigate to="/esperanza" replace />
+    return <Navigate to="/Abacus" replace />
   }
 
   return children
@@ -208,6 +209,14 @@ const App = () => {
                 element={
                   <PageWrapper>
                     <Developers />
+                  </PageWrapper>
+                }
+              />
+              <Route
+                path="/Abacus"
+                element={
+                  <PageWrapper>
+                    <Abacus />
                   </PageWrapper>
                 }
               />

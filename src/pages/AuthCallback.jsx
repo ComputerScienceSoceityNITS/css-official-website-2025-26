@@ -42,7 +42,7 @@ const AuthCallback = () => {
                     await refreshProfile();
                     
                     
-                    let redirectTo = '/esperanza'; 
+                    let redirectTo = '/Abacus'; 
                     
                     
                     const storedRedirect = localStorage.getItem('postVerificationRedirect');
@@ -62,7 +62,7 @@ const AuthCallback = () => {
                     
                     const previousPath = document.referrer;
                     if (previousPath && previousPath.includes('/esperanza')) {
-                        redirectTo = '/esperanza';
+                        redirectTo = '/Abacus';
                     }
 
                     
