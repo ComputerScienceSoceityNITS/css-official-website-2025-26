@@ -38,8 +38,8 @@
     "slug": "uiux-duel",
     "description": "Design duel. Create stunning interfaces based on a mystery prompt within 4 hours.",
     "rules": "1. Tool allowed: Figma / Adobe XD.\n2. Design must be responsive.\n3. Submission must include the design file and a viewable link.\n4. Focus on accessibility and user experience.",
-    "type": "single",
-    "maxTeamSize": 1,
+    "type": "team",
+    "maxTeamSize": 3,
     "whatsappLink": "https://chat.whatsapp.com/E78VjnRUR4pBHIeTlvObfC?mode=gi_t",
     "posterUrl": null
   },
