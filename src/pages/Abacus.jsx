@@ -180,35 +180,36 @@ const Abacus = () => {
                 </header>
 
                 {/* Mobile Selector */}
-                <div className="lg:hidden mb-10 relative">
+                <div className="lg:hidden mb-6 relative">
+                    <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-2 block ml-4">SELECT EVENT FROM MENU</label>
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="w-full h-16 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl flex items-center justify-between px-6 group transition-all"
+                        className="w-full h-14 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl flex items-center justify-between px-5 group transition-all"
                     >
-                        <div className="flex items-center gap-4">
-                            <div className="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_10px_#7c3aed]" />
-                            <span className="font-black text-xl tracking-tight uppercase text-white/90">{selectedEvent.name}</span>
+                        <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_10px_#7c3aed]" />
+                            <span className="font-bold text-lg tracking-tight text-white/90 truncate">{selectedEvent.name}</span>
                         </div>
-                        <FaChevronRight className={`transition-transform duration-500 ${isDropdownOpen ? 'rotate-90 text-purple-400' : 'text-white/20'}`} />
+                        <FaChevronRight className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-90 text-purple-400' : 'text-white/20'}`} />
                     </button>
                     <AnimatePresence>
                         {isDropdownOpen && (
                             <motion.div
-                                initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                                className="absolute top-full left-0 right-0 mt-3 z-50 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl p-3 space-y-1"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-xl shadow-2xl p-2 max-h-[60vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-purple-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-purple-500/50"
                             >
                                 {abacusEvents.map((event) => (
                                     <button
                                         key={event.id}
                                         onClick={() => { setSelectedEvent(event); setActiveTab('description'); setIsDropdownOpen(false); }}
-                                        className={`w-full text-left p-4 rounded-xl flex items-center justify-between transition-all ${
-                                            selectedEvent.id === event.id ? 'bg-purple-600 text-white font-bold shadow-lg' : 'hover:bg-white/5 text-white/50'
+                                        className={`w-full text-left p-3 rounded-lg flex items-center justify-between transition-all mb-1 last:mb-0 ${
+                                            selectedEvent.id === event.id ? 'bg-purple-600/40 border border-purple-500/30 text-white font-bold' : 'hover:bg-white/5 text-white/60'
                                         }`}
                                     >
-                                        <span className="text-lg">{event.name}</span>
-                                        {registrations.includes(event.slug) && <FaCheckCircle />}
+                                        <span className="text-base">{event.name}</span>
+                                        {registrations.includes(event.slug) && <FaCheckCircle className="text-purple-400 text-sm" />}
                                     </button>
                                 ))}
                             </motion.div>
@@ -264,12 +265,12 @@ const Abacus = () => {
                                     <button
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
-                                        className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all relative overflow-hidden group ${
-                                            activeTab === tab.id ? 'bg-white text-black' : 'text-white/40 hover:bg-white/5'
+                                        className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-3 rounded-2xl font-bold sm:font-black text-sm uppercase tracking-wider transition-all relative overflow-hidden group ${
+                                            activeTab === tab.id ? 'bg-white text-black' : 'text-white/50 hover:bg-white/10'
                                         }`}
                                     >
-                                        <span className={activeTab === tab.id ? 'text-black' : 'text-purple-500'}>{tab.icon}</span>
-                                        <span className="hidden sm:inline">{tab.label}</span>
+                                        <span className={`text-lg sm:text-base ${activeTab === tab.id ? 'text-black' : 'text-purple-500'}`}>{tab.icon}</span>
+                                        <span>{tab.label}</span>
                                         {activeTab === tab.id && (
                                             <motion.div layoutId="tab-active-pill" className="absolute inset-0 bg-white -z-10" />
                                         )}
@@ -357,21 +358,36 @@ const Abacus = () => {
 
                                         {activeTab === 'register' && (
                                             <div className="max-w-xl mx-auto w-full py-12">
-                                                {isRegistered ? (
+                                                {!user ? (
+                                                    <div className="text-center space-y-8">
+                                                        <div className="w-32 h-32 rounded-[2.5rem] bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(244,63,94,0.1)]">
+                                                            <FaExclamationTriangle className="text-rose-500 text-5xl" />
+                                                        </div>
+                                                        <div className="space-y-4">
+                                                            <h3 className="text-4xl font-black text-white uppercase tracking-tight">Authentication Required</h3>
+                                                            <p className="text-gray-400 text-lg font-medium">You must be logged in to access the registration terminal for {selectedEvent.name}.</p>
+                                                        </div>
+                                                        <div className="flex justify-center pt-4">
+                                                            <a href="/auth" className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-[0_0_30px_rgba(124,58,237,0.3)] border border-purple-500/30">
+                                                                Initiate Login
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                ) : isRegistered ? (
                                                     <div className="text-center space-y-8">
                                                         <div className="w-32 h-32 rounded-[2.5rem] bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
                                                             <FaCheckCircle className="text-emerald-500 text-5xl" />
                                                         </div>
                                                         <div className="space-y-4">
-                                                            <h3 className="text-4xl font-black text-white uppercase tracking-tight">Access Granted</h3>
-                                                            <p className="text-gray-400 text-lg font-medium">Authentication complete for {selectedEvent.name}. Connection stable.</p>
+                                                            <h3 className="text-4xl font-black text-white uppercase tracking-tight">Registration Done</h3>
+                                                            <p className="text-gray-400 text-lg font-medium">You have been successfully registered for {selectedEvent.name}.</p>
                                                         </div>
                                                         <div className="flex flex-col items-center gap-6">
                                                             <a 
                                                                 href={selectedEvent.whatsappLink} target="_blank" rel="noreferrer"
                                                                 className="inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-105 transition-all text-white rounded-3xl font-black text-lg shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
                                                             >
-                                                                <FaWhatsapp size={24} /> JOIN COMMAND CENTER
+                                                                <FaWhatsapp size={24} /> JOIN THE WHATSAPP GROUP
                                                             </a>
                                                             {isAdmin && (
                                                                 <button 
@@ -385,6 +401,14 @@ const Abacus = () => {
                                                     </div>
                                                 ) : (
                                                     <form onSubmit={handleRegister} className="space-y-6">
+                                                        <div className="space-y-3">
+                                                            <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">FULL NAME</label>
+                                                            <input 
+                                                                type="text" required placeholder="Your Full Name" value={formData.name}
+                                                                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-white placeholder:text-white/10"
+                                                            />
+                                                        </div>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                             <div className="space-y-3">
                                                                 <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">SCHOLAR ID</label>
@@ -409,7 +433,7 @@ const Abacus = () => {
                                                                 <div className="space-y-3">
                                                                     <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2 flex items-center gap-2"><FaUsers /> TEAM NAME</label>
                                                                     <input 
-                                                                        type="text" required placeholder="Designation" value={formData.teamName}
+                                                                        type="text" required placeholder="Team Name" value={formData.teamName}
                                                                         onChange={(e) => setFormData({...formData, teamName: e.target.value})}
                                                                         className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all"
                                                                     />

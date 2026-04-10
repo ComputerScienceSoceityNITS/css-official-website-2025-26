@@ -215,11 +215,9 @@ const App = () => {
               <Route
                 path="/Abacus"
                 element={
-                  <ProtectedRoute requireProfileCompletion={true}>
-                    <PageWrapper>
-                      <Abacus />
-                    </PageWrapper>
-                  </ProtectedRoute>
+                  <PageWrapper>
+                    <Abacus />
+                  </PageWrapper>
                 }
               />
 

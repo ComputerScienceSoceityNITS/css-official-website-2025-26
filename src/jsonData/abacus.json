@@ -1,61 +1,50 @@
 [
   {
-    "id": 1,
+  "id": 1,
+  "name": "Algochemy",
+  "slug": "algochemy",
+  "description": "Algochemy is an ICPC-style competitive programming contest designed to test problem-solving skills, speed, and teamwork. Teams will compete in a single offline round, solving a diverse set of algorithmic challenges under strict contest conditions.",
+  "rules": "1. Team size: 2-3 members.\n2. Open to 1st to 3rd year students (cross-branch teams allowed).\n3. Contest duration: 3 to 4 hours with 12-14 problems.\n4. Use of internet, search engines, or AI tools is strictly prohibited.\n5. Copying or sharing code between teams will result in disqualification.\n6. Self-prepared templates and printed notes are allowed.\n7. Participants must not use any external assistance during the contest.\n8. Final rankings will be based on official contest standings.\n9. Participants must bring their own laptops and ensure setup is complete.\n10. Violation of any rule will lead to immediate disqualification.",
+  "type": "team",
+  "maxTeamSize": 3,
+  "whatsappLink": "https://chat.whatsapp.com/ALGOCHEMY_LINK",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/algochemy-poster.png"
+},
+  {
+    "id": 2,
     "name": "CSS Hacks",
     "slug": "css-hacks",
     "description": "CSS Hacks is our flagship web development hackathon. Bring your innovative ideas to life in a high-pressure, cyberpunk-themed competition.",
-    "rules": "1. Team size: 2-4 members.\n2. Only college students are allowed.\n3. Projects must be built during the hackathon.\n4. Use of pre-built libraries is allowed, but core logic must be original.\n5. Submission must include source code and a live demo link.",
+    "rules": "1. Team size: 2-4 members.\n2. Only 1st & 2nd Year students are allowed.\n3. Projects must be built during the hackathon.\n4. Use of pre-built libraries is allowed, but core logic must be original.\n5. Submission must include source code and a live demo link.",
     "type": "team",
     "maxTeamSize": 4,
     "whatsappLink": "https://chat.whatsapp.com/CSS_HACKS_LINK",
     "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png"
   },
   {
-    "id": 2,
-    "name": "Datathon",
-    "slug": "datathon",
-    "description": "Unlock the power of data. Solve real-world problems using machine learning, statistics, and neural uplinks in the Neon Grid Datathon.",
-    "rules": "1. Team size: 1-3 members.\n2. Datasets will be provided at the start of the event.\n3. Participants must submit a Jupyter Notebook or equivalent script.\n4. Accuracy and innovation in feature engineering will be prioritized.",
-    "type": "team",
-    "maxTeamSize": 3,
-    "whatsappLink": "https://chat.whatsapp.com/DATATHON_LINK",
-    "posterUrl": null
-  },
-  {
-    "id": 3,
-    "name": "Open Source Marathon",
-    "slug": "open-source-marathon",
-    "description": "Contribute to the global ecosystem. Spend 24 hours squashing bugs and building features for open-source repositories.",
-    "rules": "1. Individual or pairs allowed.\n2. Contributions must be merged or under review by the end of the marathon.\n3. Pull requests must follow repository contribution guidelines.\n4. Bonus points for contributing to CSS projects.",
-    "type": "team",
-    "maxTeamSize": 2,
-    "whatsappLink": "https://chat.whatsapp.com/OSM_LINK",
-    "posterUrl": null
-  },
-  {
+  "id": 3,
+  "name": "ReModel",
+  "slug": "remodel",
+  "description": "ReModel is a Machine Learning and Data Science hackathon focused on solving real-world environmental challenges under the theme Sustainable Futures. It emphasizes model development, fine-tuning, deployment, and collaborative problem-solving through multiple rounds.",
+  "rules": "1. Round 1 is an individual written test.\n2. Only qualified participants proceed to Round 2.\n3. Teams will be formed randomly by organizers.\n4. Final submission must include code, documentation, and PPT.\n5. All work must adhere to the given theme.",
+  "type": "single",
+  "maxTeamSize": 3,
+  "whatsappLink": "https://chat.whatsapp.com/DYAkaQaCmGRLizJLbpfIxh?mode=gi_t",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/remodel-poster.png"
+},
+{
     "id": 4,
-    "name": "Treasure Hunt",
-    "slug": "treasure-hunt",
-    "description": "Decipher cryptic clues hidden across the physical and digital campus. The ultimate test of logic and observation.",
-    "rules": "1. Team size: 3-5 members.\n2. No collaboration between teams.\n3. Clues will be delivered through the CSS app.\n4. Physical clues must not be removed or damaged.",
-    "type": "team",
-    "maxTeamSize": 5,
-    "whatsappLink": "https://chat.whatsapp.com/TREASURE_HUNT_LINK",
-    "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png"
-  },
-  {
-    "id": 5,
-    "name": "Abacus Got Latent",
-    "slug": "abacus-got-latent",
-    "description": "Showcase your hidden talents. Be it dark comedy, mimicry, or high-speed coding—the stage is yours.",
-    "rules": "1. Maximum performance time: 5 minutes.\n2. No offensive or sensitive content.\n3. Props must be arranged by the participants.\n4. Judges' decision is final.",
+    "name": "Aakruti",
+    "slug": "uiux-duel",
+    "description": "Design duel. Create stunning interfaces based on a mystery prompt within 4 hours.",
+    "rules": "1. Tool allowed: Figma / Adobe XD.\n2. Design must be responsive.\n3. Submission must include the design file and a viewable link.\n4. Focus on accessibility and user experience.",
     "type": "single",
     "maxTeamSize": 1,
-    "whatsappLink": "https://chat.whatsapp.com/LATENT_LINK",
-    "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501445/Screenshot_2025-09-10_162215_w81bsa.png"
+    "whatsappLink": "https://chat.whatsapp.com/UIUX_LINK",
+    "posterUrl": null
   },
-  {
-    "id": 6,
+{
+    "id": 5,
     "name": "Chase Cloud 9",
     "slug": "chase-cloud-9",
     "description": "Simulated placement drive. Experience the rigors of technical interviews, HR rounds, and aptitude tests.",
@@ -66,47 +55,25 @@
     "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png"
   },
   {
-    "id": 7,
-    "name": "Riddlex",
-    "slug": "riddlex",
-    "description": "The battle of wits and. No code, just raw intelligence solving puzzles that would make even a quantum computer sweat.",
-    "rules": "1. Individual participation only.\n2. Time-limited rounds for each riddle.\n3. No external help allowed.\n4. Hint usage will incur a point penalty.",
-    "type": "single",
-    "maxTeamSize": 1,
-    "whatsappLink": "https://chat.whatsapp.com/RIDDLEX_LINK",
-    "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501771/Screenshot_2025-09-10_162735_jjocgt.png"
-  },
+  "id": 6,
+  "name": "Build & Pitch",
+  "slug": "build-and-pitch",
+  "description": "Build & Pitch is a fast-paced challenge where participants turn ideas into working solutions under time pressure. Students will pick random problem statements from a bowl, collaborate in teams, and build their solutions before presenting their approach.",
+  "rules": "1. Participants will initially register as individuals.\n2. Teams will be formed on the day of the event.\n3. Each team will pick a random problem statement from a bowl.\n4. Teams will have 1.5 hours to build a solution.\n5. Use of any tools, frameworks, or AI is allowed.\n6. After the build phase, each team must pitch their solution and explain their implementation.\n7. Judging will be based on implementation quality, creativity, and clarity of the pitch.",
+  "type": "single",
+  "maxTeamSize": 3,
+  "whatsappLink": "https://chat.whatsapp.com/BUILD_PITCH_LINK",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/build-and-pitch-poster.png"
+},
   {
-    "id": 8,
-    "name": "Valorant Showdown",
-    "slug": "valorant-showdown",
-    "description": "The neon-lit battlefield awaits. Competitive Valorant tournament for the tactically superior.",
-    "rules": "1. Team size: 5 members.\n2. Single elimination matches.\n3. Standard tournament rules (no exploits).\n4. Bring your own peripherals if possible.",
+    "id": 7,
+    "name": "Treasure Hunt",
+    "slug": "treasure-hunt",
+    "description": "Decipher cryptic clues hidden across the physical and digital campus. The ultimate test of logic and observation.",
+    "rules": "1. Team size: 3-5 members.\n2. No collaboration between teams.\n3. Clues will be delivered through the CSS app.\n4. Physical clues must not be removed or damaged.",
     "type": "team",
     "maxTeamSize": 5,
-    "whatsappLink": "https://chat.whatsapp.com/VALORANT_LINK",
-    "posterUrl": null
-  },
-  {
-    "id": 9,
-    "name": "Code Sprint",
-    "slug": "code-sprint",
-    "description": "Fast-paced competitive programming. Solve as many problems as possible in 3 hours.",
-    "rules": "1. Individual contest.\n2. Platform: Codeforces/HackerRank.\n3. Strictly no plagiarism.\n4. Penalty for incorrect submissions.",
-    "type": "single",
-    "maxTeamSize": 1,
-    "whatsappLink": "https://chat.whatsapp.com/CODESPRINT_LINK",
-    "posterUrl": null
-  },
-  {
-    "id": 10,
-    "name": "UI/UX Duel",
-    "slug": "uiux-duel",
-    "description": "Design duel. Create stunning interfaces based on a mystery prompt within 4 hours.",
-    "rules": "1. Tool allowed: Figma / Adobe XD.\n2. Design must be responsive.\n3. Submission must include the design file and a viewable link.\n4. Focus on accessibility and user experience.",
-    "type": "single",
-    "maxTeamSize": 1,
-    "whatsappLink": "https://chat.whatsapp.com/UIUX_LINK",
-    "posterUrl": null
+    "whatsappLink": "https://chat.whatsapp.com/TREASURE_HUNT_LINK",
+    "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png"
   }
 ]
