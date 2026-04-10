@@ -219,36 +219,38 @@ const Abacus = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12" ref={containerRef}>
                     <aside className="hidden lg:block lg:col-span-4">
-                        <div className="sticky top-32 space-y-3 pb-20">
+                        <div className="sticky top-32 pb-20">
                             <div className="flex items-center gap-2 mb-6 px-4">
                                 {/* <FaTerminal className="text-purple-500" /> */}
                                 <span className="text-xs font-black uppercase tracking-[0.3em] text-white/40">SELECT EVENT</span>
                             </div>
-                            {abacusEvents.map((event, idx) => (
-                                <motion.button
-                                    key={event.id}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    whileHover={{ x: 10 }}
-                                    onClick={() => { setSelectedEvent(event); setActiveTab('description'); }}
-                                    className={`w-full text-left p-5 rounded-2xl flex items-center justify-between transition-all relative overflow-hidden group border ${
-                                        selectedEvent.id === event.id 
-                                        ? 'bg-purple-600 border-purple-400 shadow-[0_10px_30px_rgba(124,58,237,0.3)] text-white' 
-                                        : 'bg-white/5 border-white/5 hover:border-white/20 text-white/70 hover:text-white'
-                                    }`}
-                                >
-                                    <span className="font-black text-lg uppercase tracking-wider relative z-10">{event.name}</span>
-                                    {registrations.includes(event.slug) ? (
-                                        <FaCheckCircle className="relative z-10 text-white/80" />
-                                    ) : (
-                                        <FaChevronRight className={`transition-transform ${selectedEvent.id === event.id ? 'translate-x-0' : 'translate-x-2 opacity-0 group-hover:opacity-100'}`} />
-                                    )}
-                                    {selectedEvent.id === event.id && (
-                                        <motion.div layoutId="sidebar-active" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[pulse_2s_infinite]" />
-                                    )}
-                                </motion.button>
-                            ))}
+                            <div className="space-y-3 max-h-[calc(100vh-240px)] overflow-y-auto pr-4 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-purple-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-purple-500/50">
+                                {abacusEvents.map((event, idx) => (
+                                    <motion.button
+                                        key={event.id}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: idx * 0.1 }}
+                                        whileHover={{ x: 10 }}
+                                        onClick={() => { setSelectedEvent(event); setActiveTab('description'); }}
+                                        className={`w-full text-left p-5 rounded-2xl flex items-center justify-between transition-all relative overflow-hidden group border ${
+                                            selectedEvent.id === event.id 
+                                            ? 'bg-purple-600 border-purple-400 shadow-[0_10px_30px_rgba(124,58,237,0.3)] text-white' 
+                                            : 'bg-white/5 border-white/5 hover:border-white/20 text-white/70 hover:text-white'
+                                        }`}
+                                    >
+                                        <span className="font-black text-lg uppercase tracking-wider relative z-10">{event.name}</span>
+                                        {registrations.includes(event.slug) ? (
+                                            <FaCheckCircle className="relative z-10 text-white/80" />
+                                        ) : (
+                                            <FaChevronRight className={`transition-transform ${selectedEvent.id === event.id ? 'translate-x-0' : 'translate-x-2 opacity-0 group-hover:opacity-100'}`} />
+                                        )}
+                                        {selectedEvent.id === event.id && (
+                                            <motion.div layoutId="sidebar-active" className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-[pulse_2s_infinite]" />
+                                        )}
+                                    </motion.button>
+                                ))}
+                            </div>
                         </div>
                     </aside>
 
@@ -467,6 +469,29 @@ const Abacus = () => {
                             </section>
                         </div>
                     </main>
+                </div>
+
+                {/* Global WhatsApp Community CTA */}
+                <div className="mt-24 pt-16 border-t border-white/10 flex flex-col items-center text-center space-y-8">
+                    <div className="w-24 h-24 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.15)] relative group cursor-pointer">
+                        <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl scale-0 group-hover:scale-125 transition-transform duration-700" />
+                        <FaWhatsapp className="text-emerald-500 text-5xl relative z-10 " />
+                    </div>
+                    <div className="space-y-4">
+                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white mb-2">
+                            Join the <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">ABACUS Community</span>
+                        </h2>
+                        <p className="text-gray-400 font-medium text-lg max-w-2xl mx-auto">
+                            Don't miss a beat. Get real-time updates, network with fellow participants, and have your doubts cleared instantly by our command center.
+                        </p>
+                    </div>
+                    <a 
+                        href="https://chat.whatsapp.com/LbuPaX0mu7zLYQ0IprpTTW" 
+                        target="_blank" rel="noreferrer"
+                        className="mt-6 inline-flex items-center gap-4 px-10 py-5 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-[1.02] text-white rounded-3xl font-black text-lg uppercase tracking-[0.2em] transition-all "
+                    >
+                        <FaWhatsapp size={24} /> CONNECT NOW
+                    </a>
                 </div>
             </div>
 

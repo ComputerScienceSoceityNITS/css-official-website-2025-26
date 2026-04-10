@@ -7,7 +7,7 @@
   "rules": "1. Team size: 2-3 members.\n2. Open to 1st to 3rd year students (cross-branch teams allowed).\n3. Contest duration: 3 to 4 hours with 12-14 problems.\n4. Use of internet, search engines, or AI tools is strictly prohibited.\n5. Copying or sharing code between teams will result in disqualification.\n6. Self-prepared templates and printed notes are allowed.\n7. Participants must not use any external assistance during the contest.\n8. Final rankings will be based on official contest standings.\n9. Participants must bring their own laptops and ensure setup is complete.\n10. Violation of any rule will lead to immediate disqualification.",
   "type": "team",
   "maxTeamSize": 3,
-  "whatsappLink": "https://chat.whatsapp.com/ALGOCHEMY_LINK",
+  "whatsappLink": "https://chat.whatsapp.com/G2W0RDaXN5g9LJHNczcYpY?mode=gi_t",
   "posterUrl": "https://res.cloudinary.com/your-image-link/algochemy-poster.png"
 },
   {
@@ -18,7 +18,7 @@
     "rules": "1. Team size: 2-4 members.\n2. Only 1st & 2nd Year students are allowed.\n3. Projects must be built during the hackathon.\n4. Use of pre-built libraries is allowed, but core logic must be original.\n5. Submission must include source code and a live demo link.",
     "type": "team",
     "maxTeamSize": 4,
-    "whatsappLink": "https://chat.whatsapp.com/CSS_HACKS_LINK",
+    "whatsappLink": "https://chat.whatsapp.com/JWEcNE3qW8FGB4eUGPvHkD?mode=gi_t",
     "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png"
   },
   {
@@ -40,20 +40,20 @@
     "rules": "1. Tool allowed: Figma / Adobe XD.\n2. Design must be responsive.\n3. Submission must include the design file and a viewable link.\n4. Focus on accessibility and user experience.",
     "type": "single",
     "maxTeamSize": 1,
-    "whatsappLink": "https://chat.whatsapp.com/UIUX_LINK",
+    "whatsappLink": "https://chat.whatsapp.com/E78VjnRUR4pBHIeTlvObfC?mode=gi_t",
     "posterUrl": null
   },
 {
-    "id": 5,
-    "name": "Chase Cloud 9",
-    "slug": "chase-cloud-9",
-    "description": "Simulated placement drive. Experience the rigors of technical interviews, HR rounds, and aptitude tests.",
-    "rules": "1. Formal attire is recommended.\n2. Resumes must be submitted in PDF format.\n3. Multiple rounds: Aptitude, Technical, and HR.\n4. Open only to 2nd and 3rd-year students.",
-    "type": "single",
-    "maxTeamSize": 1,
-    "whatsappLink": "https://chat.whatsapp.com/CLOUD9_LINK",
-    "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png"
-  },
+  "id": 5,
+  "name": "Chase Cloud 9",
+  "slug": "chase-cloud-9",
+  "description": "Chase Cloud 9 is an exciting opportunity for students to experience the real-world recruitment process and prove their skills in a competitive environment. Participants will go through multiple rounds including resume screening, group discussions, and personal interviews, simulating an actual placement drive.",
+  "rules": "1. Round 1: Resume and cover letter submission is mandatory.\n2. Only shortlisted candidates will proceed to the Group Discussion round.\n3. Participants will be evaluated on communication, critical thinking, and confidence in GD.\n4. Final round will be a personal interview with 4th-year seniors.\n5. Participants must maintain professionalism throughout all rounds.\n6. Any form of misconduct will lead to disqualification.",
+  "type": "single",
+  "maxTeamSize": 1,
+  "whatsappLink": "https://chat.whatsapp.com/ETickgEVKsqBqeYx0tY0Zq?mode=gi_t",
+  "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png"
+},
   {
   "id": 6,
   "name": "Build & Pitch",
@@ -62,7 +62,7 @@
   "rules": "1. Participants will initially register as individuals.\n2. Teams will be formed on the day of the event.\n3. Each team will pick a random problem statement from a bowl.\n4. Teams will have 1.5 hours to build a solution.\n5. Use of any tools, frameworks, or AI is allowed.\n6. After the build phase, each team must pitch their solution and explain their implementation.\n7. Judging will be based on implementation quality, creativity, and clarity of the pitch.",
   "type": "single",
   "maxTeamSize": 3,
-  "whatsappLink": "https://chat.whatsapp.com/BUILD_PITCH_LINK",
+  "whatsappLink": "https://chat.whatsapp.com/Dk61paSbcNELlxZ8NiqdHH?mode=gi_t",
   "posterUrl": "https://res.cloudinary.com/your-image-link/build-and-pitch-poster.png"
 },
   {
@@ -70,10 +70,54 @@
     "name": "Treasure Hunt",
     "slug": "treasure-hunt",
     "description": "Decipher cryptic clues hidden across the physical and digital campus. The ultimate test of logic and observation.",
-    "rules": "1. Team size: 3-5 members.\n2. No collaboration between teams.\n3. Clues will be delivered through the CSS app.\n4. Physical clues must not be removed or damaged.",
+    "rules": "1. Team size: 3-5 members.\n2. No collaboration between teams.\n3. Physical clues must not be removed or damaged.",
     "type": "team",
     "maxTeamSize": 5,
-    "whatsappLink": "https://chat.whatsapp.com/TREASURE_HUNT_LINK",
+    "whatsappLink": "https://chat.whatsapp.com/CQm4UUxiS2OLaDgdGPTR3N?mode=gi_t",
     "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png"
-  }
+  },
+  {
+  "id": 8,
+  "name": "Holmes Alone",
+  "slug": "holmes-alone",
+  "description": "Holmes Alone is a mystery-solving event where participants test their logical thinking and deduction skills. It begins with a written round of riddles and puzzles, followed by an immersive spy game where a single group must analyze clues and identify the hidden killer.",
+  "rules": "1. Round 1 will be a written test consisting of riddles and puzzles.\n2. Only shortlisted participants will proceed to the next rounds.\n3. A single group of 6-8 participants will be formed for the final rounds.\n4. The group will be given a case study-based spy scenario.\n5. One participant will be secretly assigned as the killer.\n6. The remaining participants must identify the killer through discussion and deduction.\n7. Any form of unfair means or revealing hidden roles will lead to disqualification.",
+  "type": "single",
+  "maxTeamSize": 8,
+  "whatsappLink": "https://chat.whatsapp.com/Cg3TFMxKQPU7sTiSLKRlyA?mode=gi_t",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/holmes-alone-poster.png"
+},
+{
+  "id": 9,
+  "name": "The Grand Gambit",
+  "slug": "the-grand-gambit",
+  "description": "The Grand Gambit is a multi-round competitive event that tests research agility, mathematical thinking, strategy, and adaptability. Participants will progress through an AI-assisted assessment, a high-stakes 1v1 math duel, and a final coding challenge using a custom-built programming language.",
+  "rules": "1. Round 1: Digital MCQ test (on-site) with AI tools and search engines allowed; no communication with others.\n2. Top 16 participants will qualify for Round 2.\n3. Round 2: 1v1 math card battle with 10 rounds, involving solving and strategic betting.\n4. Scoring includes correct answers (+5) and optional bets (+2 or -2).\n5. Winners of duels advance based on total score; ties resolved using CGPA.\n6. Round 3: Competitive coding using a custom-built programming language.\n7. Only the provided language and documentation can be used in the final round.\n8. Use of AI tools is strictly prohibited in Round 3.\n9. Final ranking will follow ICPC format (accuracy and time penalty).",
+  "type": "single",
+  "maxTeamSize": 1,
+  "whatsappLink": "https://chat.whatsapp.com/GaijU5ilPaDEQc8Nl9myOK?mode=gi_t",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/grand-gambit-poster.png"
+},
+{
+  "id": 10,
+  "name": "Polaroid",
+  "slug": "polaroid",
+  "description": "Polaroid is a photography contest that challenges participants to capture moments creatively within a given theme. It focuses on storytelling, composition, and originality through a single powerful shot.",
+  "rules": "1. Individual participation only.\n2. Participants must submit original photographs.\n3. Editing is allowed but should not distort the authenticity of the image.\n4. Submission must follow the given theme.\n5. Any form of plagiarism will lead to disqualification.",
+  "type": "single",
+  "maxTeamSize": 1,
+  "whatsappLink": "https://chat.whatsapp.com/Cn3DaGvJYdhKqio7Gz10K1?mode=gi_t",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/polaroid-poster.png"
+},
+{
+  "id": 11,
+  "name": "CSS Wars",
+  "slug": "css-wars",
+  "description": "CSS Wars is an online gaming event where participants compete across multiple mobile games like Clash Royale and Mini Militia. Test your skills, strategy, and reflexes to dominate the leaderboard and emerge victorious.",
+  "rules": "1. Individual participation only.\n2. The event will be conducted online.\n3. Games include Clash Royale, Mini Militia, and others as decided by organizers.\n4. Participants must follow fair play; use of hacks or exploits is strictly prohibited.\n5. Match formats and schedules will be shared prior to the event.\n6. Any misconduct or cheating will lead to disqualification.",
+  "type": "single",
+  "maxTeamSize": 1,
+  "whatsappLink": "https://chat.whatsapp.com/ESha4oa3Ijl4kmWpfworlD?mode=gi_t",
+  "posterUrl": "https://res.cloudinary.com/your-image-link/css-wars-poster.png"
+}
 ]
