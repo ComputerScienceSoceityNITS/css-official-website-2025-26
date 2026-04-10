@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { supabase } from '../supabaseClient.js';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
 import { gsap } from 'gsap';
 import { FaWhatsapp, FaInfoCircle, FaScroll, FaUserEdit, FaDownload, FaUsers, FaCheckCircle, FaExclamationTriangle, FaChevronRight } from 'react-icons/fa';
 import abacusEvents from '../jsonData/abacus.json';
@@ -80,6 +80,7 @@ const Abacus = () => {
             });
         }, titleRef);
         return () => ctx.revert();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const fetchUserRegistrations = async () => {
@@ -115,7 +116,7 @@ const Abacus = () => {
                 setToast({ message: 'Registration complete.', type: 'success' });
                 setRegistrations(prev => [...prev, selectedEvent.slug]);
             }
-        } catch (error) {
+        } catch (_error) {
             setToast({ message: 'System error. Please retry.', type: 'error' });
         } finally { setLoading(false); }
     };
@@ -139,7 +140,7 @@ const Abacus = () => {
             a.href = url;
             a.download = `ABACUS_${eventName}_ADMIN_REPORT.csv`;
             a.click();
-        } catch (error) { setToast({ message: 'Export failed.', type: 'error' }); }
+        } catch (_error) { setToast({ message: 'Export failed.', type: 'error' }); }
     };
 
     const isRegistered = registrations.includes(selectedEvent.slug);
