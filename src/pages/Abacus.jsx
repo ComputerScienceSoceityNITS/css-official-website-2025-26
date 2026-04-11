@@ -45,6 +45,7 @@ const Abacus = () => {
     const [registrations, setRegistrations] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [showHint, setShowHint] = useState(false);
     
     const titleRef = useRef(null);
     const containerRef = useRef(null);
@@ -62,6 +63,12 @@ const Abacus = () => {
                 scholarId: profile.scholar_id || ''
             }));
             setIsAdmin(profile.role === 'admin' || profile.is_admin === true);
+        }
+
+        // Check for onboarding hint
+        const hintSeen = localStorage.getItem('abacus_hint_seen');
+        if (!hintSeen) {
+            setShowHint(true);
         }
     }, [profile]);
 
@@ -180,15 +187,50 @@ const Abacus = () => {
                 </header>
 
                 {/* Mobile Selector */}
-                <div className="lg:hidden mb-6 relative">
-                    <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-2 block ml-4">SELECT EVENT FROM MENU</label>
+                <div className="lg:hidden mb-4 relative">
+                    <AnimatePresence>
+                        {showHint && !isDropdownOpen && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                animate={{ 
+                                    opacity: 1, 
+                                    y: 0, 
+                                    scale: 1,
+                                    transition: {
+                                        y: {
+                                            duration: 0.6,
+                                            repeat: Infinity,
+                                            repeatType: "reverse",
+                                            ease: "easeInOut"
+                                        }
+                                    }
+                                }}
+                                exit={{ opacity: 0, scale: 0.5 }}
+                                className="absolute -top-14 left-0 right-0 z-[60] flex justify-center"
+                            >
+                                <div className="bg-purple-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-white shadow-[0_10px_30px_rgba(124,58,237,0.5)] border border-purple-400/30 flex items-center gap-2 relative">
+                                    <div className="w-2 h-2 rounded-full bg-white animate-ping" />
+                                    SELECT EVENT FROM HERE
+                                    <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-purple-600 rotate-45 border-r border-b border-purple-400/30" />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-1 block ml-2">SELECT EVENT FROM MENU</label>
                     <button
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="w-full h-14 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-xl flex items-center justify-between px-5 group transition-all"
+                        onClick={() => {
+                            setIsDropdownOpen(!isDropdownOpen);
+                            if (showHint) {
+                                setShowHint(false);
+                                localStorage.setItem('abacus_hint_seen', 'true');
+                            }
+                        }}
+                        className="w-full h-12 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-lg flex items-center justify-between px-4 group transition-all"
                     >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_10px_#7c3aed]" />
-                            <span className="font-bold text-lg tracking-tight text-white/90 truncate">{selectedEvent.name}</span>
+                            <span className="font-bold text-base tracking-tight text-white/90 truncate">{selectedEvent.name}</span>
                         </div>
                         <FaChevronRight className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-90 text-purple-400' : 'text-white/20'}`} />
                     </button>
@@ -198,17 +240,17 @@ const Abacus = () => {
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-xl shadow-2xl p-2 max-h-[60vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-purple-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-purple-500/50"
+                                className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-lg shadow-2xl p-2 max-h-[60vh] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-purple-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-purple-500/50"
                             >
                                 {abacusEvents.map((event) => (
                                     <button
                                         key={event.id}
                                         onClick={() => { setSelectedEvent(event); setActiveTab('description'); setIsDropdownOpen(false); }}
-                                        className={`w-full text-left p-3 rounded-lg flex items-center justify-between transition-all mb-1 last:mb-0 ${
+                                        className={`w-full text-left p-2 rounded-md flex items-center justify-between transition-all mb-1 last:mb-0 ${
                                             selectedEvent.id === event.id ? 'bg-purple-600/40 border border-purple-500/30 text-white font-bold' : 'hover:bg-white/5 text-white/60'
                                         }`}
                                     >
-                                        <span className="text-base">{event.name}</span>
+                                        <span className="text-sm">{event.name}</span>
                                         {registrations.includes(event.slug) && <FaCheckCircle className="text-purple-400 text-sm" />}
                                     </button>
                                 ))}
@@ -256,9 +298,9 @@ const Abacus = () => {
 
                     {/* Main Content Deck */}
                     <main className="lg:col-span-8 space-y-8">
-                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col min-h-[700px]">
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl md:rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col h-[550px] md:h-[700px]">
                             {/* Tab Bar */}
-                            <nav className="flex p-3 bg-white/5 border-b border-white/5 gap-2">
+                            <nav className="flex p-1 sm:p-3 bg-white/5 border-b border-white/5 gap-1 sm:gap-2 shrink-0">
                                 {[
                                     { id: 'description', label: 'Brief', icon: <FaInfoCircle /> },
                                     { id: 'rules', label: 'Rules', icon: <FaScroll /> },
@@ -267,11 +309,11 @@ const Abacus = () => {
                                     <button
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
-                                        className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-3 rounded-2xl font-bold sm:font-black text-sm uppercase tracking-wider transition-all relative overflow-hidden group ${
+                                        className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl md:rounded-2xl font-bold md:font-black text-[10px] md:text-sm uppercase tracking-wider transition-all relative overflow-hidden group ${
                                             activeTab === tab.id ? 'bg-white text-black' : 'text-white/50 hover:bg-white/10'
                                         }`}
                                     >
-                                        <span className={`text-lg sm:text-base ${activeTab === tab.id ? 'text-black' : 'text-purple-500'}`}>{tab.icon}</span>
+                                        <span className={`text-sm md:text-base ${activeTab === tab.id ? 'text-black' : 'text-purple-500'}`}>{tab.icon}</span>
                                         <span>{tab.label}</span>
                                         {activeTab === tab.id && (
                                             <motion.div layoutId="tab-active-pill" className="absolute inset-0 bg-white -z-10" />
@@ -281,7 +323,7 @@ const Abacus = () => {
                             </nav>
 
                             {/* Content Deck Body */}
-                            <section className="p-10 flex-1 relative overflow-hidden group">
+                            <section className="p-5 md:p-10 flex-1 relative overflow-y-auto group [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-purple-500/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-purple-500/50">
                                 <AnimatePresence mode="wait">
                                     <motion.div
                                         key={selectedEvent.slug + activeTab}
@@ -292,33 +334,33 @@ const Abacus = () => {
                                         className="h-full flex flex-col"
                                     >
                                         {activeTab === 'description' && (
-                                            <div className="space-y-12">
-                                                <div className="flex flex-col md:flex-row gap-12 items-start">
+                                            <div className="space-y-8 md:space-y-12">
+                                                <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                                                     {selectedEvent.posterUrl ? (
-                                                        <div className="relative group/poster">
-                                                            <div className="absolute -inset-4 bg-purple-500/20 blur-2xl rounded-3xl opacity-0 group-hover/poster:opacity-100 transition-opacity" />
+                                                        <div className="relative group/poster w-full max-w-[400px] md:w-72 mx-auto md:mx-0">
+                                                            <div className="absolute -inset-4 bg-purple-500/20 blur-3xl rounded-[2rem] opacity-0 group-hover/poster:opacity-100 transition-opacity duration-500" />
                                                             <img 
                                                                 src={selectedEvent.posterUrl} 
                                                                 alt={selectedEvent.name} 
-                                                                className="w-full md:w-64 h-80 object-cover rounded-3xl border border-white/10 shadow-2xl relative z-10"
+                                                                className="w-full aspect-[4/5] object-cover rounded-2xl md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 hover:scale-[1.02] transition-transform duration-500"
                                                             />
                                                         </div>
                                                     ) : (
-                                                        <div className="w-full md:w-64 h-80 rounded-3xl bg-white/5 border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-4 text-white/20">
-                                                            <FaInfoCircle size={40} />
-                                                            <p className="font-black text-xs uppercase tracking-widest">Image Encrypted</p>
+                                                        <div className="w-full max-w-[400px] md:w-72 aspect-[4/5] mx-auto md:mx-0 rounded-2xl md:rounded-[2rem] bg-white/5 border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-4 text-white/20">
+                                                            <FaInfoCircle className="text-4xl md:text-5xl opacity-40" />
+                                                            <p className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">No Visual Intelligence</p>
                                                         </div>
                                                     )}
-                                                    <div className="flex-1 space-y-6">
+                                                    <div className="flex-1 space-y-4 md:space-y-6">
                                                         <div className="space-y-2">
                                                             <p className="text-purple-500 font-black text-xs tracking-[0.4em] uppercase">Core Objective</p>
-                                                            <h2 className="text-5xl font-black text-white leading-none">{selectedEvent.name}</h2>
+                                                            <h2 className="text-3xl md:text-5xl font-black text-white leading-none">{selectedEvent.name}</h2>
                                                         </div>
-                                                        <p className="text-xl text-gray-400 leading-relaxed font-medium">
+                                                        <p className="text-sm md:text-xl text-gray-400 leading-relaxed font-medium">
                                                             {selectedEvent.description}
                                                         </p>
-                                                        <div className="flex gap-4 pt-6">
-                                                            <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest text-white/80">
+                                                        <div className="flex flex-wrap gap-3 md:gap-4 pt-4 md:pt-6">
+                                                            <div className="px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl bg-white/5 border border-white/10 text-[10px] md:text-xs font-black uppercase tracking-widest text-white/80">
                                                                 MODE: {selectedEvent.type}
                                                             </div>
                                                             {isAdmin && (
@@ -336,22 +378,22 @@ const Abacus = () => {
                                         )}
 
                                         {activeTab === 'rules' && (
-                                            <div className="space-y-8">
-                                                <div className="flex items-center gap-4 text-purple-500">
-                                                    <div className="h-[2px] w-12 bg-purple-500" />
-                                                    <h3 className="text-xs font-black uppercase tracking-[0.5em]">OPERATIONAL PROTOCOLS</h3>
+                                            <div className="space-y-6 md:space-y-8">
+                                                <div className="flex items-center gap-3 md:gap-4 text-purple-500">
+                                                    <div className="h-[2px] w-8 md:w-12 bg-purple-500" />
+                                                    <h3 className="text-[10px] md:text-xs font-black uppercase tracking-[0.5em]">OPERATIONAL PROTOCOLS</h3>
                                                 </div>
-                                                <div className="grid gap-6">
+                                                <div className="grid gap-4 md:gap-6">
                                                     {selectedEvent.rules.split('\n').map((rule, i) => (
                                                         <motion.div 
                                                             key={i} 
                                                             initial={{ opacity: 0, x: -20 }}
                                                             animate={{ opacity: 1, x: 0 }}
                                                             transition={{ delay: i * 0.1 }}
-                                                            className="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-purple-500/30 transition-colors flex gap-6 items-start"
+                                                            className="p-4 md:p-6 rounded-2xl md:rounded-3xl bg-white/5 border border-white/5 hover:border-purple-500/30 transition-colors flex gap-4 md:gap-6 items-start"
                                                         >
-                                                            <span className="w-12 h-12 flex items-center justify-center rounded-2xl bg-purple-500/10 text-purple-400 font-black text-xl border border-purple-500/20">{i + 1}</span>
-                                                            <p className="flex-1 text-lg text-gray-300 font-medium pt-2">{rule.replace(/^\d+\.\s*/, '')}</p>
+                                                            <span className="shrink-0 w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-purple-500/10 text-purple-400 font-black text-sm md:text-xl border border-purple-500/20">{i + 1}</span>
+                                                            <p className="flex-1 text-sm md:text-lg text-gray-300 font-medium pt-1 md:pt-2">{rule.replace(/^\d+\.\s*/, '')}</p>
                                                         </motion.div>
                                                     ))}
                                                 </div>
@@ -359,37 +401,37 @@ const Abacus = () => {
                                         )}
 
                                         {activeTab === 'register' && (
-                                            <div className="max-w-xl mx-auto w-full py-12">
+                                            <div className="max-w-xl mx-auto w-full py-6 md:py-12">
                                                 {!user ? (
-                                                    <div className="text-center space-y-8">
-                                                        <div className="w-32 h-32 rounded-[2.5rem] bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(244,63,94,0.1)]">
-                                                            <FaExclamationTriangle className="text-rose-500 text-5xl" />
+                                                    <div className="text-center space-y-6 md:space-y-8">
+                                                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-3xl md:rounded-[2.5rem] bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(244,63,94,0.1)]">
+                                                            <FaExclamationTriangle className="text-rose-500 text-4xl md:text-5xl" />
                                                         </div>
-                                                        <div className="space-y-4">
-                                                            <h3 className="text-4xl font-black text-white uppercase tracking-tight">Authentication Required</h3>
-                                                            <p className="text-gray-400 text-lg font-medium">You must be logged in to access the registration terminal for {selectedEvent.name}.</p>
+                                                        <div className="space-y-3 md:space-y-4">
+                                                            <h3 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight">Authentication Required</h3>
+                                                            <p className="text-gray-400 text-sm md:text-lg font-medium px-4 md:px-0">You must be logged in to access the registration terminal for {selectedEvent.name}.</p>
                                                         </div>
-                                                        <div className="flex justify-center pt-4">
-                                                            <a href="/auth" className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] transition-all shadow-[0_0_30px_rgba(124,58,237,0.3)] border border-purple-500/30">
+                                                        <div className="flex justify-center pt-2 md:pt-4">
+                                                            <a href="/auth" className="px-8 py-3 md:px-12 md:py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-[0.2em] transition-all shadow-[0_0_30px_rgba(124,58,237,0.3)] border border-purple-500/30">
                                                                 Initiate Login
                                                             </a>
                                                         </div>
                                                     </div>
                                                 ) : isRegistered ? (
-                                                    <div className="text-center space-y-8">
-                                                        <div className="w-32 h-32 rounded-[2.5rem] bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
-                                                            <FaCheckCircle className="text-emerald-500 text-5xl" />
+                                                    <div className="text-center space-y-6 md:space-y-8">
+                                                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-3xl md:rounded-[2.5rem] bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto shadow-[0_0_50px_rgba(16,185,129,0.1)]">
+                                                            <FaCheckCircle className="text-emerald-500 text-4xl md:text-5xl" />
                                                         </div>
-                                                        <div className="space-y-4">
-                                                            <h3 className="text-4xl font-black text-white uppercase tracking-tight">Registration Done</h3>
-                                                            <p className="text-gray-400 text-lg font-medium">You have been successfully registered for {selectedEvent.name}.</p>
+                                                        <div className="space-y-3 md:space-y-4">
+                                                            <h3 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight">Registration Done</h3>
+                                                            <p className="text-gray-400 text-sm md:text-lg font-medium">You have been successfully registered for {selectedEvent.name}.</p>
                                                         </div>
-                                                        <div className="flex flex-col items-center gap-6">
+                                                        <div className="flex flex-col items-center gap-4 md:gap-6 pt-2">
                                                             <a 
                                                                 href={selectedEvent.whatsappLink} target="_blank" rel="noreferrer"
-                                                                className="inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-105 transition-all text-white rounded-3xl font-black text-lg shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
+                                                                className="inline-flex items-center gap-3 md:gap-4 px-6 py-4 md:px-12 md:py-6 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-[1.02] transition-all text-white rounded-2xl md:rounded-3xl font-black text-xs md:text-lg shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
                                                             >
-                                                                <FaWhatsapp size={24} /> JOIN THE WHATSAPP GROUP
+                                                                <FaWhatsapp size={20} className="md:w-6 md:h-6" /> <span className="uppercase">Join the Whatsapp Group</span>
                                                             </a>
                                                             {isAdmin && (
                                                                 <button 
@@ -402,50 +444,50 @@ const Abacus = () => {
                                                         </div>
                                                     </div>
                                                 ) : (
-                                                    <form onSubmit={handleRegister} className="space-y-6">
-                                                        <div className="space-y-3">
-                                                            <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">FULL NAME</label>
+                                                    <form onSubmit={handleRegister} className="space-y-5 md:space-y-6">
+                                                        <div className="space-y-2 md:space-y-3">
+                                                            <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">FULL NAME</label>
                                                             <input 
                                                                 type="text" required placeholder="Your Full Name" value={formData.name}
                                                                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-white placeholder:text-white/10"
+                                                                className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-sm md:text-base text-white placeholder:text-white/10"
                                                             />
                                                         </div>
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                            <div className="space-y-3">
-                                                                <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">SCHOLAR ID</label>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                                            <div className="space-y-2 md:space-y-3">
+                                                                <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">SCHOLAR ID</label>
                                                                 <input 
                                                                     type="text" required value={formData.scholarId}
                                                                     onChange={(e) => setFormData({...formData, scholarId: e.target.value})}
-                                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-white placeholder:text-white/10"
+                                                                    className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-sm md:text-base text-white placeholder:text-white/10"
                                                                 />
                                                             </div>
-                                                            <div className="space-y-3">
-                                                                <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Contact Number</label>
+                                                            <div className="space-y-2 md:space-y-3">
+                                                                <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Contact Number</label>
                                                                 <input 
                                                                     type="text" required placeholder="Phone" value={formData.contact}
                                                                     onChange={(e) => setFormData({...formData, contact: e.target.value})}
-                                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-white placeholder:text-white/10"
+                                                                    className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-sm md:text-base text-white placeholder:text-white/10"
                                                                 />
                                                             </div>
                                                         </div>
 
                                                         {selectedEvent.type === 'team' && (
-                                                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6 pt-6 border-t border-white/5">
-                                                                <div className="space-y-3">
-                                                                    <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2 flex items-center gap-2"><FaUsers /> TEAM NAME</label>
+                                                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5 md:space-y-6 pt-4 md:pt-6 border-t border-white/5">
+                                                                <div className="space-y-2 md:space-y-3">
+                                                                    <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2 flex items-center gap-2"><FaUsers /> TEAM NAME</label>
                                                                     <input 
                                                                         type="text" required placeholder="Team Name" value={formData.teamName}
                                                                         onChange={(e) => setFormData({...formData, teamName: e.target.value})}
-                                                                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all"
+                                                                        className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all text-sm md:text-base"
                                                                     />
                                                                 </div>
-                                                                <div className="space-y-3">
-                                                                    <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">TEAM MEMBERS (Max {selectedEvent.maxTeamSize})</label>
+                                                                <div className="space-y-2 md:space-y-3">
+                                                                    <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">TEAM MEMBERS (Max {selectedEvent.maxTeamSize})</label>
                                                                     <textarea 
                                                                         required placeholder="Separate names with commas" value={formData.members}
                                                                         onChange={(e) => setFormData({...formData, members: e.target.value})}
-                                                                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-purple-500 transition-all h-32 resize-none"
+                                                                        className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all h-24 md:h-32 resize-none text-sm md:text-base"
                                                                     />
                                                                 </div>
                                                             </motion.div>
@@ -453,7 +495,7 @@ const Abacus = () => {
 
                                                         <button 
                                                             disabled={loading}
-                                                            className={`w-full py-6 rounded-3xl font-black text-xl uppercase tracking-[0.2em] transition-all transform active:scale-[0.98] shadow-2xl relative overflow-hidden group ${
+                                                            className={`w-full py-4 md:py-6 rounded-2xl md:rounded-3xl font-black text-lg md:text-xl uppercase tracking-[0.2em] transition-all transform active:scale-[0.98] shadow-2xl relative overflow-hidden group mt-4 ${
                                                                 loading ? 'bg-white/10 text-white/20 cursor-wait' : 'bg-white text-black hover:bg-[#fafafa]'
                                                             }`}
                                                         >
@@ -472,25 +514,25 @@ const Abacus = () => {
                 </div>
 
                 {/* Global WhatsApp Community CTA */}
-                <div className="mt-24 pt-16 border-t border-white/10 flex flex-col items-center text-center space-y-8">
-                    <div className="w-24 h-24 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.15)] relative group cursor-pointer">
+                <div className="mt-16 md:mt-24 pt-12 md:pt-16 border-t border-white/10 flex flex-col items-center text-center space-y-6 md:space-y-8 px-4 md:px-0">
+                    <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.15)] relative group cursor-pointer">
                         <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl scale-0 group-hover:scale-125 transition-transform duration-700" />
-                        <FaWhatsapp className="text-emerald-500 text-5xl relative z-10 " />
+                        <FaWhatsapp className="text-emerald-500 text-4xl md:text-5xl relative z-10 " />
                     </div>
-                    <div className="space-y-4">
-                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white mb-2">
-                            Join the <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400">ABACUS Community</span>
+                    <div className="space-y-3 md:space-y-4">
+                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mb-1 md:mb-2 leading-tight">
+                            Join the <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400 block sm:inline">ABACUS Community</span>
                         </h2>
-                        <p className="text-gray-400 font-medium text-lg max-w-2xl mx-auto">
+                        <p className="text-gray-400 font-medium text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
                             Don't miss a beat. Get real-time updates, network with fellow participants, and have your doubts cleared instantly by our command center.
                         </p>
                     </div>
                     <a 
                         href="https://chat.whatsapp.com/LbuPaX0mu7zLYQ0IprpTTW" 
                         target="_blank" rel="noreferrer"
-                        className="mt-6 inline-flex items-center gap-4 px-10 py-5 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-[1.02] text-white rounded-3xl font-black text-lg uppercase tracking-[0.2em] transition-all "
+                        className="mt-4 md:mt-6 inline-flex items-center gap-3 md:gap-4 px-6 py-4 md:px-10 md:py-5 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-[1.02] text-white rounded-2xl md:rounded-3xl font-black text-xs md:text-lg uppercase tracking-[0.2em] transition-all shadow-[0_20px_40px_rgba(16,185,129,0.3)]"
                     >
-                        <FaWhatsapp size={24} /> CONNECT NOW
+                        <FaWhatsapp size={20} className="md:w-6 md:h-6" /> <span className="translate-y-[1px]">CONNECT NOW</span>
                     </a>
                 </div>
             </div>
