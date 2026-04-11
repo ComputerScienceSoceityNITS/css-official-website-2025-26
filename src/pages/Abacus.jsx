@@ -337,18 +337,18 @@ const Abacus = () => {
                                             <div className="space-y-8 md:space-y-12">
                                                 <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                                                     {selectedEvent.posterUrl ? (
-                                                        <div className="relative group/poster w-full md:w-auto">
-                                                            <div className="absolute -inset-4 bg-purple-500/20 blur-2xl rounded-3xl opacity-0 group-hover/poster:opacity-100 transition-opacity" />
+                                                        <div className="relative group/poster w-full max-w-[400px] md:w-72 mx-auto md:mx-0">
+                                                            <div className="absolute -inset-4 bg-purple-500/20 blur-3xl rounded-[2rem] opacity-0 group-hover/poster:opacity-100 transition-opacity duration-500" />
                                                             <img 
                                                                 src={selectedEvent.posterUrl} 
                                                                 alt={selectedEvent.name} 
-                                                                className="w-full md:w-64 h-64 md:h-80 object-cover rounded-2xl md:rounded-3xl border border-white/10 shadow-2xl relative z-10"
+                                                                className="w-full aspect-[4/5] object-cover rounded-2xl md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 hover:scale-[1.02] transition-transform duration-500"
                                                             />
                                                         </div>
                                                     ) : (
-                                                        <div className="w-full md:w-64 h-64 md:h-80 rounded-2xl md:rounded-3xl bg-white/5 border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-4 text-white/20">
-                                                            <FaInfoCircle size={40} />
-                                                            <p className="font-black text-xs uppercase tracking-widest">Image Encrypted</p>
+                                                        <div className="w-full max-w-[400px] md:w-72 aspect-[4/5] mx-auto md:mx-0 rounded-2xl md:rounded-[2rem] bg-white/5 border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-4 text-white/20">
+                                                            <FaInfoCircle className="text-4xl md:text-5xl opacity-40" />
+                                                            <p className="font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">No Visual Intelligence</p>
                                                         </div>
                                                     )}
                                                     <div className="flex-1 space-y-4 md:space-y-6">
