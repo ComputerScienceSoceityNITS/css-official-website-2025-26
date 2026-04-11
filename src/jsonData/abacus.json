@@ -8,7 +8,7 @@
   "type": "team",
   "maxTeamSize": 3,
   "whatsappLink": "https://chat.whatsapp.com/G2W0RDaXN5g9LJHNczcYpY?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/algochemy-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "type": "team",
     "maxTeamSize": 4,
     "whatsappLink": "https://chat.whatsapp.com/JWEcNE3qW8FGB4eUGPvHkD?mode=gi_t",
-    "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png"
+    "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
   },
   {
   "id": 3,
@@ -30,7 +30,7 @@
   "type": "single",
   "maxTeamSize": 3,
   "whatsappLink": "https://chat.whatsapp.com/DYAkaQaCmGRLizJLbpfIxh?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/remodel-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896535/remodel_cqgq11.png"
 },
 {
     "id": 4,
@@ -41,7 +41,7 @@
     "type": "team",
     "maxTeamSize": 3,
     "whatsappLink": "https://chat.whatsapp.com/E78VjnRUR4pBHIeTlvObfC?mode=gi_t",
-    "posterUrl": null
+    "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
   },
 {
   "id": 5,
@@ -52,7 +52,7 @@
   "type": "single",
   "maxTeamSize": 1,
   "whatsappLink": "https://chat.whatsapp.com/ETickgEVKsqBqeYx0tY0Zq?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 },
   {
   "id": 6,
@@ -63,7 +63,7 @@
   "type": "single",
   "maxTeamSize": 3,
   "whatsappLink": "https://chat.whatsapp.com/Dk61paSbcNELlxZ8NiqdHH?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/build-and-pitch-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 },
   {
     "id": 7,
@@ -74,7 +74,7 @@
     "type": "team",
     "maxTeamSize": 5,
     "whatsappLink": "https://chat.whatsapp.com/CQm4UUxiS2OLaDgdGPTR3N?mode=gi_t",
-    "posterUrl": "https://res.cloudinary.com/dx8jytou0/image/upload/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png"
+    "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
   },
   {
   "id": 8,
@@ -85,7 +85,7 @@
   "type": "single",
   "maxTeamSize": 8,
   "whatsappLink": "https://chat.whatsapp.com/Cg3TFMxKQPU7sTiSLKRlyA?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/holmes-alone-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 },
 {
   "id": 9,
@@ -96,7 +96,7 @@
   "type": "single",
   "maxTeamSize": 1,
   "whatsappLink": "https://chat.whatsapp.com/GaijU5ilPaDEQc8Nl9myOK?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/grand-gambit-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 },
 {
   "id": 10,
@@ -107,7 +107,7 @@
   "type": "single",
   "maxTeamSize": 1,
   "whatsappLink": "https://chat.whatsapp.com/Cn3DaGvJYdhKqio7Gz10K1?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/polaroid-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 },
 {
   "id": 11,
@@ -118,6 +118,6 @@
   "type": "single",
   "maxTeamSize": 1,
   "whatsappLink": "https://chat.whatsapp.com/ESha4oa3Ijl4kmWpfworlD?mode=gi_t",
-  "posterUrl": "https://res.cloudinary.com/your-image-link/css-wars-poster.png"
+  "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1775896661/abacus_hgdluk.jpg"
 }
 ]
