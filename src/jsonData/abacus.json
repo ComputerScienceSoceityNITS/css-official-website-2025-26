@@ -40,7 +40,7 @@
   
   "rules": "PRELIMS ROUND:\n1. Mode: Online (Individual Participation).\n2. Participants must design a poster/graphic based on the given problem statement.\n3. Allowed tools: Canva, Figma, Photoshop, Illustrator.\n4. Evaluation based on creativity, visual appeal, relevance, and clarity.\n5. Top 18 participants will be shortlisted.\n\nFINAL ROUND:\n6. Mode: Offline (Team-Based).\n7. 18 shortlisted participants will be divided into 6 teams of 3 members.\n8. Teams must design a UI/UX solution based on a given problem statement.\n9. Allowed tools: Figma, Canva, Code (optional).\n10. Focus will be on creativity, design thinking, and user experience (not coding complexity).\n11. Teams must present their design including concept, user flow, and visual decisions.\n\nGENERAL RULES:\n12. No plagiarism or sharing of designs.\n13. Only original work is allowed.\n14. Participants must ensure proper submission in prelims.\n15. Shortlisted participants must be physically present for finals.\n16. Participants must bring their own laptops.\n17. Judges' decisions will be final.\n\nSCORING (FINAL ROUND):\n- 60% Creativity & Design Thinking\n- 40% Presentation & Justification",
   
-  "type": "team",
+  "type": "single",
   "maxTeamSize": 3,
   "whatsappLink": "https://chat.whatsapp.com/E78VjnRUR4pBHIeTlvObfC?mode=gi_t",
   "posterUrl": "https://res.cloudinary.com/dp4sknsba/image/upload/v1776082496/Aakruti_lkm2q6.jpg"
