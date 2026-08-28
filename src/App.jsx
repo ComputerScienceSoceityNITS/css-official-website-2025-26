@@ -1,14 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useNavigate,
 } from 'react-router-dom'
-import { Dock, DockIcon, DockItem, DockLabel } from '../components/motion-primitives/dock'
-import { Home as HomeIcon, Layers, Award, Users, BookOpen, User } from 'lucide-react'
 import { cn } from '../lib/utils'
 import Member from './pages/Member'
 import Home from './pages/Home'
@@ -60,10 +57,10 @@ const ProtectedRoute = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-lg">Loading...</p>
+          <div className="mx-auto mb-6 h-10 w-10 animate-spin border border-arch-line border-t-arch-ink"></div>
+          <p className="arch-label">Loading</p>
         </div>
       </div>
     )
@@ -87,17 +84,18 @@ const ProtectedRoute = ({
 
     if (!isCollegeUser && skippedMigration) {
       return (
-        <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
-          <div className="text-center max-w-md p-6">
-            <h1 className="text-2xl text-red-400 mb-4">Access Restricted</h1>
-            <p className="text-gray-300 mb-4">
+        <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center">
+          <div className="max-w-md border border-arch-line bg-arch-card p-10 text-left">
+            <p className="arch-label mb-6">Restricted</p>
+            <h1 className="arch-title mb-4 text-3xl">Access restricted</h1>
+            <p className="arch-body mb-8">
               This feature requires college email verification.
             </p>
             <button
               onClick={() => (window.location.href = '/email-migration')}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-6 rounded-lg"
+              className="arch-btn"
             >
-              Verify College Email
+              <span>Verify College Email</span>
             </button>
           </div>
         </div>
@@ -112,10 +110,10 @@ const GuestRoute = ({ children }) => {
   const { user, loading } = useAuth()
   if (loading) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-lg">Loading...</p>
+          <div className="mx-auto mb-6 h-10 w-10 animate-spin border border-arch-line border-t-arch-ink"></div>
+          <p className="arch-label">Loading</p>
         </div>
       </div>
     )
@@ -129,123 +127,9 @@ const GuestRoute = ({ children }) => {
 }
 
 const NavbarWrapper = () => {
-  const location = useLocation()
-  if (location.pathname === '/') {
-    return null
-  }
-
-  return (
-    <div className="hidden md:block">
-      <NavbarDemo />
-    </div>
-  )
-}
-
-const MobileDockWrapper = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { user, profile } = useAuth()
-  const [showDock, setShowDock] = useState(false)
-
-  useEffect(() => {
-    if (location.pathname !== '/') {
-      setShowDock(true)
-      return
-    }
-
-    const handleScroll = () => {
-      const aboutSection = document.getElementById('about')
-      if (aboutSection) {
-        const aboutSectionTop = aboutSection.offsetTop
-        const scrollPosition = window.scrollY + window.innerHeight / 2
-        setShowDock(scrollPosition >= aboutSectionTop)
-      } else {
-        setShowDock(false)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    handleScroll() // Initial check
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [location.pathname])
-
-  if (!showDock) return null
-
-  const isProfileActive = location.pathname === '/dashboard' || location.pathname === '/auth'
-
-  const navData = [
-    {
-      title: 'Home',
-      icon: <HomeIcon className="w-5 h-5" />,
-      onClick: () => navigate('/'),
-      active: location.pathname === '/'
-    },
-    {
-      title: 'Wings',
-      icon: <Layers className="w-5 h-5" />,
-      onClick: () => navigate('/wings'),
-      active: location.pathname === '/wings'
-    },
-    {
-      title: 'Events',
-      icon: <Award className="w-5 h-5" />,
-      onClick: () => navigate('/events'),
-      active: location.pathname === '/events'
-    },
-    {
-      title: 'Members',
-      icon: <Users className="w-5 h-5" />,
-      onClick: () => navigate('/members'),
-      active: location.pathname === '/members'
-    },
-    {
-      title: 'Materials',
-      icon: <BookOpen className="w-5 h-5" />,
-      onClick: () => navigate('/materials'),
-      active: location.pathname === '/materials'
-    },
-    {
-      title: user ? 'Profile' : 'Login',
-      icon: user ? (
-        <img
-          src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
-          alt="Profile"
-          className="w-5 h-5 rounded-full object-cover border border-cyan-400/30"
-        />
-      ) : (
-        <User className="w-5 h-5" />
-      ),
-      onClick: () => navigate(user ? '/dashboard' : '/auth'),
-      active: isProfileActive
-    }
-  ]
-
-  return (
-    <div className="block md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-max select-none">
-      <Dock
-        className="bg-slate-950/75 border border-cyan-500/20 backdrop-blur-md rounded-full shadow-lg shadow-cyan-500/10 p-1.5 gap-2 items-center"
-        panelHeight={58}
-        magnification={70}
-        distance={120}
-      >
-        {navData.map((item, idx) => (
-          <DockItem
-            key={idx}
-            onClick={item.onClick}
-            className={cn(
-              "aspect-square rounded-full bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300 transition-colors flex items-center justify-center",
-              item.active && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
-            )}
-          >
-            <DockLabel className="bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 whitespace-nowrap shadow-md shadow-cyan-500/5">
-              {item.title}
-            </DockLabel>
-            <DockIcon className="flex items-center justify-center">{item.icon}</DockIcon>
-          </DockItem>
-        ))}
-      </Dock>
-    </div>
-  )
+  // The bar now rides every route, home included. It stays transparent
+  // over the hero and solidifies on scroll (handled inside NavbarDemo).
+  return <NavbarDemo />
 }
 
 const AnalyticsTracker = () => {
@@ -263,8 +147,8 @@ const PageWrapper = ({ children }) => {
   const isHomePage = location.pathname === '/'
   return (
     <div className={cn(
-      "min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)]",
-      !isHomePage && "pt-24 md:pt-28"
+      "min-h-screen bg-arch-bg",
+      !isHomePage && "pt-[76px]"
     )}>
       {children}
     </div>
@@ -283,7 +167,7 @@ const App = () => {
           <AnalyticsTracker />
           <ScrollToTop />
 
-          <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)]">
+          <div className="min-h-screen bg-arch-bg">
             <NavbarWrapper />
 
             <div className="relative">
@@ -509,7 +393,6 @@ const App = () => {
               </Routes>
             </div>
             {/* <DiwaliWidget /> */}
-            <MobileDockWrapper />
             <Footer />
           </div>
         </BrowserRouter>

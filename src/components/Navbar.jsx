@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { FaSignInAlt } from 'react-icons/fa'
-import { MdAccountCircle } from "react-icons/md"
-import { KeycapButton } from './ui/KeycapButton'
+import { archSpring, archTween } from '../hooks/useArchAnim'
 
 const menuItems = [
     { path: '/', label: 'Home' },
@@ -15,166 +14,240 @@ const menuItems = [
     { path: '/materials', label: 'Materials' }
 ]
 
+const LOGO = 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg'
+
+/**
+ * The society mark is white artwork drawn for the old dark theme, so it
+ * disappears on beige. It sits on a black chip instead of being recoloured:
+ * that reads correctly whether the source has a transparent or a black
+ * background, and looks deliberate rather than patched.
+ */
+const LogoMark = ({ className = 'h-11 w-11' }) => (
+    <span className={`flex shrink-0 items-center justify-center overflow-hidden bg-black ${className}`}>
+        <img src={LOGO} alt="Computer Science Society" className="h-full w-full object-contain" />
+    </span>
+)
+
 export const NavbarDemo = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const [scrolled, setScrolled] = useState(false)
     const location = useLocation()
     const { user, profile } = useAuth()
 
+    const isHome = location.pathname === '/'
+    // Transparent only over the home hero; every other route needs the bar
+    // to sit on its own ground so copy never runs underneath it.
+    const solid = scrolled || isOpen || !isHome
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 24)
+        onScroll()
+        window.addEventListener('scroll', onScroll, { passive: true })
+        return () => window.removeEventListener('scroll', onScroll)
+    }, [])
+
+    useEffect(() => {
+        setIsOpen(false)
+    }, [location.pathname])
+
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? 'hidden' : ''
+        return () => {
+            document.body.style.overflow = ''
+        }
+    }, [isOpen])
+
     return (
-        <motion.nav
-            className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-7xl h-16 bg-slate-950/70 border border-white/[0.08] backdrop-blur-xl shadow-xl shadow-black/40 rounded-2xl flex items-center px-4 md:px-6 transition-all duration-300 font-sans"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.4, ease: 'easeOut' }}
-        >
-            <div className="flex justify-between items-center w-full">
-                {/* Logo - Left on desktop */}
-                <div className="flex items-center md:flex-1">
-                    <Link to="/" className="flex items-center transition-opacity hover:opacity-90">
-                        <img
-                            src="https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg"
-                            alt="CSS Logo"
-                            className="h-9 w-auto object-contain"
-                        />
-                    </Link>
-                </div>
-
-                {/* Desktop Menu - Center */}
-                <div className="hidden md:flex items-center space-x-1 relative">
-                    {menuItems.map((item) => (
-                        <Link
-                            to={item.path}
-                            key={item.path}
-                            className="relative px-4 py-2 text-sm font-medium transition-colors duration-200 rounded-xl group"
-                        >
-                            <span className={`relative z-10 transition-colors duration-200 ${location.pathname === item.path
-                                    ? 'text-white'
-                                    : 'text-slate-400 group-hover:text-white'
-                                }`}>
-                                {item.label}
+        <>
+            <motion.nav
+                className={`fixed top-0 left-0 z-[200] w-full font-sans transition-[background-color,border-color,backdrop-filter] duration-500 ${
+                    solid
+                        ? 'border-b border-arch-line bg-arch-bg/94 backdrop-blur-xl'
+                        : 'border-b border-transparent bg-transparent'
+                }`}
+                initial={{ y: -24, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={archTween}
+            >
+                <div className="mx-auto flex h-[76px] w-full max-w-[1600px] items-center justify-between gap-6 px-6 md:px-10">
+                    {/* Identity */}
+                    <Link
+                        to="/"
+                        aria-label="Computer Science Society — home"
+                        className="flex items-center gap-3.5 transition-opacity duration-300 hover:opacity-70"
+                    >
+                        <LogoMark className="h-11 w-11" />
+                        <span className="hidden leading-[1.15] sm:block">
+                            <span className="block text-[15px] font-semibold tracking-[-0.02em] text-arch-ink">
+                                Computer Science Society
                             </span>
-                            {location.pathname === item.path ? (
-                                <motion.div
-                                    layoutId="active-pill"
-                                    className="absolute inset-0 bg-white/[0.08] border border-white/[0.08] rounded-xl"
-                                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                />
-                            ) : (
-                                <div className="absolute inset-0 bg-white/0 group-hover:bg-white/[0.04] rounded-xl transition-colors duration-200" />
-                            )}
-                        </Link>
-                    ))}
-                </div>
+                            <span className="mt-0.5 block text-[11px] font-medium uppercase tracking-[0.16em] text-arch-ink-3">
+                                NIT Silchar
+                            </span>
+                        </span>
+                    </Link>
 
-                {/* Desktop Auth/Profile - Right */}
-                <div className="hidden md:flex items-center space-x-4 md:flex-1 justify-end">
-                    {user ? (
-                        <Link to="/dashboard">
-                            <KeycapButton className="keycap-wide h-10 px-3 py-1 flex items-center gap-2 bg-slate-900 border border-white/[0.08] hover:border-white/20">
-                                <img
-                                    src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
-                                    alt="Profile"
-                                    className="w-6 h-6 rounded-full border border-white/15 object-cover"
-                                />
-                                <span className="text-sm font-medium">Profile</span>
-                            </KeycapButton>
-                        </Link>
-                    ) : (
-                        <Link to="/auth">
-                            <KeycapButton className="keycap-wide keycap-cyan h-10 px-4">
-                                <div className="flex items-center gap-2">
-                                    <FaSignInAlt className="text-sm" />
-                                    <span>Sign In</span>
-                                </div>
-                            </KeycapButton>
-                        </Link>
-                    )}
-                </div>
-
-                {/* Mobile Layout */}
-                <div className="flex md:hidden items-center justify-between w-full">
-                    {/* Mobile Menu Button - Left */}
-                    <div className="flex items-center">
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="p-2 rounded-xl bg-slate-900/60 border border-white/[0.08] hover:bg-slate-900 hover:border-white/20 text-slate-300 hover:text-white transition-all duration-200"
-                        >
-                            <svg
-                                className="h-6 w-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d={isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16m-7 6h7'}
-                                />
-                            </svg>
-                        </button>
+                    {/* Desktop menu */}
+                    <div className="hidden items-center gap-2 md:flex">
+                        {menuItems.map((item) => {
+                            const active = location.pathname === item.path
+                            return (
+                                <Link
+                                    to={item.path}
+                                    key={item.path}
+                                    aria-current={active ? 'page' : undefined}
+                                    className="group relative px-4 py-2.5"
+                                >
+                                    <span
+                                        className={`relative z-10 text-[15px] font-medium tracking-[-0.01em] transition-colors duration-300 ${
+                                            active ? 'text-arch-ink' : 'text-arch-ink-3 group-hover:text-arch-ink'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </span>
+                                    {active ? (
+                                        <motion.span
+                                            layoutId="active-pill"
+                                            className="absolute inset-x-4 bottom-1 h-px bg-arch-ink"
+                                            transition={archSpring}
+                                        />
+                                    ) : (
+                                        <span className="absolute inset-x-4 bottom-1 h-px origin-right scale-x-0 bg-arch-ink/45 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:origin-left group-hover:scale-x-100" />
+                                    )}
+                                </Link>
+                            )
+                        })}
                     </div>
 
-                    {/* Mobile Logo - Center */}
-                    <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center">
-                        <Link to="/">
-                            <img
-                                src="https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg"
-                                alt="CSS Logo"
-                                className="h-8 w-auto object-contain"
-                            />
-                        </Link>
-                    </div>
-
-                    {/* Mobile Profile/Auth - Right */}
-                    <div className="flex items-center">
+                    {/* Desktop account */}
+                    <div className="hidden items-center md:flex">
                         {user ? (
                             <Link to="/dashboard">
-                                <img
-                                    src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
-                                    alt="Profile"
-                                    className="w-8 h-8 rounded-full border border-white/15 object-cover"
-                                />
+                                <motion.div
+                                    whileHover={{ y: -2 }}
+                                    whileTap={{ scale: 0.97 }}
+                                    transition={archSpring}
+                                    className="flex items-center gap-3 border border-arch-line bg-arch-card px-4 py-2.5 transition-colors duration-300 hover:border-arch-ink"
+                                >
+                                    <img
+                                        src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
+                                        alt=""
+                                        className="h-6 w-6 rounded-full border border-arch-line object-cover"
+                                    />
+                                    <span className="text-sm font-medium tracking-[-0.005em] text-arch-ink">
+                                        Profile
+                                    </span>
+                                </motion.div>
                             </Link>
                         ) : (
                             <Link to="/auth">
-                                <div className="p-2 rounded-xl bg-slate-900/60 border border-white/[0.08] text-slate-300">
-                                    <MdAccountCircle className="w-5 h-5 text-slate-300" />
-                                </div>
+                                <motion.button
+                                    whileTap={{ scale: 0.97 }}
+                                    transition={archSpring}
+                                    className="arch-btn arch-btn-solid px-6 py-3"
+                                >
+                                    <FaSignInAlt className="text-[11px]" />
+                                    <span>Sign In</span>
+                                </motion.button>
                             </Link>
                         )}
                     </div>
-                </div>
-            </div>
 
-            {/* Mobile Menu Dropdown */}
+                    {/* Mobile trigger — the sheet is the whole nav now */}
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={isOpen}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center border border-arch-line bg-arch-card text-arch-ink transition-colors duration-300 hover:border-arch-ink md:hidden"
+                    >
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="square"
+                                strokeWidth="1.5"
+                                d={isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 7h16M4 17h16'}
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </motion.nav>
+
+            {/* Mobile sheet */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="md:hidden bg-slate-950/95 border border-white/[0.08] absolute top-18 left-0 w-full shadow-2xl backdrop-blur-xl rounded-2xl overflow-hidden p-4 space-y-1.5"
-                        initial={{ y: -10, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -10, opacity: 0 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                        className="fixed inset-0 z-[190] overflow-y-auto bg-arch-bg pt-[76px] md:hidden"
                     >
-                        {menuItems.map((item) => (
-                            <Link
-                                to={item.path}
-                                key={item.path}
-                                onClick={() => setIsOpen(false)}
-                                className="block"
+                        <nav className="flex min-h-[calc(100vh-76px)] flex-col justify-between px-6 pb-12 pt-6">
+                            <ul>
+                                {menuItems.map((item, i) => (
+                                    <motion.li
+                                        key={item.path}
+                                        initial={{ opacity: 0, y: 22 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.05 + i * 0.045, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                                        className="border-b border-arch-line"
+                                    >
+                                        <Link
+                                            to={item.path}
+                                            onClick={() => setIsOpen(false)}
+                                            className={`block py-5 ${
+                                                location.pathname === item.path ? 'text-arch-ink' : 'text-arch-ink-3'
+                                            }`}
+                                        >
+                                            <span className="arch-title text-[2rem]">{item.label}</span>
+                                        </Link>
+                                    </motion.li>
+                                ))}
+                            </ul>
+
+                            {/* Account — replaces the old bottom tab bar */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 18 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                                className="pt-12"
                             >
-                                <div className={`relative px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${location.pathname === item.path
-                                        ? 'text-white bg-white/[0.08] border border-white/[0.08]'
-                                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
-                                    }`}>
-                                    {item.label}
-                                </div>
-                            </Link>
-                        ))}
+                                {user ? (
+                                    <Link
+                                        to="/dashboard"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-4 border border-arch-line bg-arch-card px-5 py-4"
+                                    >
+                                        <img
+                                            src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
+                                            alt=""
+                                            className="h-10 w-10 rounded-full border border-arch-line object-cover"
+                                        />
+                                        <span>
+                                            <span className="block text-[15px] font-medium tracking-[-0.01em] text-arch-ink">
+                                                Your profile
+                                            </span>
+                                            <span className="mt-0.5 block text-[13px] text-arch-ink-3">
+                                                Dashboard &amp; registrations
+                                            </span>
+                                        </span>
+                                    </Link>
+                                ) : (
+                                    <Link to="/auth" onClick={() => setIsOpen(false)}>
+                                        <button className="arch-btn arch-btn-solid w-full py-4">
+                                            <FaSignInAlt className="text-[11px]" />
+                                            <span>Sign In</span>
+                                        </button>
+                                    </Link>
+                                )}
+
+                                <p className="arch-body mt-10 text-[13px]">
+                                    National Institute of Technology, Silchar
+                                </p>
+                            </motion.div>
+                        </nav>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.nav>
+        </>
     )
 }

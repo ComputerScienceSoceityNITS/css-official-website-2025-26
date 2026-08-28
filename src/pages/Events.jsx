@@ -1,5 +1,8 @@
 // pages/EventsList.jsx - COMPLETE UPDATED VERSION
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useArchReveal } from "../hooks/useArchAnim";
+import ArchPageLoader from "../components/ArchPageLoader";
 import { Link, Navigate } from "react-router-dom";
 import eventsContent from "../constants/events";
 import { FaArrowRight, FaExternalLinkAlt, FaLock, FaCheck, FaHandPointer, FaInfoCircle, FaTrophy, FaGraduationCap } from "react-icons/fa";
@@ -59,299 +62,152 @@ function EventCard({
     return "Tap for more info";
   };
 
+  const showDetail = hovered;
+
   return (
-    <div className="w-full max-w-md h-full min-w-0">
-      {/* Event Card */}
-      <div className="perspective h-full w-full">
-        <div
-          className={`relative w-full h-full transition-transform duration-700 preserve-3d ${
-            hovered ? "rotate-y-180" : ""
-          }`}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          onClick={handleInteraction}
-        >
-          {/* Front */}
-          <div className={`relative inset-0 backface-hidden bg-gray-700 rounded-xl overflow-hidden border shadow-2xl transition-all duration-500 min-h-[280px] sm:min-h-[320px] md:min-h-[370px] lg:min-h-[400px] ${
-            isCompleted 
-              ? 'border-green-500/20 shadow-green-500/10 hover:border-green-400/60 hover:shadow-green-400/20' 
-              : 'border-cyan-500/20 shadow-cyan-500/10 hover:border-cyan-400/60 hover:shadow-cyan-400/20'
-          }`}>
-            {/* Mobile tap indicator */}
-            {isTouchDevice && !hovered && (
-              <div className={`absolute top-2 right-2 z-30 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1 animate-pulse ${
-                isCompleted ? 'bg-green-600/90' : 'bg-cyan-600/90'
-              }`}>
-                <FaHandPointer className="text-xs" /> 
-                <span className="hidden xs:inline">{getTapMessage()}</span>
-                <span className="xs:hidden">Tap</span>
-              </div>
+    <div className="w-full min-w-0" data-arch="fade">
+      <article
+        className={`group relative flex h-full min-h-[420px] flex-col border bg-arch-card transition-colors duration-500 ${
+          isCompleted ? 'border-arch-line opacity-80' : 'border-arch-line hover:border-arch-ink/30'
+        }`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onClick={handleInteraction}
+      >
+        {/* Poster */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-arch-line bg-arch-bg-alt">
+          <img
+            src={image || 'https://via.placeholder.com/400x300'}
+            alt={name}
+            className="h-full w-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+            onError={(e) => {
+              e.target.src = 'https://via.placeholder.com/400x300/F4F3EF/1C1C1C?text=Event'
+            }}
+          />
+
+          {/* Tags */}
+          <div className="absolute left-4 top-4 flex flex-col items-start gap-1.5">
+            {isCompleted && (
+              <span className="arch-label bg-arch-card px-2 py-1">Completed</span>
             )}
-            
-            {/* Event Badges */}
-            <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
-              {/* Completed event badge */}
-              {isCompleted && (
-                <div className="bg-green-600/90 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                  <FaTrophy className="text-xs" /> Completed
-                </div>
-              )}
-              
-              {/* CSE Only badge */}
-              {isCSEOnly && !isCompleted && (
-                <div className="bg-purple-600/90 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                  <FaGraduationCap className="text-xs" /> CSE Only
-                </div>
-              )}
-              
-              {/* Multi-Event badge */}
-              {!isDirectRegistration && !isCompleted && (
-                <div className="bg-indigo-600/90 text-white px-2 py-1 rounded text-xs font-bold">
-                  Multi-Event
-                </div>
-              )}
-              
-              {/* Auth required badge */}
-              {requiresAuth && !user && !isCompleted && (
-                <div className="bg-red-600/90 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                  <FaLock className="text-xs" /> Login Required
-                </div>
-              )}
-              
-              {/* Registered badge */}
-              {isRegistered && !isCompleted && (
-                <div className="bg-green-600/90 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                  <FaCheck className="text-xs" /> Registered
-                </div>
-              )}
-            </div>
-
-            {/* Rest of front card content */}
-            <div className={`relative inset-0 rounded-xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 ${
-              isCompleted ? 'bg-green-500/5' : 'bg-cyan-500/5'
-            }`}></div>
-            <div className="relative inset-0 bg-tech-grid opacity-10"></div>
-
-            <div className={`absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 ${
-              isCompleted ? 'border-green-500/70' : 'border-cyan-500/70'
-            }`}></div>
-            <div className={`absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 ${
-              isCompleted ? 'border-green-500/70' : 'border-cyan-500/70'
-            }`}></div>
-            <div className={`absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 ${
-              isCompleted ? 'border-green-500/70' : 'border-cyan-500/70'
-            }`}></div>
-            <div className={`absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 ${
-              isCompleted ? 'border-green-500/70' : 'border-cyan-500/70'
-            }`}></div>
-
-            {/* Image Container */}
-            <div className="absolute w-full h-full overflow-hidden">
-              <img
-                src={image || "https://via.placeholder.com/400x300"}
-                alt={name}
-                className="w-full h-full object-cover rounded-lg"
-                style={{ 
-                  objectPosition: 'center',
-                  minHeight: '100%',
-                  minWidth: '100%'
-                }}
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/400x300/1a202c/cyan?text=Event+Image";
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-            </div>
-
-            {/* Event info overlay on front card */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black/90 to-transparent rounded-b-xl">
-              <h3 className="text-base sm:text-lg md:text-xl font-bold text-white line-clamp-1">
-                {name}
-              </h3>
-              <p className={`text-xs font-mono mt-1 ${
-                isCompleted ? 'text-green-300' : 'text-cyan-300'
-              }`}>
-                {status}
-              </p>
-              <p className="text-xs text-gray-300 mt-1 line-clamp-2">
-                {description}
-              </p>
-            </div>
-
-            <div className={`absolute inset-0 rounded-xl border animate-pulse-slow pointer-events-none ${
-              isCompleted ? 'border-green-400/30' : 'border-cyan-400/30'
-            }`}></div>
+            {isCSEOnly && !isCompleted && (
+              <span className="arch-label bg-arch-card px-2 py-1">CSE only</span>
+            )}
+            {!isDirectRegistration && !isCompleted && (
+              <span className="arch-label bg-arch-card px-2 py-1">Multi-event</span>
+            )}
+            {requiresAuth && !user && !isCompleted && (
+              <span className="arch-label bg-arch-card px-2 py-1">Login required</span>
+            )}
+            {isRegistered && !isCompleted && (
+              <span className="arch-label bg-arch-ink px-2 py-1 text-arch-bg">Registered</span>
+            )}
           </div>
 
-          {/* Back */}
-          <div className={`absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl overflow-hidden border shadow-2xl min-h-[280px] sm:min-h-[320px] md:min-h-[370px] lg:min-h-[400px] ${
-            isCompleted 
-              ? 'border-green-500/50 shadow-green-500/30' 
-              : 'border-cyan-500/50 shadow-cyan-500/30'
-          }`}>
-            <div className={`absolute inset-0 rounded-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 ${
-              isCompleted ? 'bg-green-500/10' : 'bg-cyan-500/10'
-            }`}></div>
-            <div className="absolute inset-0 bg-circuit-pattern opacity-15"></div>
-            <div className={`absolute inset-0 rounded-xl border-2 hover:border-cyan-400/50 transition-all duration-500 ${
-              isCompleted ? 'border-green-500/30 hover:border-green-400/50' : 'border-cyan-500/30'
-            }`}></div>
-
-            <div className={`absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 ${
-              isCompleted ? 'border-green-400/80' : 'border-cyan-400/80'
-            }`}></div>
-            <div className={`absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 ${
-              isCompleted ? 'border-green-400/80' : 'border-cyan-400/80'
-            }`}></div>
-            <div className={`absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 ${
-              isCompleted ? 'border-green-400/80' : 'border-cyan-400/80'
-            }`}></div>
-            <div className={`absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 ${
-              isCompleted ? 'border-green-400/80' : 'border-cyan-400/80'
-            }`}></div>
-
-            {/* Mobile back indicator */}
-            {isTouchDevice && (
-              <div className="absolute top-2 right-2 z-30 bg-purple-600/90 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                <FaInfoCircle className="text-xs" /> 
-                <span className="hidden xs:inline">Tap to flip back</span>
-                <span className="xs:hidden">Tap back</span>
-              </div>
-            )}
-
-            <div className="relative h-full flex flex-col justify-between p-3 sm:p-4 md:p-6 z-10">
-              <div className="flex-1 overflow-hidden">
-                <h3 className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-2 bg-gradient-to-r bg-clip-text text-transparent line-clamp-2 ${
-                  isCompleted 
-                    ? 'from-green-300 to-green-100' 
-                    : 'from-cyan-300 to-cyan-100'
-                }`}>
-                  {name}
-                </h3>
-                
-                {/* Event Badges on Back */}
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {isCSEOnly && (
-                    <span className="px-2 py-1 bg-purple-600/20 text-purple-400 rounded text-xs flex items-center gap-1">
-                      <FaGraduationCap size={10} /> CSE Only
-                    </span>
-                  )}
-                  {!isDirectRegistration && (
-                    <span className="px-2 py-1 bg-indigo-600/20 text-indigo-400 rounded text-xs">
-                      Multi-Event
-                    </span>
-                  )}
-                </div>
-                
-                <p className={`text-xs font-mono mb-2 sm:mb-3 ${
-                  isCompleted ? 'text-green-300' : 'text-cyan-300'
-                }`}>
-                  {status}
-                </p>
-                <p className="text-gray-300 mb-3 text-xs sm:text-sm">
-                  {description}
-                </p>
-                <p className={`text-xs mt-2 ${
-                  isCompleted ? 'text-green-200' : 'text-cyan-200'
-                }`}>
-                  <strong className={isCompleted ? 'text-green-400' : 'text-cyan-400'}>Organizer: </strong>
-                  {organizer}
-                </p>
-                
-                {/* Show completion message for completed events */}
-                {isCompleted && (
-                  <div className="mt-3 p-2 bg-green-900/30 border border-green-500/30 rounded text-xs text-green-200">
-                    <FaTrophy className="inline mr-1" />
-                    This event has been successfully completed. Stay tuned for future events!
-                  </div>
-                )}
-
-                {/* Show CSE-only message */}
-                {isCSEOnly && !isCompleted && (
-                  <div className="mt-3 p-2 bg-purple-900/30 border border-purple-500/30 rounded text-xs text-purple-200">
-                    <FaGraduationCap className="inline mr-1" />
-                    This event is exclusively for CSE students (@cse.nits.ac.in emails only)
-                  </div>
-                )}
-
-                {/* Show multi-event message */}
-                {!isDirectRegistration && !isCompleted && (
-                  <div className="mt-3 p-2 bg-indigo-900/30 border border-indigo-500/30 rounded text-xs text-indigo-200">
-                    <FaInfoCircle className="inline mr-1" />
-                    This event contains multiple sub-events. Click below to view and register.
-                  </div>
-                )}
-              </div>
-
-              {/* Registration Buttons */}
-              {!isCompleted && registrationLink ? (
-                <a
-                  href={registrationLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 mb-2 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-cyan-700 to-cyan-900 rounded-lg text-white hover:from-cyan-600 hover:to-cyan-800 transition-all duration-300 border border-cyan-500/50 hover:border-cyan-400/70 text-xs sm:text-sm"
-                  onClick={handleRegisterClick}
-                >
-                  Register Now <FaExternalLinkAlt className="text-xs" />
-                </a>
-              ) : !isCompleted && onRegister && isDirectRegistration ? (
-                // Direct Registration Button
-                <button
-                  onClick={handleRegisterClick}
-                  disabled={isRegistered || registering}
-                  className={`mt-3 mb-2 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white transition-all duration-300 border text-xs sm:text-sm ${
-                    isRegistered 
-                      ? 'bg-green-600 border-green-500 cursor-not-allowed' 
-                      : registering
-                      ? 'bg-cyan-800 border-cyan-600 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-cyan-700 to-cyan-900 border-cyan-500/50 hover:from-cyan-600 hover:to-cyan-800 hover:border-cyan-400/70'
-                  }`}
-                >
-                  {registering ? (
-                    <>
-                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
-                      Registering...
-                    </>
-                  ) : isRegistered ? (
-                    <>
-                      <FaCheck className="text-xs" />
-                      Registered
-                    </>
-                  ) : (
-                    'Register Now'
-                  )}
-                </button>
-              ) : !isCompleted && !isDirectRegistration ? (
-                // Multi-event Registration Button - Redirect to event page
-                <Link
-                  to={`/events/${slug}`}
-                  className="mt-3 mb-2 flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-700 to-purple-900 rounded-lg text-white hover:from-purple-600 hover:to-purple-800 transition-all duration-300 border border-purple-500/50 hover:border-purple-400/70 text-xs sm:text-sm"
-                >
-                  View Events <FaArrowRight className="text-xs" />
-                </Link>
-              ) : null}
-
-              <div className="absolute top-2 left-2 flex space-x-1 z-20">
-                <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse shadow shadow-red-500/50"></div>
-                <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse delay-300 shadow shadow-yellow-500/50"></div>
-                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse delay-700 shadow shadow-green-500/50"></div>
-              </div>
-            </div>
-
-            <div className={`absolute inset-0 rounded-xl border animate-pulse-slow pointer-events-none ${
-              isCompleted ? 'border-green-400/40' : 'border-cyan-400/40'
-            }`}></div>
-          </div>
+          {isTouchDevice && !hovered && (
+            <span className="arch-label absolute right-4 top-4 flex items-center gap-1.5 bg-arch-card px-2 py-1">
+              <FaHandPointer className="text-[10px]" />
+              <span className="hidden xs:inline">{getTapMessage()}</span>
+              <span className="xs:hidden">Tap</span>
+            </span>
+          )}
         </div>
-      </div>
+
+        {/* Body */}
+        <div className="flex flex-1 flex-col p-7">
+          <div className="flex items-center justify-between border-b border-arch-line pb-4">
+            <span className="arch-label">{status}</span>
+            <span className="arch-label">{organizer}</span>
+          </div>
+
+          <h3 className="arch-title mt-6 text-2xl">{name}</h3>
+          <p className="arch-body mt-4 grow">{description}</p>
+
+          {/* Detail drawer — same hovered state that used to flip the card */}
+          <AnimatePresence initial={false}>
+            {showDetail && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="mt-6 space-y-3 border-t border-arch-line pt-5">
+                  {isCompleted && (
+                    <p className="arch-body flex gap-2 text-[13px]">
+                      <FaTrophy className="mt-1 shrink-0 text-arch-faint" />
+                      This event has been successfully completed. Stay tuned for future events.
+                    </p>
+                  )}
+                  {isCSEOnly && !isCompleted && (
+                    <p className="arch-body flex gap-2 text-[13px]">
+                      <FaGraduationCap className="mt-1 shrink-0 text-arch-faint" />
+                      Exclusively for CSE students (@cse.nits.ac.in emails only).
+                    </p>
+                  )}
+                  {!isDirectRegistration && !isCompleted && (
+                    <p className="arch-body flex gap-2 text-[13px]">
+                      <FaInfoCircle className="mt-1 shrink-0 text-arch-faint" />
+                      Contains multiple sub-events. Open the event page to register.
+                    </p>
+                  )}
+                  {isTouchDevice && (
+                    <p className="arch-label pt-1">Tap again to close</p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Actions */}
+          {!isCompleted && registrationLink ? (
+            <a
+              href={registrationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="arch-btn mt-8 w-full"
+              onClick={handleRegisterClick}
+            >
+              <span>Register Now</span>
+              <FaExternalLinkAlt className="text-[10px]" />
+            </a>
+          ) : !isCompleted && onRegister && isDirectRegistration ? (
+            <button
+              onClick={handleRegisterClick}
+              disabled={isRegistered || registering}
+              className="arch-btn mt-8 w-full"
+            >
+              {registering ? (
+                <>
+                  <span className="h-3 w-3 animate-spin border border-current border-t-transparent" />
+                  <span>Registering…</span>
+                </>
+              ) : isRegistered ? (
+                <>
+                  <FaCheck className="text-[10px]" />
+                  <span>Registered</span>
+                </>
+              ) : (
+                <span>Register Now</span>
+              )}
+            </button>
+          ) : !isCompleted && !isDirectRegistration ? (
+            <Link to={`/events/${slug}`} className="arch-btn mt-8 w-full">
+              <span>View Events</span>
+              <FaArrowRight className="text-[10px]" />
+            </Link>
+          ) : null}
+        </div>
+      </article>
 
       {/* More Events Link */}
       {Array.isArray(moreEvents) && moreEvents.length > 0 && slug && (
         <Link
           to={`/events/${slug}`}
-          className="mb-2 mt-2 bg-red flex items-center justify-center gap-1 text-cyan-400 hover:text-cyan-300 transition-colors duration-300 text-sm sm:text-base underline"
+          className="arch-label mt-4 flex items-center justify-center gap-2 transition-colors duration-300 hover:text-arch-ink"
         >
-          View More Events <FaArrowRight className="text-xs" />
+          View More Events <FaArrowRight className="text-[10px]" />
         </Link>
       )}
     </div>
@@ -360,20 +216,19 @@ function EventCard({
 
 function Header({ title, description }) {
   return (
-    <header className="text-center mb-8 sm:mb-12 relative z-10 px-2">
-      <h1
-        className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 text-white"
-        style={{ fontFamily: "Goldman, sans-serif" }}
-      >
-        {title}
+    <header className="border-b border-arch-line py-20 md:py-32">
+      <h1 data-arch="lines" className="arch-display text-[clamp(2.75rem,9vw,8rem)]">
+        <span className="arch-split-line">
+          <span className="arch-line-inner">{title}</span>
+        </span>
       </h1>
-      <div className="max-w-4xl mx-auto p-3 sm:p-4 md:p-6 lg:p-8 bg-black/70 rounded-lg md:rounded-xl lg:rounded-2xl backdrop-blur-lg border border-cyan-500/30 relative overflow-hidden mt-4 sm:mt-6 mb-6 sm:mb-12">
-        <div className="absolute inset-0 bg-hexagon-pattern-black bg-[length:40px_40px] sm:bg-[length:50px_50px] opacity-20"></div>
-        <p className="text-gray-200 text-xs sm:text-sm md:text-base lg:text-xl leading-relaxed font-mono">
-          <span className="text-cyan-400">$~ </span>
-          {description}
-        </p>
-      </div>
+      <p
+        className="arch-body mt-10 max-w-3xl"
+        data-arch="fade"
+        data-arch-delay="0.2"
+      >
+        {description}
+      </p>
     </header>
   );
 }
@@ -387,6 +242,19 @@ export default function EventsList() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const sections = ["Upcoming", "Completed", "Yearly", "Cultural", "Technical"];
+
+  // ARCH scroll reveals (presentation only)
+  const archScope = useRef(null);
+  const [loaderDone, setLoaderDone] = useState(false);
+  useArchReveal(archScope, [loading, loaderDone, databaseEvents.length, registeredEvents.length]);
+
+  // Hold the page still behind the panel until it lifts.
+  useEffect(() => {
+    document.body.style.overflow = loaderDone ? '' : 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [loaderDone]);
 
   useEffect(() => {
     fetchDatabaseEvents();
@@ -602,55 +470,29 @@ export default function EventsList() {
     return event.id && !event.isFromContent;
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-lg">Loading events...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white px-2 sm:px-3 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-6 md:py-8 lg:py-10 overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 opacity-20">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute text-green-400 text-xs animate-[fall_5s_linear_infinite]"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                top: "-20px",
-              }}
-            >
-              {Math.random() > 0.5 ? "1" : "0"}
-            </div>
-          ))}
-        </div>
+    <>
+      {!loaderDone && (
+        <ArchPageLoader
+          title="Events"
+          label="Computer Science Society"
+          steps={['Fetching programme', 'Reading registrations', 'Composing calendar']}
+          ready={!loading}
+          onDone={() => setLoaderDone(true)}
+        />
+      )}
 
-        {/* Grid lines */}
-        <div className="absolute inset-0 bg-grid-pattern bg-[length:30px_30px] sm:bg-[length:40px_40px] md:bg-[length:50px_50px] opacity-10 animate-grid-move"></div>
-
-        {/* Hexagon pattern */}
-        <div className="absolute inset-0 bg-hexagon-pattern bg-[length:60px_60px] sm:bg-[length:80px_80px] md:bg-[length:100px_100px] opacity-5 animate-pulse"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto">
+    <div ref={archScope} className="min-h-screen w-full bg-arch-bg text-arch-ink">
+      <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
         <Header
           title="Our Events"
           description="From DSA Marathons, Development, ML and Design Workshops to sessions that sharpen technical expertise, from the spirited CSS Olympics that celebrate sportsmanship to cultural highlights like ESPERANZA, CSS GO, and our flagship annual fest CSS ABACUS — our calendar is packed with opportunities to learn, grow, and celebrate. Guided by the motto Participate, Enjoy & Learn, every event is designed to build all-rounders and leave behind unforgettable memories."
         />
 
         {/* Mobile Instructions */}
-        <div className="md:hidden mb-6 p-3 bg-cyan-900/30 border border-cyan-500/50 rounded-lg text-center">
-          <p className="text-cyan-300 text-sm flex items-center justify-center gap-2">
-            <FaHandPointer className="text-cyan-400" />
-            Tap on cards to flip and see registration options
-          </p>
+        <div className="flex items-center gap-2 border-b border-arch-line py-5 md:hidden">
+          <FaHandPointer className="text-xs text-arch-faint" />
+          <p className="arch-label">Tap a card for details and registration</p>
         </div>
 
         {sections.map((section) => {
@@ -659,37 +501,15 @@ export default function EventsList() {
           if (sectionEvents.length === 0) return null;
 
           return (
-            <div key={section} className="mb-8 sm:mb-12 md:mb-16 relative z-10">
-              <div className={`flex items-center justify-center mb-6 sm:mb-8 md:mb-12 p-2 sm:p-4 md:p-6 bg-black/60 rounded-lg border relative overflow-hidden ${
-                section === "Completed" 
-                  ? "border-green-500/30" 
-                  : "border-cyan-500/30"
-              }`}>
-                <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-                {/* Cyberpunk border corners */}
-                <div className={`absolute top-1 left-1 w-2 h-2 border-t-2 border-l-2 ${
-                  section === "Completed" ? "border-green-400" : "border-cyan-400"
-                }`}></div>
-                <div className={`absolute top-1 right-1 w-2 h-2 border-t-2 border-r-2 ${
-                  section === "Completed" ? "border-green-400" : "border-cyan-400"
-                }`}></div>
-                <div className={`absolute bottom-1 left-1 w-2 h-2 border-b-2 border-l-2 ${
-                  section === "Completed" ? "border-green-400" : "border-cyan-400"
-                }`}></div>
-                <div className={`absolute bottom-1 right-1 w-2 h-2 border-b-2 border-r-2 ${
-                  section === "Completed" ? "border-green-400" : "border-cyan-400"
-                }`}></div>
-                <h2 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold bg-gradient-to-r bg-clip-text text-transparent text-center ${
-                  section === "Completed"
-                    ? "from-green-300 to-green-100"
-                    : "from-cyan-300 to-cyan-100"
-                }`}>
-                  {section.toUpperCase()} EVENTS
+            <section key={section} className="py-16 md:py-24">
+              <div className="mb-12 border-b border-arch-line pb-6">
+                <h2 className="arch-title text-[clamp(1.5rem,4vw,3rem)]">
+                  {section} Events
                 </h2>
               </div>
 
               {/* Grid Container */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-x-3 sm:gap-x-4 md:gap-x-6 lg:gap-x-8 gap-y-6 sm:gap-y-8 md:gap-y-10 lg:gap-y-12 w-full max-w-6xl mx-auto px-1 sm:px-2 justify-items-center">
+              <div className="grid grid-cols-1 gap-px bg-arch-line sm:grid-cols-2 xl:grid-cols-3">
                 {sectionEvents.map((event) => (
                   <EventCard
                     key={event.slug}
@@ -716,10 +536,11 @@ export default function EventsList() {
                   />
                 ))}
               </div>
-            </div>
+            </section>
           );
         })}
       </div>
     </div>
+    </>
   );
 }
