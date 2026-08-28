@@ -635,7 +635,7 @@ const Wings = () => {
     >
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        
+
         <div className="absolute inset-0 bg-grid-pattern bg-[length:50px_50px] opacity-10"></div>
         <div className="absolute w-72 h-72 bg-cyan-600/10 rounded-full blur-xl animate-[pulse_4s_ease-in-out_infinite] top-10 left-10"></div>
         <div className="absolute w-96 h-96 bg-purple-600/10 rounded-full blur-xl animate-[pulse_5s_ease-in-out_infinite_1s] bottom-20 right-10"></div>

@@ -9,11 +9,13 @@ import React, {
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Carousel from '../components/ui/Carousel'
-import AnimatedTestimonials from '../components/ui/PillarsOfCSS'
+import { AnimatePresence, motion } from 'framer-motion'
+
+import { StackingCards, StackingCardItem } from '../components/ui/StackingCards'
 import Chatbot from '../components/ui/Chatbot'
 import { NavbarDemo } from '../components/Navbar'
-import useAnnouncementObserver from '../hooks/useAnnouncementObserver'
+
+import CssLogo3D from '../components/ui/CssLogo3D'
 // import DiwaliPopup from '../components/DiwaliPopup'
 // import SponsorPopup from '../components/SponsorPopup'
 // Register GSAP plugins only once
@@ -27,54 +29,134 @@ const PILLARS_TESTIMONIALS = [
     src: 'https://cs.nits.ac.in/storage/FacultyDetails/IMG_175345198568838dd11b534.jpg',
     name: 'Umakanta Majhi',
     designation: 'Faculty Advisor',
+    tag: '// FACULTY_ADVISOR',
     quote:
       'Promoting a culture of innovation and creativity. We encourage students to think outside the box, experiment with new ideas, and develop solutions that make a difference.',
+    bio:
+      'Dr. Umakanta Majhi serves as the Faculty Advisor for the Computer Science Society. With over a decade of research and teaching experience in the Department of Computer Science & Engineering at NIT Silchar, he provides academic and technical direction to the society. He works closely with student leaders to align society activities with modern engineering standards and research domains.',
+    focus:
+      'Empowering research-driven projects, academic mentorship, departmental coordination, and organizing technical symposiums.',
   },
   {
     src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760007735/Swapneel_Bhaiya_ltkb53.jpg',
     name: 'Swapnil Dansana',
     designation: 'President',
+    tag: '// EXECUTIVE_PRESIDENT',
     quote:
       "Encouraging innovative thinking and research-oriented approach. We support projects in AI, ML, web development, and emerging technologies to push boundaries of what's possible.",
+    bio:
+      'Swapnil Dansana leads the society as the President. Under his guidance, the society has scaled its tech stack and organized institute-level hackathons. He focuses on creating collaborative pipelines for projects in Artificial Intelligence, Machine Learning, and Web development.',
+    focus:
+      'Executive governance, industrial collaboration, project pipelines, and tech-symposium oversight.',
   },
   {
     src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760007829/Amborish_xqum5s.jpg',
     name: 'Amborish Sarmah',
     designation: 'General Secretary',
+    tag: '// GENERAL_SECRETARY',
     quote:
       'Creating a supportive network where students can learn, grow, and collaborate. We organize tech talks, networking events, and mentorship programs to foster meaningful connections.',
+    bio:
+      'Amborish Sarmah is the General Secretary, overseeing operations, event schedules, and cross-society coordination. He acts as the main facilitator between the executive wing, alumni networks, and the general student body to drive massive engagement in technical bootcamps.',
+    focus:
+      'Operations management, workshop schedules, alumni liaison, and campus-wide community building.',
   },
-
   {
     src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757535079/WhatsApp_Image_2025-08-31_at_11.28.29_AM_-_002_RAJ_KUMAR_ROY_uopc4j.webp',
     name: 'Raj Kumar Roy',
-    designation: 'Technical Head',
+    designation: 'Vice President',
+    tag: '// VICE_PRESIDENT',
     quote:
-      'Providing opportunities for professional development through interview preparation, resume building, and industry interactions. We bridge the gap between academia and industry.',
+      'Collaborating to solve challenges, share knowledge, and build things that matter. We provide platforms for students to showcase skills, build projects, and prepare for careers.',
+    bio:
+      'Raj Kumar Roy serves as the Vice President, supporting strategic initiatives and hackathon architectures. He is passionate about setting up software development environments, hosting coding contests, and guiding junior members in foundational data structures and algorithms.',
+    focus:
+      'Hackathon architecture, competitive programming bootcamps, and technical mentoring.',
   },
   {
     src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757535268/IMG-20250510-WA0014_-_CSE_100_TARUN_CHANDAK_w0cny9.webp',
     name: 'Tarun Chandak',
     designation: 'Finance and Ops Co-ordinator',
+    tag: '// FINANCE_OPS_LEAD',
     quote:
       'Fostering a culture of continuous learning and curiosity. We encourage students to explore new technologies, participate in hackathons, and stay updated with industry trends.',
+    bio:
+      'Tarun Chandak manages the finance portfolios and operational logistics of the society. He coordinates budget allocations, sponsor distributions, and ensures smooth material operations during major hackathons and technical exhibitions.',
+    focus:
+      'Financial modeling, sponsorship logistics, procurement operations, and venue management.',
   },
 ]
 
-const SPONSORS_DATA = [
+const SPONSORS_LIST = [
   {
-    name: 'Momo Magic Cafe',
-    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978633/download_iwxpso.png', // Replace with actual logo URL
-    href: 'https://momomagiccafe.in/', // Replace with actual website
-    type: 'Official Food Partner',
+    name: 'Unstop',
+    href: 'https://unstop.com',
+    type: 'Official Platform Partner',
+    isSvg: true,
+    logoKey: 'unstop',
+  },
+  {
+    name: 'Matiks',
+    href: 'https://matiks.in',
+    type: 'Official Tech Partner',
+    isSvg: true,
+    logoKey: 'matiks',
   },
   {
     name: 'Campa Cola',
-    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978610/WhatsApp_Image_2025-10-31_at_17.10.58_722ac4a3_ar2y9k.jpg', // Replace with actual logo URL
-    href: 'https://campabeverages.com/', // Replace with actual website
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978610/WhatsApp_Image_2025-10-31_at_17.10.58_722ac4a3_ar2y9k.jpg',
+    href: 'https://campabeverages.com/',
     type: 'Official Beverage Partner',
+    isSvg: false,
+  },
+  {
+    name: 'Momo Magic Cafe',
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978633/download_iwxpso.png',
+    href: 'https://momomagiccafe.in/',
+    type: 'Official Food Partner',
+    isSvg: false,
+  },
+  {
+    name: 'Pizza Hut',
+    href: 'https://www.pizzahut.co.in/',
+    type: 'Official Food Partner',
+    isSvg: true,
+    logoKey: 'pizzahut',
   },
 ]
+
+const renderSponsorLogo = (logoKey) => {
+  switch (logoKey) {
+    case 'unstop':
+      return (
+        <svg viewBox="0 0 120 40" className="h-8 w-auto">
+          <rect width="120" height="40" rx="6" fill="#0f294a" />
+          <circle cx="22" cy="20" r="7" fill="#1e40af" />
+          <circle cx="25" cy="20" r="4.5" fill="#facc15" />
+          <circle cx="22" cy="20" r="2.5" fill="#3b82f6" />
+          <text x="38" y="25" fill="#ffffff" fontSize="13" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.5">unstop</text>
+        </svg>
+      )
+    case 'matiks':
+      return (
+        <svg viewBox="0 0 120 40" className="h-8 w-auto">
+          <text x="12" y="24" fill="#00ff66" fontSize="15" fontWeight="bold" fontFamily="monospace" letterSpacing="2">MΛTIKS</text>
+          <path d="M 12 30 L 85 30 L 93 22" stroke="#00f0ff" strokeWidth="1.5" fill="none" />
+          <circle cx="93" cy="22" r="2" fill="#00f0ff" />
+        </svg>
+      )
+    case 'pizzahut':
+      return (
+        <svg viewBox="0 0 120 40" className="h-8 w-auto">
+          <path d="M 15 18 Q 30 9 60 9 Q 90 9 105 18 Q 80 16 60 16 Q 40 16 15 18 Z" fill="#ef4444" />
+          <path d="M 25 19 L 95 19 L 90 22 L 30 22 Z" fill="#f59e0b" />
+          <text x="25" y="34" fill="#ffffff" fontSize="9.5" fontWeight="bold" fontFamily="Arial Black, sans-serif" letterSpacing="0.5">Pizza Hut</text>
+        </svg>
+      )
+    default:
+      return null
+  }
+}
 
 // Preload critical images
 const preloadImages = () => {
@@ -192,10 +274,12 @@ function Home() {
   const svgRef = useRef(null)
   const animationRef = useRef(null)
   const videoRef = useRef(null)
-  const { showPopup, setShowPopup } = useAnnouncementObserver()
+
   const [showSponsorPopup, setShowSponsorPopup] = useState(false)
   const [showSecondSponsorPopup, setShowSecondSponsorPopup] = useState(false)
   const [sponsorPopupShown, setSponsorPopupShown] = useState(false)
+  const [expandedIndex, setExpandedIndex] = useState(null)
+
   // Set mounted state
   useEffect(() => {
     setIsMounted(true)
@@ -614,7 +698,11 @@ function Home() {
           </svg>
         </div>
 
-        {showNavbar && <NavbarDemo />}
+        {showNavbar && (
+          <div className="hidden md:block">
+            <NavbarDemo />
+          </div>
+        )}
 
         {/* About Section - Reduced padding for mobile */}
         <section
@@ -622,7 +710,7 @@ function Home() {
           className="about relative min-h-[65vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-4 py-1 md:py-3.5 overflow-hidden"
         >
           <div className="relative z-10 max-w-6xl w-full flex flex-col md:flex-row items-center gap-6 md:gap-10">
-            <div className="flex-1 bg-black/70 rounded-xl border border-cyan-500/20 p-5 md:p-8 lg:p-12 backdrop-blur-md shadow-lg shadow-cyan-500/10">
+            <div className="md:flex-[1.4] flex-1 bg-black/70 rounded-xl border border-cyan-500/20 p-5 md:p-8 lg:p-12 backdrop-blur-md shadow-lg shadow-cyan-500/10">
               <div className="flex items-center mb-3 md:mb-6">
                 <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full mr-2"></div>
                 <span className="text-cyan-400 font-mono text-sm md:text-md">
@@ -669,20 +757,22 @@ function Home() {
               </div>
             </div>
 
-            {/* Image Container - Hidden on mobile, visible on medium screens and up */}
-            <div className=" flex-1 justify-center">
-              <img
-                src="/images/about.png"
-                alt="About Us"
-                loading="lazy"
-                className="rounded-2xl shadow-lg shadow-cyan-500/20 border border-cyan-500/20 object-cover max-h-[300px] md:max-h-[400px] w-full"
-                onLoad={() => {
-                  // Image loaded callback
-                  if (isLoading && loadingProgress < 80 && isMounted) {
-                    setLoadingProgress(80)
-                  }
-                }}
-              />
+            {/* 3D Logo Canvas Container */}
+            <div className="md:flex-[0.8] flex-1 flex justify-center items-center w-full">
+              <Suspense fallback={
+                <div className="w-full h-[320px] md:h-[420px] flex items-center justify-center border border-cyan-500/20 rounded-2xl bg-black/40 backdrop-blur-md">
+                  <div className="text-cyan-400 font-mono text-sm animate-pulse">Initializing 3D Interface...</div>
+                </div>
+              }>
+                <CssLogo3D
+                  onLoad={() => {
+                    // 3D canvas loaded callback
+                    if (isLoading && loadingProgress < 80 && isMounted) {
+                      setLoadingProgress(80)
+                    }
+                  }}
+                />
+              </Suspense>
             </div>
           </div>
         </section>
@@ -726,66 +816,43 @@ function Home() {
               </p>
             </div>
 
-            {/* Sponsors Grid - Stack on mobile, side-by-side on desktop */}
-            <div className="bg-gradient-to-br from-black/60 to-cyan-900/20 rounded-xl md:rounded-3xl border border-cyan-500/30 backdrop-blur-md shadow-xl md:shadow-2xl shadow-cyan-500/10 overflow-hidden p-4 md:p-8 lg:p-12 relative">
-              {/* Animated background elements */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse"></div>
-              <div className="absolute -top-6 -right-6 w-16 h-16 md:-top-10 md:-right-10 md:w-20 md:h-20 bg-cyan-400/10 rounded-full blur-xl"></div>
-              <div className="absolute -bottom-6 -left-6 w-16 h-16 md:-bottom-10 md:-left-10 md:w-20 md:h-20 bg-purple-400/10 rounded-full blur-xl"></div>
-
-              {/* Vertical layout for mobile, horizontal for desktop */}
-              <div className="flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 relative z-10">
-                {SPONSORS_DATA.map((sponsor, index) => (
+            {/* Minimalist Marquee Sponsors Row - Clean Logos Only */}
+            <div className="relative z-10 w-full overflow-hidden py-10 border-y border-slate-900/60 bg-transparent">
+              <style dangerouslySetInnerHTML={{__html: `
+                @keyframes marqueeScroll {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
+                }
+                .animate-marquee-loop {
+                  display: flex;
+                  width: max-content;
+                  animation: marqueeScroll 30s linear infinite;
+                }
+                .animate-marquee-loop:hover {
+                  animation-play-state: paused;
+                }
+              `}} />
+              <div className="animate-marquee-loop flex items-center">
+                {[...SPONSORS_LIST, ...SPONSORS_LIST].map((sponsor, index) => (
                   <a
-                    key={sponsor.name}
+                    key={`${sponsor.name}-${index}`}
                     href={sponsor.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col items-center justify-center p-4 md:p-6 lg:p-8 bg-gradient-to-br from-gray-900/80 to-cyan-900/20 rounded-xl md:rounded-2xl border border-cyan-500/30 hover:border-cyan-400 transition-all duration-300 transform hover:scale-[1.02] md:hover:scale-105 hover:shadow-lg md:hover:shadow-2xl hover:shadow-cyan-500/20"
+                    className="mx-12 shrink-0 flex items-center justify-center opacity-65 hover:opacity-100 hover:scale-110 grayscale hover:grayscale-0 transition-all duration-300"
                   >
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/5 to-cyan-500/0 rounded-xl md:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                    {/* Sponsor Type Badge - Smaller on mobile */}
-                    <div className="absolute -top-2 md:-top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-cyan-500 text-white text-xs md:text-sm font-mono px-2 md:px-3 py-1 rounded-full border border-cyan-400/50 whitespace-nowrap">
-                        {sponsor.type}
-                      </span>
-                    </div>
-
-                    {/* Sponsor Logo - Responsive sizing */}
-                    <div className="relative z-10 p-3 md:p-4 lg:p-6 bg-white/5 rounded-xl md:rounded-2xl border border-cyan-500/20 group-hover:border-cyan-400/50 transition-all duration-300 w-full max-w-[280px] md:max-w-xs">
-                      <img
-                        src={sponsor.logo}
-                        alt={`${sponsor.name} logo`}
-                        loading="lazy"
-                        className="h-20 md:h-24 lg:h-32 w-full object-contain brightness-110"
-                      />
-                    </div>
-
-                    {/* Sponsor Name - Responsive text */}
-                    <p className="mt-4 md:mt-6 text-lg md:text-xl lg:text-2xl font-mono font-bold text-white text-center bg-black/30 px-4 py-2 md:px-6 md:py-2 rounded-full border border-cyan-500/20 group-hover:border-cyan-400 transition-colors duration-300">
-                      {sponsor.name}
-                    </p>
-
-                    {/* Visit Website Text - Smaller on mobile */}
-                    <div className="mt-3 md:mt-4 flex items-center text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300">
-                      <span className="text-xs md:text-sm lg:text-base font-mono mr-1 md:mr-2">
-                        Visit Website
-                      </span>
-                      <svg
-                        className="w-3 h-3 md:w-4 md:h-4 transform group-hover:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    {/* Logo container (Larger and cleaner) */}
+                    <div className="h-16 w-36 flex items-center justify-center overflow-hidden">
+                      {sponsor.isSvg ? (
+                        renderSponsorLogo(sponsor.logoKey)
+                      ) : (
+                        <img
+                          src={sponsor.logo}
+                          alt={`${sponsor.name} logo`}
+                          loading="lazy"
+                          className="h-full w-full object-contain brightness-110 contrast-125"
                         />
-                      </svg>
+                      )}
                     </div>
                   </a>
                 ))}
@@ -806,40 +873,7 @@ function Home() {
           </div>
         </section>
 
-        {/* Announcement Section */}
-        <section
-          id="announcement"
-          className="relative min-h-[90vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex flex-col items-center justify-center px-3 py-1 md:py-7 overflow-hidden"
-        >
-          {/* Foreground Terminal Box */}
-          <div className="relative z-10 w-full max-w-[1200px] bg-black/70 rounded-xl border border-cyan-500/20 p-3 md:p-9 backdrop-blur-md shadow-lg shadow-cyan-500/10">
-            {/* Terminal Header */}
-            <div className="flex items-center mb-3 md:mb-4">
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-red-500 rounded-full mr-1 md:mr-2"></div>
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-yellow-500 rounded-full mr-1 md:mr-2"></div>
-              <div className="w-2 h-2 md:w-3 md:h-3 bg-green-500 rounded-full mr-1 md:mr-2"></div>
-              <span className="text-cyan-400 font-mono text-xs md:text-sm">
-                ANNOUNCEMENTS_TERMINAL
-              </span>
-            </div>
 
-            {/* Terminal Title */}
-            <h2 className="text-lg md:text-3xl font-mono font-bold text-green-400 mb-0 md:mb-4">
-              <span className="text-cyan-400">$~ </span> Announcements
-            </h2>
-
-            {/* Carousel */}
-            <div className="w-full flex justify-center">
-              <Carousel />
-            </div>
-            <div className="flex items-center mt-4 md:mt-6">
-              <span className="text-cyan-400 font-mono text-sm md:text-lg mr-2">
-                $~
-              </span>
-              <div className="w-[2px] h-4 md:h-6 bg-cyan-400 animate-blink"></div>
-            </div>
-          </div>
-        </section>
         {/* <SponsorPopup
           isOpen={showSponsorPopup}
           onClose={() => {
@@ -872,7 +906,7 @@ function Home() {
         /> */}
 
         {/* Pillars Section */}
-        <section className="relative min-h-[90vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-3 py-1 md:py-7 overflow-hidden">
+        <section id="pillars" className="relative min-h-[90vh] md:min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-3 py-1 md:py-7">
           {/* Main Content */}
           <div className="relative z-10 w-full max-w-7xl">
             {/* Section Header */}
@@ -899,12 +933,93 @@ function Home() {
               </p>
             </div>
 
-            {/* Testimonials Component */}
-            <div className="bg-black/50 rounded-xl md:rounded-2xl border border-cyan-500/30 backdrop-blur-md shadow-lg md:shadow-2xl shadow-cyan-500/10 overflow-hidden">
-              <AnimatedTestimonials
-                testimonials={PILLARS_TESTIMONIALS}
-                autoplay={true}
-              />
+            {/* Stacking Cards Component */}
+            <div className="w-full max-w-5xl mx-auto mt-8">
+              <StackingCards
+                totalCards={PILLARS_TESTIMONIALS.length}
+                scaleMultiplier={0.04}
+                className="relative flex flex-col gap-10 md:gap-16 pb-[50vh]"
+              >
+                {PILLARS_TESTIMONIALS.map((pillar, index) => {
+                  const layoutId = `expandable-pillar-card-${pillar.name.replace(/ /g, '-')}`;
+                  return (
+                    <StackingCardItem
+                      key={pillar.name}
+                      index={index}
+                      topPosition={`${80 + index * 24}px`}
+                      className="w-full h-[420px] sm:h-[400px] md:h-[350px]"
+                    >
+                      {/* Closed Card Container (Split Layout: Left Image, Right Text) */}
+                      <motion.div
+                        layoutId={layoutId}
+                        onClick={() => setExpandedIndex(index)}
+                        className="cursor-pointer bg-[#020617]/90 backdrop-blur-xl border border-cyan-500/20 rounded-3xl shadow-2xl h-full flex flex-col md:flex-row relative overflow-hidden group select-none"
+                        whileHover="hover"
+                      >
+                        {/* Left Side: Profile Image */}
+                        <div className="relative w-full md:w-1/3 h-40 md:h-full overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-cyan-500/15">
+                          <motion.img
+                            layoutId={`image-${layoutId}`}
+                            src={pillar.src}
+                            alt={pillar.name}
+                            className="h-full w-full object-cover object-center"
+                            variants={{
+                              hover: { scale: 1.05 }
+                            }}
+                            transition={{ duration: 0.3 }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:hidden" />
+                        </div>
+
+                        {/* Right Side: Text & Quotes */}
+                        <div className="flex-1 p-6 md:p-8 flex flex-col justify-between h-full relative">
+                          {/* Floating Terminal header dots */}
+                          <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500 animate-pulse" style={{ animationDelay: '0.2s' }} />
+                              <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" style={{ animationDelay: '0.4s' }} />
+                              <span className="text-[10px] font-mono text-cyan-400 ml-1.5">PILLAR_0{index + 1}_LOG</span>
+                            </div>
+                            <span className="text-[8px] font-mono text-emerald-400 bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                              STATUS: ACTIVE
+                            </span>
+                          </div>
+
+                          {/* Member info */}
+                          <div className="flex flex-col mt-2">
+                            <motion.p
+                              layoutId={`subtitle-${layoutId}`}
+                              className="text-cyan-400 font-mono text-[10px] tracking-wider uppercase mb-1"
+                            >
+                              {pillar.designation}
+                            </motion.p>
+                            <motion.h3
+                              layoutId={`title-${layoutId}`}
+                              className="text-lg md:text-xl font-bold font-mono text-white tracking-tight"
+                            >
+                              {pillar.name}
+                            </motion.h3>
+                          </div>
+
+                          {/* Quote preview */}
+                          <p className="text-xs md:text-sm text-slate-300 leading-relaxed italic mt-4 font-sans font-light grow flex items-center">
+                            "{pillar.quote}"
+                          </p>
+
+                          {/* Cyber Click-to-expand Action Indicator */}
+                          <div className="flex justify-end items-center mt-3 text-[9px] font-mono text-cyan-500/70 group-hover:text-cyan-400 transition-colors duration-300">
+                            <span>expand_profile_logs --execute</span>
+                            <svg className="w-3.5 h-3.5 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </StackingCardItem>
+                  )
+                })}
+              </StackingCards>
             </div>
 
             {/* Additional Info */}
@@ -917,6 +1032,110 @@ function Home() {
             </div>
           </div>
         </section>
+        {/* AnimatePresence for Expandable Modal */}
+        <AnimatePresence>
+          {expandedIndex !== null && (() => {
+            const pillar = PILLARS_TESTIMONIALS[expandedIndex];
+            const layoutId = `expandable-pillar-card-${pillar.name.replace(/ /g, '-')}`;
+            return (
+              <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-10">
+                {/* Backdrop Blur */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setExpandedIndex(null)}
+                  className="absolute inset-0 bg-black/85 backdrop-blur-md"
+                />
+                
+                {/* Modal Container */}
+                <motion.div
+                  layoutId={layoutId}
+                  className="relative w-full max-w-4xl h-[85vh] md:h-[75vh] bg-[#020617] border border-cyan-500/30 rounded-2xl overflow-hidden z-10 flex flex-col md:flex-row shadow-2xl shadow-cyan-500/10"
+                >
+                  {/* Floating Close Button */}
+                  <button 
+                    onClick={() => setExpandedIndex(null)} 
+                    className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center bg-black/60 hover:bg-slate-900 rounded-full border border-cyan-500/30 text-cyan-400 hover:text-cyan-300 transition-colors backdrop-blur-sm"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  </button>
+                  
+                  {/* Left Pane - Portrait Photo */}
+                  <div className="relative h-48 w-full shrink-0 overflow-hidden md:h-full md:w-1/2 bg-black border-r border-cyan-500/10">
+                    <motion.img 
+                      layoutId={`image-${layoutId}`} 
+                      src={pillar.src} 
+                      alt={pillar.name}
+                      className="h-full w-full object-cover object-center" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:hidden" />
+                  </div>
+                  
+                  {/* Right Pane - Scrollable Bio Content */}
+                  <div className="p-6 md:p-10 w-full md:w-1/2 flex flex-col h-full overflow-y-auto bg-slate-950/40 select-none">
+                    <motion.p 
+                      layoutId={`subtitle-${layoutId}`} 
+                      className="text-cyan-400 font-mono text-xs tracking-widest uppercase mb-2"
+                    >
+                      {pillar.tag}
+                    </motion.p>
+                    
+                    <motion.h3 
+                      layoutId={`title-${layoutId}`} 
+                      className="text-2xl md:text-3xl font-bold font-mono text-white tracking-tight mb-6 pb-4 border-b border-cyan-500/10"
+                    >
+                      {pillar.name}
+                    </motion.h3>
+                    
+                    {/* Biography and Focus Details */}
+                    <motion.div 
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 10 }}
+                      transition={{ delay: 0.15 }}
+                      className="font-mono text-slate-300 text-xs md:text-sm leading-relaxed flex flex-col gap-6"
+                    >
+                      {/* Departmental Designation */}
+                      <div>
+                        <h4 className="text-cyan-400 font-bold tracking-wider mb-1 uppercase text-[11px]">// DESIGNATION</h4>
+                        <p className="text-white text-sm">{pillar.designation}</p>
+                      </div>
+
+                      {/* Quote */}
+                      <div>
+                        <h4 className="text-cyan-400 font-bold tracking-wider mb-1 uppercase text-[11px]">// INSPIRATIONAL_QUOTE</h4>
+                        <p className="italic text-slate-200 border-l-2 border-cyan-500/40 pl-3 py-1 font-sans font-light text-sm md:text-md">
+                          "{pillar.quote}"
+                        </p>
+                      </div>
+
+                      {/* Biography */}
+                      <div>
+                        <h4 className="text-cyan-400 font-bold tracking-wider mb-1.5 uppercase text-[11px]">// BIOGRAPHY</h4>
+                        <p className="text-slate-300 text-xs md:text-sm leading-relaxed">{pillar.bio}</p>
+                      </div>
+
+                      {/* Focus */}
+                      <div>
+                        <h4 className="text-cyan-400 font-bold tracking-wider mb-1.5 uppercase text-[11px]">// OPERATIONAL_FOCUS</h4>
+                        <p className="text-slate-300 text-xs md:text-sm leading-relaxed">{pillar.focus}</p>
+                      </div>
+
+                      {/* Close Button */}
+                      <button 
+                        onClick={() => setExpandedIndex(null)}
+                        className="mt-4 px-5 py-2.5 bg-gradient-to-r from-cyan-900/40 to-slate-900/40 hover:from-cyan-900/60 hover:to-slate-900/60 text-cyan-400 border border-cyan-500/30 font-bold rounded-lg hover:shadow-md hover:shadow-cyan-500/10 transition-all self-start text-[11px]"
+                      >
+                        CLOSE_PROFILE_TERMINAL
+                      </button>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </div>
+            );
+          })()}
+        </AnimatePresence>
       </div>
     </>
   )

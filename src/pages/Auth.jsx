@@ -26,22 +26,22 @@ const Auth = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
-        
+
         try {
             if (isLogin) {
                 // Login flow
                 const { data, error } = await signIn({ email, password });
-                
+
                 if (error) {
                     console.error('Login error:', error);
                     throw error;
                 }
-                
+
                 navigate('/dashboard');
-                
+
             } else {
                 // Signup flow
-                
+
                 if (!fullName.trim() || !scholarId.trim()) {
                     throw new Error('Please fill in all fields');
                 }
@@ -51,7 +51,7 @@ const Auth = () => {
                 }
 
                 // Use the updated signUp function that includes profile data
-                const result= await signUp(email, password, fullName, scholarId);
+                const result = await signUp(email, password, fullName, scholarId);
 
                 if (result.error) {
                     console.error('Signup error:', result.error);
@@ -60,11 +60,11 @@ const Auth = () => {
 
 
                 // Navigate to OTP verification
-                navigate('/otp-verification', { 
-                    state: { 
+                navigate('/otp-verification', {
+                    state: {
                         email,
-                        message: 'Check your email for verification code!' 
-                    } 
+                        message: 'Check your email for verification code!'
+                    }
                 });
             }
         } catch (error) {
@@ -102,7 +102,7 @@ const Auth = () => {
 
     return (
         <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-6 py-10 overflow-hidden">
-            
+
             <div className="relative max-w-md w-full bg-black/70 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg">
                 <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
                 <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400"></div>
@@ -112,16 +112,16 @@ const Auth = () => {
                 <h2 className="text-4xl font-bold mb-6 text-center text-white drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" style={{ fontFamily: "Goldman, sans-serif" }}>
                     {isLogin ? 'LOGIN' : 'SIGN UP'}
                 </h2>
-                
+
                 {error && (
                     <div className="bg-red-900/50 text-red-300 text-center p-3 rounded-md mb-4 border border-red-500/50">
                         {error}
                     </div>
                 )}
-                
+
                 <form onSubmit={handleSubmit}>
                     {!isLogin && (
-                         <div className="mb-4">
+                        <div className="mb-4">
                             <label className="block mb-2 font-mono text-cyan-300">Full Name</label>
                             <input
                                 type="text"
@@ -133,7 +133,7 @@ const Auth = () => {
                             />
                         </div>
                     )}
-                    
+
                     <div className="mb-4">
                         <label className="block mb-2 font-mono text-cyan-300">Email</label>
                         <input
@@ -145,7 +145,7 @@ const Auth = () => {
                             placeholder="Enter your email"
                         />
                     </div>
-                    
+
                     {!isLogin && (
                         <div className="mb-4">
                             <label className="block mb-2 font-mono text-cyan-300">Scholar ID</label>
@@ -159,7 +159,7 @@ const Auth = () => {
                             />
                         </div>
                     )}
-                    
+
                     <div className="mb-6">
                         <label className="block mb-2 font-mono text-cyan-300">Password</label>
                         <input
@@ -175,10 +175,10 @@ const Auth = () => {
                             <p className="text-xs text-gray-400 mt-1">Password must be at least 6 characters long</p>
                         )}
                     </div>
-                    
-                    <button 
-                        type="submit" 
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
+
+                    <button
+                        type="submit"
+                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={loading}
                     >
                         {loading ? (
@@ -194,16 +194,16 @@ const Auth = () => {
                         )}
                     </button>
                 </form>
-                
+
                 <div className="my-4 flex items-center">
                     <div className="flex-grow border-t border-gray-700"></div>
                     <span className="mx-4 text-gray-500">OR</span>
                     <div className="flex-grow border-t border-gray-700"></div>
                 </div>
-                
-                <button 
-                    onClick={handleGoogleSignIn} 
-                    className="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" 
+
+                <button
+                    onClick={handleGoogleSignIn}
+                    className="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     disabled={loading}
                 >
                     {/* <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -215,11 +215,11 @@ const Auth = () => {
                     <FcGoogle className='w-5 h-5' />
                     Continue with Google
                 </button>
-                
+
                 <p className="text-center mt-6 text-gray-300">
                     {isLogin ? "Don't have an account?" : "Already have an account?"}
-                    <button 
-                        onClick={toggleMode} 
+                    <button
+                        onClick={toggleMode}
                         className="text-cyan-400 hover:text-cyan-300 ml-2 font-bold transition-colors"
                         type="button"
                     >

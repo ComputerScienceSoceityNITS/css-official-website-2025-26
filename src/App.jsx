@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate,
   useLocation,
+  useNavigate,
 } from 'react-router-dom'
+import { Dock, DockIcon } from '../components/ui/dock'
+import { Home as HomeIcon, Layers, Award, Users, BookOpen, User } from 'lucide-react'
+import { cn } from '../lib/utils'
 import Member from './pages/Member'
 import Home from './pages/Home'
 import { NavbarDemo } from './components/Navbar'
@@ -130,7 +134,101 @@ const NavbarWrapper = () => {
     return null
   }
 
-  return <NavbarDemo />
+  return (
+    <div className="hidden md:block">
+      <NavbarDemo />
+    </div>
+  )
+}
+
+const MobileDockWrapper = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { user, profile } = useAuth()
+  const [showDock, setShowDock] = useState(false)
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setShowDock(true)
+      return
+    }
+
+    const handleScroll = () => {
+      const aboutSection = document.getElementById('about')
+      if (aboutSection) {
+        const aboutSectionTop = aboutSection.offsetTop
+        const scrollPosition = window.scrollY + window.innerHeight / 2
+        setShowDock(scrollPosition >= aboutSectionTop)
+      } else {
+        setShowDock(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial check
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [location.pathname])
+
+  if (!showDock) return null
+
+  const isProfileActive = location.pathname === '/dashboard' || location.pathname === '/auth'
+
+  return (
+    <div className="block md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-max select-none">
+      <Dock className="bg-slate-950/75 border-cyan-500/20 backdrop-blur-md rounded-full shadow-lg shadow-cyan-500/10 p-1.5 h-[58px] gap-2">
+        <DockIcon onClick={() => navigate('/')} className={cn("relative group bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300", location.pathname === '/' && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]")}>
+          <HomeIcon className="w-5 h-5" />
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-[9999] shadow-md shadow-cyan-500/5">
+            Home
+          </span>
+        </DockIcon>
+        <DockIcon onClick={() => navigate('/wings')} className={cn("relative group bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300", location.pathname === '/wings' && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]")}>
+          <Layers className="w-5 h-5" />
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-[9999] shadow-md shadow-cyan-500/5">
+            Wings
+          </span>
+        </DockIcon>
+        <DockIcon onClick={() => navigate('/events')} className={cn("relative group bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300", location.pathname === '/events' && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]")}>
+          <Award className="w-5 h-5" />
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-[9999] shadow-md shadow-cyan-500/5">
+            Events
+          </span>
+        </DockIcon>
+        <DockIcon onClick={() => navigate('/members')} className={cn("relative group bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300", location.pathname === '/members' && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]")}>
+          <Users className="w-5 h-5" />
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-[9999] shadow-md shadow-cyan-500/5">
+            Members
+          </span>
+        </DockIcon>
+        <DockIcon onClick={() => navigate('/materials')} className={cn("relative group bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300", location.pathname === '/materials' && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]")}>
+          <BookOpen className="w-5 h-5" />
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-[9999] shadow-md shadow-cyan-500/5">
+            Materials
+          </span>
+        </DockIcon>
+        <DockIcon 
+          onClick={() => navigate(user ? '/dashboard' : '/auth')} 
+          className={cn(
+            "relative group bg-[#020617] border border-cyan-500/15 text-cyan-400 hover:text-cyan-300", 
+            isProfileActive && "border-cyan-400 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
+          )}
+        >
+          {user ? (
+            <img
+              src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
+              alt="Profile"
+              className="w-5 h-5 rounded-full object-cover border border-cyan-400/30"
+            />
+          ) : (
+            <User className="w-5 h-5" />
+          )}
+          <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-950/90 text-cyan-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-cyan-500/30 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-[9999] shadow-md shadow-cyan-500/5">
+            {user ? 'Profile' : 'Login'}
+          </span>
+        </DockIcon>
+      </Dock>
+    </div>
+  )
 }
 
 const AnalyticsTracker = () => {
@@ -389,6 +487,7 @@ const App = () => {
             </Routes>
           </div>
           {/* <DiwaliWidget /> */}
+          <MobileDockWrapper />
           <Footer />
         </div>
       </BrowserRouter>

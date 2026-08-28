@@ -16,14 +16,14 @@ const Footer = () => {
             {/* Logo */}
             <div className="flex justify-center items-center mb-4">
               <div className="relative group">
-                <img 
-                  src="https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg" 
-                  alt="CSS Logo" 
+                <img
+                  src="https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg"
+                  alt="CSS Logo"
                   className="h-24 sm:h-32 w-auto" // Reduced height for mobile
                 />
                 {/* Fallback text logo */}
                 <div className="text-cyan-400 font-bold text-2xl sm:text-3xl tracking-wider font-mono hidden">
-                  CSS  
+                  CSS
                 </div>
               </div>
             </div>
@@ -77,7 +77,7 @@ const Footer = () => {
                 // { path: '/chat', label: 'Chat' },
               ].map((item) => (
                 <li key={item.path}>
-                  <Link 
+                  <Link
                     to={item.path}
                     className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-mono text-xs sm:text-sm group flex items-center justify-center lg:justify-start"
                   >

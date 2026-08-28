@@ -14,7 +14,7 @@ import {
 } from 'react-icons/fa'
 import { Tilt } from 'react-tilt'
 import { motion } from 'framer-motion'
-import teamData from '../jsonData/developers.json' 
+import teamData from '../jsonData/developers.json'
 import '../styles/developers.css'
 import { NavbarDemo } from '../components/Navbar'
 import TerminalLoader from '../components/Loader'
@@ -46,9 +46,8 @@ const MemberCard = ({ member, index }) => {
         onClick={handleFlip}
       >
         <div
-          className={`relative w-full h-full transition-transform duration-700 preserve-3d ${
-            flipped ? 'rotate-y-180' : ''
-          }`}
+          className={`relative w-full h-full transition-transform duration-700 preserve-3d ${flipped ? 'rotate-y-180' : ''
+            }`}
         >
           {/* Front of Card */}
           <div className="absolute inset-0 backface-hidden bg-gray-700 rounded-xl overflow-hidden border border-cyan-500/20 shadow-2xl shadow-cyan-500/10 group-hover:border-cyan-400/60 group-hover:shadow-cyan-400/20 transition-all duration-500">
@@ -164,15 +163,15 @@ const Carousel = ({ children, className }) => {
   const totalSlides = Math.ceil(totalItems / itemsPerView)
   const [isLoading, setIsLoading] = useState(true);
 
-  
-  
+
+
   useEffect(() => {
     const updateItemsPerView = () => {
       if (window.innerWidth < 640)
-        setItemsPerView(1) 
+        setItemsPerView(1)
       else if (window.innerWidth < 1024)
-        setItemsPerView(2) 
-      else setItemsPerView(4) 
+        setItemsPerView(2)
+      else setItemsPerView(4)
     }
     updateItemsPerView()
     window.addEventListener('resize', updateItemsPerView)
@@ -187,7 +186,7 @@ const Carousel = ({ children, className }) => {
     setCurrentIndex((prev) => (prev === 0 ? totalSlides - 1 : prev - 1))
   }
 
-  
+
   const handlers = useSwipeable({
     onSwipedLeft: next,
     onSwipedRight: prev,
@@ -196,7 +195,7 @@ const Carousel = ({ children, className }) => {
     trackMouse: false,
   })
 
-  
+
   const startIndex = currentIndex * itemsPerView
   const visibleItems = members.slice(startIndex, startIndex + itemsPerView)
 
@@ -204,7 +203,7 @@ const Carousel = ({ children, className }) => {
     return <p className="text-center text-cyan-300">No members found</p>
 
   useEffect(() => {
-    
+
     const images = document.querySelectorAll('img');
     let loadedImages = 0;
     const totalImages = images.length;
@@ -226,15 +225,15 @@ const Carousel = ({ children, className }) => {
         imageLoaded();
       } else {
         img.addEventListener('load', imageLoaded);
-        img.addEventListener('error', imageLoaded); 
+        img.addEventListener('error', imageLoaded);
       }
     });
 
-    
+
     const fallbackTimer = setTimeout(() => {
       setIsLoading(false);
     }, 3000);
-    
+
     return () => {
       clearTimeout(fallbackTimer);
       images.forEach(img => {
@@ -286,9 +285,8 @@ const Carousel = ({ children, className }) => {
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all ${
-              currentIndex === idx ? 'bg-cyan-400' : 'bg-gray-600'
-            } hover:bg-cyan-300`}
+            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all ${currentIndex === idx ? 'bg-cyan-400' : 'bg-gray-600'
+              } hover:bg-cyan-300`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
@@ -301,20 +299,20 @@ const Developers = () => {
   const [selectedCategory, setSelectedCategory] = useState(() => {
     return localStorage.getItem('selectedCategory') || 'all'
   })
-  
-  
+
+
   useEffect(() => {
     localStorage.setItem('selectedCategory', selectedCategory)
   }, [selectedCategory])
 
-  
+
   const getCurrentMembers = () => {
     return selectedCategory === 'all'
       ? teamData.categories.contributors?.members || []
       : teamData.categories[selectedCategory]?.members || []
   }
 
-  
+
   const categories = {
     all: {
       name: 'All Contributors',
@@ -587,10 +585,9 @@ const Developers = () => {
                   key={key}
                   onClick={() => setSelectedCategory(key)}
                   className={`relative px-4 sm:px-5 py-2 font-mono font-bold tracking-wider transition-all duration-300 flex items-center
-                    ${
-                      selectedCategory === key
-                        ? 'bg-gradient-to-r from-cyan-900/70 to-cyan-700/70 text-cyan-300 border border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.7)]'
-                        : 'bg-gray-900/60 text-gray-300 border border-gray-700 hover:border-cyan-500 hover:text-cyan-300 hover:shadow-[0_0_10px_rgba(6,182,212,0.4)]'
+                    ${selectedCategory === key
+                      ? 'bg-gradient-to-r from-cyan-900/70 to-cyan-700/70 text-cyan-300 border border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.7)]'
+                      : 'bg-gray-900/60 text-gray-300 border border-gray-700 hover:border-cyan-500 hover:text-cyan-300 hover:shadow-[0_0_10px_rgba(6,182,212,0.4)]'
                     } 
                     rounded-md overflow-hidden group`}
                 >
@@ -599,11 +596,10 @@ const Developers = () => {
                     <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
                   )}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-r from-cyan-500/0 to-cyan-400/0 group-hover:from-cyan-500/10 group-hover:to-cyan-400/10 transition-all duration-300 rounded-md ${
-                      selectedCategory === key
+                    className={`absolute inset-0 bg-gradient-to-r from-cyan-500/0 to-cyan-400/0 group-hover:from-cyan-500/10 group-hover:to-cyan-400/10 transition-all duration-300 rounded-md ${selectedCategory === key
                         ? 'from-cyan-500/20 to-cyan-400/20'
                         : ''
-                    }`}
+                      }`}
                   ></div>
                   <span
                     className={`relative z-10 ${selectedCategory === key ? 'drop-shadow-[0_0_4px_rgba(6,182,212,0.8)]' : ''}`}
@@ -627,15 +623,15 @@ const Developers = () => {
               {categories[selectedCategory].name} ({getCurrentMembers().length})
             </h2>
             <div className='flex justify-center items-center'>
-            <Carousel className="w-full" key={selectedCategory}>
-              {getCurrentMembers().map((member, index) => (
-                <MemberCard
-                  key={`${selectedCategory}-${index}`}
-                  member={member}
-                  index={index}
-                />
-              ))}
-            </Carousel>
+              <Carousel className="w-full" key={selectedCategory}>
+                {getCurrentMembers().map((member, index) => (
+                  <MemberCard
+                    key={`${selectedCategory}-${index}`}
+                    member={member}
+                    index={index}
+                  />
+                ))}
+              </Carousel>
             </div>
           </div>
         </div>
