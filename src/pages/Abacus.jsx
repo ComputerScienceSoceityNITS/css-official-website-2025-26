@@ -15,13 +15,12 @@ const Toast = ({ message, type = 'success', onClose }) => {
     }, [onClose]);
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: -20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className={`fixed top-6 right-6 z-[100] px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center gap-4 backdrop-blur-xl border border-white/10 ${
-                type === 'success' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
-            }`}
+            className={`fixed top-6 right-6 z-[100] px-6 py-4 rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.5)] flex items-center gap-4 backdrop-blur-xl border border-white/10 ${type === 'success' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+                }`}
         >
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${type === 'success' ? 'bg-emerald-500/20' : 'bg-rose-500/20'}`}>
                 {type === 'success' ? <FaCheckCircle size={20} /> : <FaExclamationTriangle size={20} />}
@@ -46,7 +45,7 @@ const Abacus = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [showHint, setShowHint] = useState(false);
-    
+
     const titleRef = useRef(null);
     const containerRef = useRef(null);
 
@@ -74,7 +73,7 @@ const Abacus = () => {
 
     useEffect(() => {
         if (user) fetchUserRegistrations();
-        
+
         // GSAP Title Animation
         const ctx = gsap.context(() => {
             gsap.from(".char", {
@@ -168,7 +167,7 @@ const Abacus = () => {
             <div className="max-w-7xl mx-auto pt-24 pb-12 px-4 md:px-8 relative z-10" ref={titleRef}>
                 {/* Hero */}
                 <header className="mb-16 text-center space-y-4">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         className="inline-block py-1 px-4 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 font-bold tracking-[0.3em] text-xs mb-4 uppercase"
@@ -190,11 +189,11 @@ const Abacus = () => {
                 <div className="lg:hidden mb-4 relative">
                     <AnimatePresence>
                         {showHint && !isDropdownOpen && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                                animate={{ 
-                                    opacity: 1, 
-                                    y: 0, 
+                                animate={{
+                                    opacity: 1,
+                                    y: 0,
                                     scale: 1,
                                     transition: {
                                         y: {
@@ -246,9 +245,8 @@ const Abacus = () => {
                                     <button
                                         key={event.id}
                                         onClick={() => { setSelectedEvent(event); setActiveTab('description'); setIsDropdownOpen(false); }}
-                                        className={`w-full text-left p-2 rounded-md flex items-center justify-between transition-all mb-1 last:mb-0 ${
-                                            selectedEvent.id === event.id ? 'bg-purple-600/40 border border-purple-500/30 text-white font-bold' : 'hover:bg-white/5 text-white/60'
-                                        }`}
+                                        className={`w-full text-left p-2 rounded-md flex items-center justify-between transition-all mb-1 last:mb-0 ${selectedEvent.id === event.id ? 'bg-purple-600/40 border border-purple-500/30 text-white font-bold' : 'hover:bg-white/5 text-white/60'
+                                            }`}
                                     >
                                         <span className="text-sm">{event.name}</span>
                                         {registrations.includes(event.slug) && <FaCheckCircle className="text-purple-400 text-sm" />}
@@ -275,11 +273,10 @@ const Abacus = () => {
                                         transition={{ delay: idx * 0.1 }}
                                         whileHover={{ x: 10 }}
                                         onClick={() => { setSelectedEvent(event); setActiveTab('description'); }}
-                                        className={`w-full text-left p-5 rounded-2xl flex items-center justify-between transition-all relative overflow-hidden group border ${
-                                            selectedEvent.id === event.id 
-                                            ? 'bg-purple-600 border-purple-400 shadow-[0_10px_30px_rgba(124,58,237,0.3)] text-white' 
-                                            : 'bg-white/5 border-white/5 hover:border-white/20 text-white/70 hover:text-white'
-                                        }`}
+                                        className={`w-full text-left p-5 rounded-2xl flex items-center justify-between transition-all relative overflow-hidden group border ${selectedEvent.id === event.id
+                                                ? 'bg-purple-600 border-purple-400 shadow-[0_10px_30px_rgba(124,58,237,0.3)] text-white'
+                                                : 'bg-white/5 border-white/5 hover:border-white/20 text-white/70 hover:text-white'
+                                            }`}
                                     >
                                         <span className="font-black text-lg uppercase tracking-wider relative z-10">{event.name}</span>
                                         {registrations.includes(event.slug) ? (
@@ -309,9 +306,8 @@ const Abacus = () => {
                                     <button
                                         key={tab.id}
                                         onClick={() => setActiveTab(tab.id)}
-                                        className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl md:rounded-2xl font-bold md:font-black text-[10px] md:text-sm uppercase tracking-wider transition-all relative overflow-hidden group ${
-                                            activeTab === tab.id ? 'bg-white text-black' : 'text-white/50 hover:bg-white/10'
-                                        }`}
+                                        className={`flex-1 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-xl md:rounded-2xl font-bold md:font-black text-[10px] md:text-sm uppercase tracking-wider transition-all relative overflow-hidden group ${activeTab === tab.id ? 'bg-white text-black' : 'text-white/50 hover:bg-white/10'
+                                            }`}
                                     >
                                         <span className={`text-sm md:text-base ${activeTab === tab.id ? 'text-black' : 'text-purple-500'}`}>{tab.icon}</span>
                                         <span>{tab.label}</span>
@@ -339,9 +335,9 @@ const Abacus = () => {
                                                     {selectedEvent.posterUrl ? (
                                                         <div className="relative group/poster w-full max-w-[400px] md:w-72 mx-auto md:mx-0">
                                                             <div className="absolute -inset-4 bg-purple-500/20 blur-3xl rounded-[2rem] opacity-0 group-hover/poster:opacity-100 transition-opacity duration-500" />
-                                                            <img 
-                                                                src={selectedEvent.posterUrl} 
-                                                                alt={selectedEvent.name} 
+                                                            <img
+                                                                src={selectedEvent.posterUrl}
+                                                                alt={selectedEvent.name}
                                                                 className="w-full aspect-[4/5] object-cover rounded-2xl md:rounded-[2rem] border border-white/10 shadow-2xl relative z-10 hover:scale-[1.02] transition-transform duration-500"
                                                             />
                                                         </div>
@@ -364,7 +360,7 @@ const Abacus = () => {
                                                                 MODE: {selectedEvent.type}
                                                             </div>
                                                             {isAdmin && (
-                                                                <button 
+                                                                <button
                                                                     onClick={() => exportToCSV(selectedEvent.slug, selectedEvent.name)}
                                                                     className="flex items-center gap-3 px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] border border-indigo-400/30"
                                                                 >
@@ -385,8 +381,8 @@ const Abacus = () => {
                                                 </div>
                                                 <div className="grid gap-4 md:gap-6">
                                                     {selectedEvent.rules.split('\n').map((rule, i) => (
-                                                        <motion.div 
-                                                            key={i} 
+                                                        <motion.div
+                                                            key={i}
                                                             initial={{ opacity: 0, x: -20 }}
                                                             animate={{ opacity: 1, x: 0 }}
                                                             transition={{ delay: i * 0.1 }}
@@ -427,14 +423,14 @@ const Abacus = () => {
                                                             <p className="text-gray-400 text-sm md:text-lg font-medium">You have been successfully registered for {selectedEvent.name}.</p>
                                                         </div>
                                                         <div className="flex flex-col items-center gap-4 md:gap-6 pt-2">
-                                                            <a 
+                                                            <a
                                                                 href={selectedEvent.whatsappLink} target="_blank" rel="noreferrer"
                                                                 className="inline-flex items-center gap-3 md:gap-4 px-6 py-4 md:px-12 md:py-6 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-[1.02] transition-all text-white rounded-2xl md:rounded-3xl font-black text-xs md:text-lg shadow-[0_20px_40px_rgba(16,185,129,0.2)]"
                                                             >
                                                                 <FaWhatsapp size={20} className="md:w-6 md:h-6" /> <span className="uppercase">Join the Whatsapp Group</span>
                                                             </a>
                                                             {isAdmin && (
-                                                                <button 
+                                                                <button
                                                                     onClick={() => exportToCSV(selectedEvent.slug, selectedEvent.name)}
                                                                     className="flex items-center gap-3 px-6 py-3 bg-indigo-600/20 hover:bg-indigo-600/40 text-indigo-400 rounded-2xl font-black text-xs uppercase tracking-widest transition-all border border-indigo-500/30"
                                                                 >
@@ -447,26 +443,26 @@ const Abacus = () => {
                                                     <form onSubmit={handleRegister} className="space-y-5 md:space-y-6">
                                                         <div className="space-y-2 md:space-y-3">
                                                             <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">FULL NAME</label>
-                                                            <input 
+                                                            <input
                                                                 type="text" required placeholder="Your Full Name" value={formData.name}
-                                                                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                                                 className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-sm md:text-base text-white placeholder:text-white/10"
                                                             />
                                                         </div>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                                                             <div className="space-y-2 md:space-y-3">
                                                                 <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">SCHOLAR ID</label>
-                                                                <input 
+                                                                <input
                                                                     type="text" required value={formData.scholarId}
-                                                                    onChange={(e) => setFormData({...formData, scholarId: e.target.value})}
+                                                                    onChange={(e) => setFormData({ ...formData, scholarId: e.target.value })}
                                                                     className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-sm md:text-base text-white placeholder:text-white/10"
                                                                 />
                                                             </div>
                                                             <div className="space-y-2 md:space-y-3">
                                                                 <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Contact Number</label>
-                                                                <input 
+                                                                <input
                                                                     type="text" required placeholder="Phone" value={formData.contact}
-                                                                    onChange={(e) => setFormData({...formData, contact: e.target.value})}
+                                                                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                                                                     className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all font-mono text-sm md:text-base text-white placeholder:text-white/10"
                                                                 />
                                                             </div>
@@ -476,28 +472,27 @@ const Abacus = () => {
                                                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-5 md:space-y-6 pt-4 md:pt-6 border-t border-white/5">
                                                                 <div className="space-y-2 md:space-y-3">
                                                                     <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2 flex items-center gap-2"><FaUsers /> TEAM NAME</label>
-                                                                    <input 
+                                                                    <input
                                                                         type="text" required placeholder="Team Name" value={formData.teamName}
-                                                                        onChange={(e) => setFormData({...formData, teamName: e.target.value})}
+                                                                        onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
                                                                         className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all text-sm md:text-base"
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2 md:space-y-3">
                                                                     <label className="text-[10px] md:text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">TEAM MEMBERS (Max {selectedEvent.maxTeamSize})</label>
-                                                                    <textarea 
+                                                                    <textarea
                                                                         required placeholder="Separate names with commas" value={formData.members}
-                                                                        onChange={(e) => setFormData({...formData, members: e.target.value})}
+                                                                        onChange={(e) => setFormData({ ...formData, members: e.target.value })}
                                                                         className="w-full bg-white/5 border border-white/10 rounded-xl md:rounded-2xl px-4 py-3 md:px-6 md:py-4 focus:outline-none focus:border-purple-500 transition-all h-24 md:h-32 resize-none text-sm md:text-base"
                                                                     />
                                                                 </div>
                                                             </motion.div>
                                                         )}
 
-                                                        <button 
+                                                        <button
                                                             disabled={loading}
-                                                            className={`w-full py-4 md:py-6 rounded-2xl md:rounded-3xl font-black text-lg md:text-xl uppercase tracking-[0.2em] transition-all transform active:scale-[0.98] shadow-2xl relative overflow-hidden group mt-4 ${
-                                                                loading ? 'bg-white/10 text-white/20 cursor-wait' : 'bg-white text-black hover:bg-[#fafafa]'
-                                                            }`}
+                                                            className={`w-full py-4 md:py-6 rounded-2xl md:rounded-3xl font-black text-lg md:text-xl uppercase tracking-[0.2em] transition-all transform active:scale-[0.98] shadow-2xl relative overflow-hidden group mt-4 ${loading ? 'bg-white/10 text-white/20 cursor-wait' : 'bg-white text-black hover:bg-[#fafafa]'
+                                                                }`}
                                                         >
                                                             {loading ? 'Processing...' : 'REGISTER'}
                                                             <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-purple-500 to-indigo-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
@@ -527,8 +522,8 @@ const Abacus = () => {
                             Don't miss a beat. Get real-time updates, network with fellow participants, and have your doubts cleared instantly by our command center.
                         </p>
                     </div>
-                    <a 
-                        href="https://chat.whatsapp.com/LbuPaX0mu7zLYQ0IprpTTW" 
+                    <a
+                        href="https://chat.whatsapp.com/LbuPaX0mu7zLYQ0IprpTTW"
                         target="_blank" rel="noreferrer"
                         className="mt-4 md:mt-6 inline-flex items-center gap-3 md:gap-4 px-6 py-4 md:px-10 md:py-5 bg-gradient-to-br from-emerald-500 to-teal-600 hover:scale-[1.02] text-white rounded-2xl md:rounded-3xl font-black text-xs md:text-lg uppercase tracking-[0.2em] transition-all shadow-[0_20px_40px_rgba(16,185,129,0.3)]"
                     >
