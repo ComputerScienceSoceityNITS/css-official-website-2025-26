@@ -57,12 +57,12 @@ const OtpVerification = () => {
 
         try {
             console.log('Verifying OTP for email:', email);
-            
+
             // Verify OTP
-            const result = await verifyOtp({ 
-                email, 
-                token, 
-                type: 'email' 
+            const result = await verifyOtp({
+                email,
+                token,
+                type: 'email'
             });
 
             console.log('OTP verification successful:', result);
@@ -104,10 +104,10 @@ const OtpVerification = () => {
     };
 
     const handleManualLoginRedirect = () => {
-        navigate('/auth', { 
-            state: { 
-                message: 'If you have verified your email, please login with your credentials.' 
-            } 
+        navigate('/auth', {
+            state: {
+                message: 'If you have verified your email, please login with your credentials.'
+            }
         });
     };
 
@@ -126,8 +126,8 @@ const OtpVerification = () => {
     return (
         <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-6 py-10 overflow-hidden">
             {/* Background Effects */}
-           
-            
+
+
             <div className="relative max-w-md w-full bg-black/70 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg">
                 {/* Cyberpunk corners */}
                 <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
@@ -138,13 +138,13 @@ const OtpVerification = () => {
                 <h2 className="text-3xl font-bold mb-4 text-center text-white drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" style={{ fontFamily: "Goldman, sans-serif" }}>
                     VERIFY EMAIL
                 </h2>
-                
+
                 {message && (
                     <div className="bg-cyan-900/30 text-cyan-300 text-center p-3 rounded-md mb-4 border border-cyan-500/50">
                         {message}
                     </div>
                 )}
-                
+
                 <p className="text-center text-gray-400 mb-6 font-mono">
                     {email ? `An OTP has been sent to ${email}` : 'Check your email for the verification code'}
                 </p>
@@ -175,10 +175,10 @@ const OtpVerification = () => {
                             Enter the 6-digit code from your email
                         </p>
                     </div>
-                    
-                    <button 
-                        type="submit" 
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-4" 
+
+                    <button
+                        type="submit"
+                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-4"
                         disabled={loading || token.length !== 6}
                     >
                         {loading ? (
@@ -196,17 +196,17 @@ const OtpVerification = () => {
                 </form>
 
                 <div className="flex flex-col gap-3 mt-6">
-                    <button 
+                    <button
                         onClick={handleResendOtp}
                         disabled={resendLoading || countdown > 0}
                         className="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     >
-                        {resendLoading ? 'Sending...' : 
-                         countdown > 0 ? `Resend OTP in ${countdown}s` : 
-                         'Resend OTP'}
+                        {resendLoading ? 'Sending...' :
+                            countdown > 0 ? `Resend OTP in ${countdown}s` :
+                                'Resend OTP'}
                     </button>
 
-                    <button 
+                    <button
                         onClick={handleManualLoginRedirect}
                         className="w-full bg-transparent border border-cyan-500/50 hover:border-cyan-400/70 p-3 rounded font-bold transition-all text-cyan-400 hover:text-cyan-300 text-sm"
                     >

@@ -338,10 +338,155 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
+}
+
+/* 3D Keycap Button styles */
+.keycap {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #282828, #202020);
+  box-shadow:
+    inset -8px 0 8px rgba(0, 0, 0, 0.15),
+    inset 0 -8px 8px rgba(0, 0, 0, 0.25),
+    0 0 0 2px rgba(0, 0, 0, 0.75),
+    10px 20px 25px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition:
+    transform 0.1s ease-in-out,
+    box-shadow 0.1s ease-in;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  border: none;
+}
+
+.keycap .letter {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  color: #e9e9e9;
+  font-size: 16px;
+  transition: transform 0.1s ease-in-out;
+  font-family: inherit;
+  font-weight: bold;
+  z-index: 10;
+}
+
+.keycap::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  bottom: 14px;
+  right: 12px;
+  background: linear-gradient(90deg, #232323, #4a4a4a);
+  border-radius: 10px;
+  box-shadow:
+    -10px -10px 10px rgba(255, 255, 255, 0.25),
+    10px 5px 10px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid #0004;
+  border-bottom: 1px solid #0004;
+  border-top: 1px solid #0009;
+  transition: all 0.1s ease-in-out;
+}
+
+.keycap:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset -4px 0 4px rgba(0, 0, 0, 0.1),
+    inset 0 -4px 4px rgba(0, 0, 0, 0.15),
+    0 0 0 2px rgba(0, 0, 0, 0.5),
+    5px 10px 15px rgba(0, 0, 0, 0.3);
+}
+
+.keycap:active::before {
+  top: 5px;
+  left: 5px;
+  bottom: 11px;
+  right: 11px;
+  box-shadow:
+    -5px -5px 5px rgba(255, 255, 255, 0.15),
+    5px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.keycap:active .letter {
+  transform: translateY(1px);
+}
+
+/* Wide / Custom dimension support for CTA keycaps */
+.keycap.keycap-wide {
+  width: auto;
+  height: 48px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.keycap.keycap-wide::before {
+  top: 2px;
+  left: 3px;
+  bottom: 10px;
+  right: 8px;
+  border-radius: 7px;
+}
+
+.keycap.keycap-wide .letter {
+  position: static;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.keycap.keycap-wide:active::before {
+  top: 4px;
+  left: 4px;
+  bottom: 8px;
+  right: 7px;
+}
+
+/* Custom Color Keycaps */
+.keycap.keycap-cyan {
+  background: linear-gradient(180deg, #0891b2, #0e7490);
+  box-shadow:
+    inset -8px 0 8px rgba(0, 0, 0, 0.15),
+    inset 0 -8px 8px rgba(0, 0, 0, 0.25),
+    0 0 0 2px rgba(6, 182, 212, 0.6),
+    10px 20px 25px rgba(6, 182, 212, 0.15);
+}
+
+.keycap.keycap-cyan::before {
+  background: linear-gradient(90deg, #0e7490, #22d3ee);
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.keycap.keycap-cyan .letter {
+  color: #020617;
+}
+
+/* Custom heights */
+.keycap.h-10 {
+  height: 40px !important;
+}
+
+.keycap.h-10::before {
+  bottom: 8px !important;
+}
+
+.keycap.h-10:active::before {
+  bottom: 6px !important;
 }

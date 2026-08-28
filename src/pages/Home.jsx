@@ -14,6 +14,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { StackingCards, StackingCardItem } from '../components/ui/StackingCards'
 import Chatbot from '../components/ui/Chatbot'
 import { NavbarDemo } from '../components/Navbar'
+import { AnimatedGroup } from '../components/ui/animated-group'
+import { KeycapButton } from '../components/ui/KeycapButton'
 
 import CssLogo3D from '../components/ui/CssLogo3D'
 // import DiwaliPopup from '../components/DiwaliPopup'
@@ -816,33 +818,25 @@ function Home() {
               </p>
             </div>
 
-            {/* Minimalist Marquee Sponsors Row - Clean Logos Only */}
-            <div className="relative z-10 w-full overflow-hidden py-10 border-y border-slate-900/60 bg-transparent">
-              <style dangerouslySetInnerHTML={{__html: `
-                @keyframes marqueeScroll {
-                  0% { transform: translateX(0); }
-                  100% { transform: translateX(-50%); }
-                }
-                .animate-marquee-loop {
-                  display: flex;
-                  width: max-content;
-                  animation: marqueeScroll 30s linear infinite;
-                }
-                .animate-marquee-loop:hover {
-                  animation-play-state: paused;
-                }
-              `}} />
-              <div className="animate-marquee-loop flex items-center">
-                {[...SPONSORS_LIST, ...SPONSORS_LIST].map((sponsor, index) => (
+            {/* Sponsors Grid - Staggered Scroll Animation */}
+            <div className="relative z-10 w-full py-10">
+              <AnimatedGroup
+                preset="blur-slide"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.15 }}
+                className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 max-w-5xl mx-auto px-4"
+              >
+                {SPONSORS_LIST.map((sponsor) => (
                   <a
-                    key={`${sponsor.name}-${index}`}
+                    key={sponsor.name}
                     href={sponsor.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mx-12 shrink-0 flex items-center justify-center opacity-65 hover:opacity-100 hover:scale-110 grayscale hover:grayscale-0 transition-all duration-300"
+                    className="flex items-center justify-center p-6 bg-slate-950/40 border border-white/[0.05] rounded-2xl hover:border-cyan-500/30 hover:bg-slate-900/40 hover:scale-105 transition-all duration-300 group relative overflow-hidden h-28"
                   >
-                    {/* Logo container (Larger and cleaner) */}
-                    <div className="h-16 w-36 flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    <div className="relative z-10 flex items-center justify-center w-full h-full grayscale group-hover:grayscale-0 opacity-60 group-hover:opacity-100 transition-all duration-300">
                       {sponsor.isSvg ? (
                         renderSponsorLogo(sponsor.logoKey)
                       ) : (
@@ -850,13 +844,13 @@ function Home() {
                           src={sponsor.logo}
                           alt={`${sponsor.name} logo`}
                           loading="lazy"
-                          className="h-full w-full object-contain brightness-110 contrast-125"
+                          className="max-h-12 max-w-full object-contain brightness-110 contrast-125"
                         />
                       )}
                     </div>
                   </a>
                 ))}
-              </div>
+              </AnimatedGroup>
             </div>
 
             {/* CTA Section - Responsive layout */}
@@ -865,9 +859,9 @@ function Home() {
                 <span className="text-cyan-400 font-mono text-xs md:text-sm lg:text-base">
                   $~ become-a-sponsor --help
                 </span>
-                <button className="px-4 py-2 md:px-6 md:py-2 bg-cyan-500 hover:bg-cyan-400 text-white font-mono text-xs md:text-sm rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30">
+                <KeycapButton className="keycap-wide">
                   Join as Sponsor
-                </button>
+                </KeycapButton>
               </div>
             </div>
           </div>
@@ -1047,49 +1041,49 @@ function Home() {
                   onClick={() => setExpandedIndex(null)}
                   className="absolute inset-0 bg-black/85 backdrop-blur-md"
                 />
-                
+
                 {/* Modal Container */}
                 <motion.div
                   layoutId={layoutId}
                   className="relative w-full max-w-4xl h-[85vh] md:h-[75vh] bg-[#020617] border border-cyan-500/30 rounded-2xl overflow-hidden z-10 flex flex-col md:flex-row shadow-2xl shadow-cyan-500/10"
                 >
                   {/* Floating Close Button */}
-                  <button 
-                    onClick={() => setExpandedIndex(null)} 
+                  <button
+                    onClick={() => setExpandedIndex(null)}
                     className="absolute top-4 right-4 z-20 flex h-9 w-9 items-center justify-center bg-black/60 hover:bg-slate-900 rounded-full border border-cyan-500/30 text-cyan-400 hover:text-cyan-300 transition-colors backdrop-blur-sm"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                   </button>
-                  
+
                   {/* Left Pane - Portrait Photo */}
                   <div className="relative h-48 w-full shrink-0 overflow-hidden md:h-full md:w-1/2 bg-black border-r border-cyan-500/10">
-                    <motion.img 
-                      layoutId={`image-${layoutId}`} 
-                      src={pillar.src} 
+                    <motion.img
+                      layoutId={`image-${layoutId}`}
+                      src={pillar.src}
                       alt={pillar.name}
-                      className="h-full w-full object-cover object-center" 
+                      className="h-full w-full object-cover object-center"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:hidden" />
                   </div>
-                  
+
                   {/* Right Pane - Scrollable Bio Content */}
                   <div className="p-6 md:p-10 w-full md:w-1/2 flex flex-col h-full overflow-y-auto bg-slate-950/40 select-none">
-                    <motion.p 
-                      layoutId={`subtitle-${layoutId}`} 
+                    <motion.p
+                      layoutId={`subtitle-${layoutId}`}
                       className="text-cyan-400 font-mono text-xs tracking-widest uppercase mb-2"
                     >
                       {pillar.tag}
                     </motion.p>
-                    
-                    <motion.h3 
-                      layoutId={`title-${layoutId}`} 
+
+                    <motion.h3
+                      layoutId={`title-${layoutId}`}
                       className="text-2xl md:text-3xl font-bold font-mono text-white tracking-tight mb-6 pb-4 border-b border-cyan-500/10"
                     >
                       {pillar.name}
                     </motion.h3>
-                    
+
                     {/* Biography and Focus Details */}
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 10 }}
@@ -1123,7 +1117,7 @@ function Home() {
                       </div>
 
                       {/* Close Button */}
-                      <button 
+                      <button
                         onClick={() => setExpandedIndex(null)}
                         className="mt-4 px-5 py-2.5 bg-gradient-to-r from-cyan-900/40 to-slate-900/40 hover:from-cyan-900/60 hover:to-slate-900/60 text-cyan-400 border border-cyan-500/30 font-bold rounded-lg hover:shadow-md hover:shadow-cyan-500/10 transition-all self-start text-[11px]"
                       >

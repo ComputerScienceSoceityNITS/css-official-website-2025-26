@@ -36,9 +36,8 @@ const MemberCard = ({ member, flipped, onFlip, index }) => {
           onClick={onFlip}
         >
           <div
-            className={`relative w-full h-full transition-transform duration-700 preserve-3d ${
-              flipped ? 'rotate-y-180' : ''
-            }`}
+            className={`relative w-full h-full transition-transform duration-700 preserve-3d ${flipped ? 'rotate-y-180' : ''
+              }`}
           >
             {/* Front of Card */}
             <div className="absolute inset-0 backface-hidden rounded-xl overflow-hidden border border-cyan-500/20 shadow-2xl shadow-cyan-500/10 group-hover:border-cyan-400/60 group-hover:shadow-cyan-400/20 transition-all duration-500 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800">

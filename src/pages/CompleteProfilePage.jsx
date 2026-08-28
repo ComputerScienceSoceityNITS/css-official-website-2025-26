@@ -17,16 +17,16 @@ const CompleteProfile = () => {
         setLoading(true);
         setError('');
 
-        
+
         if (!fullName.trim() || !scholarId.trim() || !contactNumber.trim()) {
             setError('Please fill in all fields');
             setLoading(false);
             return;
         }
 
-        
+
         const cleanPhoneNumber = contactNumber.replace(/\D/g, '');
-        const phoneRegex = /^[6-9]\d{9}$/; 
+        const phoneRegex = /^[6-9]\d{9}$/;
         if (!phoneRegex.test(cleanPhoneNumber)) {
             setError('Please enter a valid 10-digit Indian phone number starting with 6, 7, 8, or 9');
             setLoading(false);
@@ -39,18 +39,18 @@ const CompleteProfile = () => {
                 .update({
                     full_name: fullName.trim(),
                     scholar_id: scholarId.trim(),
-                    contact_number: cleanPhoneNumber, 
+                    contact_number: cleanPhoneNumber,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('user_id', user.id)
                 .select();
 
             if (updateError) throw updateError;
-            
-            
+
+
             await refreshProfile();
-            
-            
+
+
             navigate('/dashboard');
         } catch (error) {
             console.error('Profile completion error:', error);
@@ -60,7 +60,7 @@ const CompleteProfile = () => {
     };
 
     const handlePhoneChange = (e) => {
-        
+
         const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
         setContactNumber(digitsOnly);
     };
@@ -94,7 +94,7 @@ const CompleteProfile = () => {
                             placeholder="Enter your full name"
                         />
                     </div>
-                    
+
                     <div className="mb-4">
                         <label className="block mb-2 font-mono text-cyan-300">Scholar ID</label>
                         <input
@@ -106,7 +106,7 @@ const CompleteProfile = () => {
                             placeholder="Enter your scholar ID"
                         />
                     </div>
-                    
+
                     <div className="mb-6">
                         <label className="block mb-2 font-mono text-cyan-300">Contact Number</label>
                         <div className="relative">
@@ -127,10 +127,10 @@ const CompleteProfile = () => {
                             Enter 10-digit Indian mobile number (starts with 6, 7, 8, or 9)
                         </p>
                     </div>
-                    
-                    <button 
-                        type="submit" 
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
+
+                    <button
+                        type="submit"
+                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled={loading}
                     >
                         {loading ? 'Saving...' : 'Save and Continue'}
