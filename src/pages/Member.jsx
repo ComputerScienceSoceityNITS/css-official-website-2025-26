@@ -13,7 +13,7 @@ const Members = () => {
   const [flippedCards, setFlippedCards] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [imagesLoaded, setImagesLoaded] = useState(false)
-  
+
   const handleCardFlip = (cardId) => {
     setFlippedCards((prev) => ({
       ...prev,
@@ -41,7 +41,7 @@ const Members = () => {
         <div className="relative">
           {/* Animated loader */}
           <div className="w-16 h-16 md:w-20 md:h-20 border-4 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin mb-4"></div>
-          
+
           {/* Loading text with typing animation */}
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2">
@@ -53,12 +53,12 @@ const Members = () => {
                 <div className="w-1 h-4 bg-cyan-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
-            
+
             {/* Progress bar */}
             <div className="mt-4 w-48 md:w-64 h-1 bg-cyan-900/30 rounded-full overflow-hidden">
               <div className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 animate-pulse rounded-full w-3/4"></div>
             </div>
-            
+
             {/* Status text */}
             <p className="mt-3 text-cyan-300/80 font-mono text-xs">
               {!imagesLoaded ? 'Loading images...' : 'Initializing system...'}
@@ -75,7 +75,7 @@ const Members = () => {
 
   return (
     <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white px-4 sm:px-6 py-8 sm:py-10 overflow-hidden">
-    
+
       <div className="relative max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-8 sm:mb-12 mt-4 sm:mt-8">
@@ -91,7 +91,7 @@ const Members = () => {
         <div className="flex flex-col lg:flex-row items-center gap-4 sm:gap-6 md:gap-10 mb-8 sm:mb-12 md:mb-16 p-4 sm:p-6 md:p-8 bg-black/90 rounded-lg sm:rounded-xl md:rounded-2xl backdrop-blur-lg border border-cyan-500/20 relative z-10 overflow-hidden">
           {/* Background Patterns */}
           <div className="absolute inset-0 bg-hexagon-pattern-black bg-[length:40px_40px] sm:bg-[length:60px_60px] md:bg-[length:80px_80px] opacity-20"></div>
-          
+
           {/* Circuit Animation - Hidden on mobile for performance */}
           <div className="absolute inset-0 opacity-20 md:opacity-30 hidden sm:block">
             <svg width="100%" height="100%" className="absolute inset-0">
