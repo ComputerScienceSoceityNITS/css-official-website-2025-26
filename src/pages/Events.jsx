@@ -1,8 +1,10 @@
 // pages/EventsList.jsx - COMPLETE UPDATED VERSION
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
 import { useArchReveal } from "../hooks/useArchAnim";
 import ArchPageLoader from "../components/ArchPageLoader";
+import { ArchChars } from "../components/ArchType";
 import { Link, Navigate } from "react-router-dom";
 import eventsContent from "../constants/events";
 import { FaArrowRight, FaExternalLinkAlt, FaLock, FaCheck, FaHandPointer, FaInfoCircle, FaTrophy, FaGraduationCap } from "react-icons/fa";
@@ -214,21 +216,96 @@ function EventCard({
   );
 }
 
+/**
+ * The events masthead. The title rises character by character, and beside
+ * it a vertical cycler steps through what the society actually runs — the
+ * hero states the programme instead of describing it. The list is rendered
+ * with the first entry repeated at the end so the loop can step back to the
+ * top without a visible rewind.
+ */
+const PROGRAMME = [
+  'DSA Marathons',
+  'Dev Workshops',
+  'ML Sessions',
+  'Design Labs',
+  'CSS Olympics',
+  'ESPERANZA',
+  'CSS ABACUS',
+];
+
+function ProgrammeCycler() {
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const steps = PROGRAMME.length; // the duplicate at the end makes this seamless
+    const tl = gsap.timeline({ repeat: -1 });
+
+    for (let i = 1; i <= steps; i++) {
+      tl.to(track, {
+        yPercent: (-100 / (steps + 1)) * i,
+        duration: 0.72,
+        ease: 'power3.inOut',
+        delay: 1.5,
+      });
+    }
+    tl.set(track, { yPercent: 0 });
+
+    return () => tl.kill();
+  }, []);
+
+  return (
+    <div className="arch-cycle">
+      <div ref={trackRef} className="arch-cycle-track">
+        {[...PROGRAMME, PROGRAMME[0]].map((w, i) => (
+          <div key={`${w}-${i}`} className="arch-cycle-item">
+            {w}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Header({ title, description }) {
   return (
-    <header className="border-b border-arch-line py-20 md:py-32">
-      <h1 data-arch="lines" className="arch-display text-[clamp(2.75rem,9vw,8rem)]">
-        <span className="arch-split-line">
-          <span className="arch-line-inner">{title}</span>
-        </span>
-      </h1>
-      <p
-        className="arch-body mt-10 max-w-3xl"
-        data-arch="fade"
-        data-arch-delay="0.2"
-      >
-        {description}
-      </p>
+    <header className="relative overflow-hidden pt-28 md:pt-36">
+      <div className="pb-14 md:pb-20">
+        <p className="arch-label mb-8" data-arch="fade">
+          Participate, enjoy &amp; learn
+        </p>
+
+        <div data-arch="scrub-x" data-arch-x="-3">
+          <h1 data-arch="chars" className="arch-display text-[clamp(3rem,10vw,9rem)]">
+            <ArchChars text={title} />
+          </h1>
+        </div>
+
+        {/* what the programme actually contains */}
+        <div
+          className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-1"
+          data-arch="fade"
+          data-arch-delay="0.25"
+        >
+          <span className="arch-label">This year</span>
+          <div className="arch-title text-[clamp(1.35rem,3.4vw,2.5rem)] text-arch-ink">
+            <ProgrammeCycler />
+          </div>
+        </div>
+
+        <p
+          className="arch-body mt-12 max-w-3xl"
+          data-arch="fade"
+          data-arch-delay="0.35"
+        >
+          {description}
+        </p>
+      </div>
+
+      <div data-arch="fade" data-arch-delay="0.45" className="h-px w-full bg-arch-line" />
     </header>
   );
 }
@@ -485,7 +562,7 @@ export default function EventsList() {
     <div ref={archScope} className="min-h-screen w-full bg-arch-bg text-arch-ink">
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
         <Header
-          title="Our Events"
+          title="Events"
           description="From DSA Marathons, Development, ML and Design Workshops to sessions that sharpen technical expertise, from the spirited CSS Olympics that celebrate sportsmanship to cultural highlights like ESPERANZA, CSS GO, and our flagship annual fest CSS ABACUS — our calendar is packed with opportunities to learn, grow, and celebrate. Guided by the motto Participate, Enjoy & Learn, every event is designed to build all-rounders and leave behind unforgettable memories."
         />
 

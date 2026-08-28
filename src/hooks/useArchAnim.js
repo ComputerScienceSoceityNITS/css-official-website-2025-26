@@ -98,6 +98,43 @@ export function useArchReveal(scopeRef, deps = []) {
         )
       })
 
+      /* per-character masked rise */
+      gsap.utils.toArray('[data-arch="chars"]').forEach((el) => {
+        const chars = el.querySelectorAll('.arch-char-inner')
+        if (!chars.length) return
+        gsap.fromTo(
+          chars,
+          { yPercent: 118 },
+          {
+            yPercent: 0,
+            duration: 1.1,
+            ease: ARCH_EASE,
+            stagger: 0.028,
+            delay: parseFloat(el.dataset.archDelay || 0),
+            scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' },
+          }
+        )
+      })
+
+      /* horizontal counter-motion on scroll */
+      gsap.utils.toArray('[data-arch="scrub-x"]').forEach((el) => {
+        const amount = parseFloat(el.dataset.archX || 4)
+        gsap.fromTo(
+          el,
+          { xPercent: 0 },
+          {
+            xPercent: amount,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el.parentElement || el,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.2,
+            },
+          }
+        )
+      })
+
       /* count-up numbers */
       gsap.utils.toArray('[data-arch="count"]').forEach((el) => {
         const target = parseFloat(el.dataset.archTo || el.textContent.replace(/[^0-9.]/g, '')) || 0

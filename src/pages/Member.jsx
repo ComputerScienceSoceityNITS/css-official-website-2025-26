@@ -4,6 +4,7 @@ import '../styles/memberAnimations.css'
 import MemberCard from '../components/MemberCard'
 import { useArchReveal } from '../hooks/useArchAnim'
 import ArchPageLoader from '../components/ArchPageLoader'
+import { ArchChars } from '../components/ArchType'
 
 const Members = () => {
   const [flippedCards, setFlippedCards] = useState({})
@@ -64,50 +65,65 @@ const Members = () => {
 
     <div ref={scope} className="min-h-screen w-full bg-arch-bg text-arch-ink">
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
-        {/* Masthead */}
-        <header className="border-b border-arch-line py-20 md:py-32">
-          <h1 data-arch="lines" className="arch-display text-[clamp(2.75rem,9vw,8rem)]">
-            <span className="arch-split-line">
-              <span className="arch-line-inner">Our</span>
-            </span>
-            <span className="arch-split-line">
-              <span className="arch-line-inner">Members</span>
-            </span>
-          </h1>
-        </header>
+        {/* ── HERO ──────────────────────────────────────────────
+            The title is split per character and rises out of its mask;
+            as you scroll it drifts left while the illustration drifts
+            right, so the two halves pull apart rather than sliding as
+            one block. member.png is a square flat illustration on white
+            with the figures cropped at the baseline, so it is contained
+            (never cover — a wide crop decapitates them) and anchored to
+            the bottom of a white plate, which reads as the group
+            standing on the card's floor. */}
+        <header className="relative overflow-hidden pt-28 md:pt-36">
+          <div className="grid grid-cols-1 items-end gap-12 pb-14 md:grid-cols-12 md:gap-8 md:pb-20">
+            <div className="md:col-span-7">
+              <p className="arch-label mb-8" data-arch="fade">
+                The people behind the society
+              </p>
 
-        {/* Intro + figure */}
-        <section className="grid grid-cols-1 gap-12 border-b border-arch-line py-20 md:grid-cols-12 md:gap-6 md:py-28">
-          <div className="md:col-span-5">
-            <p
-              className="text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
-              data-arch="fade"
-            >
-              Every member brings unique energy, ideas, and enthusiasm that make our
-              society stronger each year.
-            </p>
-            <p className="arch-body mt-6" data-arch="fade" data-arch-delay="0.1">
-              We're proud of the diverse talents and perspectives that each individual
-              contributes to our community's success.
-            </p>
-          </div>
+              <div data-arch="scrub-x" data-arch-x="-3">
+                <h1 data-arch="chars" className="arch-display text-[clamp(3rem,10vw,9rem)]">
+                  <ArchChars text="Members" />
+                </h1>
+              </div>
 
-          <div className="md:col-span-7">
-            <figure className="border border-arch-line bg-arch-card">
-              <div className="overflow-hidden" data-arch="mask">
+              <div className="mt-10 max-w-xl" data-arch="fade" data-arch-delay="0.25">
+                <p className="arch-lead">
+                  Every member brings unique energy, ideas, and enthusiasm that make our
+                  society stronger each year.
+                </p>
+                <p className="arch-body mt-5">
+                  We&rsquo;re proud of the diverse talents and perspectives that each
+                  individual contributes to our community&rsquo;s success.
+                </p>
+              </div>
+            </div>
+
+            <div className="md:col-span-5" data-arch="scrub-x" data-arch-x="3">
+              <figure
+                className="flex items-end justify-center overflow-hidden border border-arch-line bg-arch-card px-6 pt-8"
+                data-arch="mask"
+              >
                 <img
                   src="/images/member.png"
-                  alt="Team members"
+                  alt="Illustration of the Computer Science Society members"
                   loading="lazy"
-                  className="w-full object-cover"
+                  className="h-[280px] w-auto max-w-full object-contain object-bottom sm:h-[340px] md:h-[420px]"
                 />
-              </div>
-            </figure>
+              </figure>
+            </div>
           </div>
-        </section>
+
+          {/* rule draws out from the left as the hero settles */}
+          <div
+            data-arch="fade"
+            data-arch-delay="0.4"
+            className="h-px w-full origin-left bg-arch-line"
+          />
+        </header>
 
         {/* Wings + members */}
-        <section className="py-20 md:py-28">
+        <section className="py-20 md:py-24">
           {Object.entries(data.wings).map(([key, wing]) => (
             <div key={key} className="mb-24 last:mb-0">
               <div className="mb-12 border-b border-arch-line pb-6">

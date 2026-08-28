@@ -1,18 +1,23 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ARCH_EASE } from '../hooks/useArchAnim'
+import { ArchChars } from './ArchType'
 
 /**
  * ArchPageLoader — the route-level loading panel.
  *
- * Four beige columns fill the viewport under the navbar. The page title
- * rises out of a mask, a status manifest ticks through, and a counter
- * ramps toward 100. When `ready` flips, the columns lift away in
- * sequence like a blind, revealing the page already rendered behind.
- *
- * Presentational only — the caller owns the actual loading state.
+ * Entrance: hairline rails draw out from the centre, the page title rises
+ * character by character, a measure rail ticks in.
+ * Idle:     the counter creeps to 92 on an easing ramp — never a fake finish.
+ * Exit:     the panel is a grid of beige cells that collapse in a diagonal
+ *           wave from the top-left, so the page behind is uncovered in a
+ *           sweep rather than by a single sliding block. Distinct from the
+ *           home intro's curtains on purpose — routes and entrances should
+ *           not use the same gesture.
  */
-const COLUMNS = 4
+const COLS = 7
+const ROWS = 4
+const CELLS = COLS * ROWS
 
 const ArchPageLoader = ({
   title = 'Loading',
@@ -23,8 +28,7 @@ const ArchPageLoader = ({
 }) => {
   const rootRef = useRef(null)
   const stageRef = useRef(null)
-  const colsRef = useRef([])
-  const titleRef = useRef(null)
+  const cellsRef = useRef([])
   const barRef = useRef(null)
   const countRef = useRef(null)
   const stepRef = useRef(null)
@@ -37,6 +41,12 @@ const ArchPageLoader = ({
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+  const paint = () => {
+    const n = Math.round(progressRef.current.v)
+    if (countRef.current) countRef.current.textContent = String(n).padStart(3, '0')
+    if (barRef.current) gsap.set(barRef.current, { scaleX: n / 100 })
+  }
+
   /* ---- entrance + idle ramp --------------------------------------- */
   useLayoutEffect(() => {
     if (reduced) return
@@ -44,39 +54,28 @@ const ArchPageLoader = ({
     const ctx = gsap.context(() => {
       const tl = gsap.timeline()
 
-      tl.from(colsRef.current, {
-        scaleY: 0,
-        transformOrigin: 'top center',
-        duration: 0.55,
+      tl.from('[data-loader-rail]', {
+        scaleX: 0,
+        duration: 0.9,
         ease: ARCH_EASE,
-        stagger: 0.05,
+        stagger: 0.06,
       })
         .from(
-          '[data-loader-rail]',
-          { scaleX: 0, transformOrigin: 'left center', duration: 0.7, ease: ARCH_EASE, stagger: 0.08 },
-          '-=0.25'
-        )
-        .from(
-          titleRef.current,
-          { yPercent: 115, duration: 1.05, ease: ARCH_EASE },
-          '-=0.5'
+          '.arch-char-inner',
+          { yPercent: 118, duration: 1.05, ease: ARCH_EASE, stagger: 0.028 },
+          '-=0.6'
         )
         .from(
           '[data-loader-meta]',
-          { opacity: 0, y: 14, duration: 0.7, ease: ARCH_EASE, stagger: 0.08 },
-          '-=0.7'
+          { opacity: 0, y: 14, duration: 0.65, ease: ARCH_EASE, stagger: 0.07 },
+          '-=0.75'
         )
 
-      /* Creep toward 92% while we wait — never fake a finish. */
       gsap.to(progressRef.current, {
         v: 92,
         duration: 6,
         ease: 'power2.out',
-        onUpdate: () => {
-          const n = Math.round(progressRef.current.v)
-          if (countRef.current) countRef.current.textContent = String(n).padStart(3, '0')
-          if (barRef.current) gsap.set(barRef.current, { scaleX: n / 100 })
-        },
+        onUpdate: paint,
       })
     }, rootRef)
 
@@ -86,9 +85,7 @@ const ArchPageLoader = ({
   /* ---- status manifest -------------------------------------------- */
   useEffect(() => {
     if (steps.length < 2) return
-    const id = setInterval(() => {
-      setStepIndex((i) => (i + 1) % steps.length)
-    }, 900)
+    const id = setInterval(() => setStepIndex((i) => (i + 1) % steps.length), 950)
     return () => clearInterval(id)
   }, [steps.length])
 
@@ -96,12 +93,12 @@ const ArchPageLoader = ({
     if (reduced || !stepRef.current) return
     gsap.fromTo(
       stepRef.current,
-      { opacity: 0, y: 8 },
+      { opacity: 0, y: 10 },
       { opacity: 1, y: 0, duration: 0.45, ease: ARCH_EASE }
     )
   }, [stepIndex, reduced])
 
-  /* ---- exit -------------------------------------------------------- */
+  /* ---- exit: diagonal cell wave ------------------------------------ */
   useEffect(() => {
     if (!ready || doneRef.current) return
     doneRef.current = true
@@ -117,22 +114,24 @@ const ArchPageLoader = ({
       v: 100,
       duration: 0.4,
       ease: ARCH_EASE,
-      onUpdate: () => {
-        const n = Math.round(progressRef.current.v)
-        if (countRef.current) countRef.current.textContent = String(n).padStart(3, '0')
-        if (barRef.current) gsap.set(barRef.current, { scaleX: n / 100 })
-      },
+      onUpdate: paint,
     })
-      .to(stageRef.current, { opacity: 0, y: -20, duration: 0.45, ease: ARCH_EASE }, '-=0.1')
+      .to(stageRef.current, { opacity: 0, y: -16, duration: 0.45, ease: ARCH_EASE }, '-=0.12')
       .to(
-        colsRef.current,
+        cellsRef.current,
         {
-          yPercent: -100,
-          duration: 1.05,
-          ease: 'power4.inOut',
-          stagger: 0.07,
+          scaleY: 0,
+          transformOrigin: 'top center',
+          duration: 0.75,
+          ease: 'power3.inOut',
+          stagger: {
+            grid: [ROWS, COLS],
+            from: 'start',
+            axis: null,
+            amount: 0.55,
+          },
         },
-        '-=0.15'
+        '-=0.1'
       )
 
     return () => tl.kill()
@@ -140,15 +139,21 @@ const ArchPageLoader = ({
 
   return (
     <div ref={rootRef} className="fixed inset-0 z-[150] overflow-hidden">
-      {/* Lifting columns */}
-      <div className="absolute inset-0 flex">
-        {Array.from({ length: COLUMNS }).map((_, i) => (
+      {/* Collapsing cells */}
+      <div
+        className="arch-cells"
+        style={{
+          gridTemplateColumns: `repeat(${COLS}, 1fr)`,
+          gridTemplateRows: `repeat(${ROWS}, 1fr)`,
+        }}
+      >
+        {Array.from({ length: CELLS }).map((_, i) => (
           <div
             key={i}
             ref={(el) => {
-              colsRef.current[i] = el
+              cellsRef.current[i] = el
             }}
-            className="h-full flex-1 border-r border-arch-line/70 bg-arch-bg last:border-r-0"
+            className="arch-cell"
           />
         ))}
       </div>
@@ -160,7 +165,7 @@ const ArchPageLoader = ({
       >
         {/* Top rail */}
         <div>
-          <div data-loader-rail className="h-px w-full origin-left bg-arch-line" />
+          <div data-loader-rail className="h-px w-full origin-center bg-arch-line" />
           <div className="flex items-center justify-between py-5">
             <span className="arch-label">{label}</span>
             <span className="arch-label hidden sm:block">NIT Silchar</span>
@@ -168,17 +173,10 @@ const ArchPageLoader = ({
         </div>
 
         {/* Title */}
-        <div className="flex-1 flex items-center">
-          <div>
-            <div className="arch-split-line">
-              <h1
-                ref={titleRef}
-                className="arch-line-inner arch-display text-[clamp(3rem,13vw,11rem)]"
-              >
-                {title}
-              </h1>
-            </div>
-          </div>
+        <div className="flex flex-1 items-center">
+          <h1 className="arch-display text-[clamp(3rem,13vw,11rem)]">
+            <ArchChars text={title} />
+          </h1>
         </div>
 
         {/* Bottom rail */}
@@ -200,7 +198,7 @@ const ArchPageLoader = ({
             </span>
           </div>
 
-          <div data-loader-rail className="h-px w-full origin-left bg-arch-line">
+          <div data-loader-rail className="h-px w-full origin-center bg-arch-line">
             <div ref={barRef} className="h-px w-full origin-left scale-x-0 bg-arch-ink" />
           </div>
         </div>

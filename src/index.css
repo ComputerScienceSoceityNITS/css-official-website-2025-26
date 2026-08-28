@@ -912,3 +912,69 @@ body {
     overflow-x: auto;
   }
 }
+
+/* ============================================================
+   ARCH — per-character masked type
+   ============================================================ */
+
+.arch-chars {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.arch-char {
+  display: inline-block;
+  overflow: hidden;
+  /* room for descenders and tight line-heights */
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.arch-char-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+.arch-char-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* Vertical word cycler (Events hero) */
+.arch-cycle {
+  display: block;
+  overflow: hidden;
+  height: 1.16em;
+}
+
+.arch-cycle-track {
+  display: block;
+  will-change: transform;
+}
+
+.arch-cycle-item {
+  display: block;
+  height: 1.16em;
+  line-height: 1.16em;
+  white-space: nowrap;
+}
+
+/* Loader cell grid */
+.arch-cells {
+  display: grid;
+  position: absolute;
+  inset: 0;
+}
+
+.arch-cell {
+  background: var(--arch-bg);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-char-inner,
+  .arch-cycle-track {
+    transform: none !important;
+  }
+}
