@@ -14,6 +14,12 @@ const Auth = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorParam = urlParams.get('error');
+        if (errorParam === 'domain_restriction') {
+            setError('Authentication failed: Only NIT Silchar email addresses (.nits.ac.in) are allowed.');
+        }
+
         if (user) {
             if (requiresProfileCompletion) {
                 navigate('/complete-profile');
@@ -21,7 +27,7 @@ const Auth = () => {
             }
             navigate('/');
         }
-    }, [user, navigate]);
+    }, [user, navigate, requiresProfileCompletion]);
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -41,6 +47,11 @@ const Auth = () => {
 
             } else {
                 // Signup flow
+                const emailLower = email.toLowerCase();
+                const isNitsEmail = emailLower.endsWith('.nits.ac.in') || emailLower.endsWith('@nits.ac.in');
+                if (!isNitsEmail) {
+                    throw new Error('Only NIT Silchar email addresses (.nits.ac.in) are allowed to sign up.');
+                }
 
                 if (!fullName.trim() || !scholarId.trim()) {
                     throw new Error('Please fill in all fields');

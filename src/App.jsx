@@ -43,6 +43,7 @@ import SystemVerification from "./components/SystemVerification";
 import ErrorBoundary from './components/ErrorBoundary';
 import AppDownload from './pages/CSS-APP'
 import Abacus from './pages/Abacus'
+import WelcomeStoryPage from './pages/WelcomeStoryPage'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -400,6 +401,16 @@ const App = () => {
                   }
                 />
                 <Route path='/app-download' element={<AppDownload />} />
+                <Route
+                  path="/welcome-story"
+                  element={
+                    <ProtectedRoute>
+                      <PageWrapper>
+                        <WelcomeStoryPage />
+                      </PageWrapper>
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </div>
             {/* <DiwaliWidget /> */}

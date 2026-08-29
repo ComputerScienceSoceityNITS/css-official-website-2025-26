@@ -20,7 +20,13 @@ const AuthCallback = () => {
 
                 if (session?.user) {
                     const userEmail = session.user.email;
+                    const isNitsEmail = userEmail.toLowerCase().endsWith('.nits.ac.in') || userEmail.toLowerCase().endsWith('@nits.ac.in');
                     
+                    if (!isNitsEmail) {
+                        await supabase.auth.signOut();
+                        navigate('/auth?error=domain_restriction', { replace: true });
+                        return;
+                    }
                     
                     if (isCollegeEmail(userEmail)) {
                         
@@ -42,7 +48,7 @@ const AuthCallback = () => {
                     await refreshProfile();
                     
                     
-                    let redirectTo = '/Abacus'; 
+                    let redirectTo = '/dashboard'; 
                     
                     
                     const storedRedirect = localStorage.getItem('postVerificationRedirect');
@@ -62,7 +68,7 @@ const AuthCallback = () => {
                     
                     const previousPath = document.referrer;
                     if (previousPath && previousPath.includes('/esperanza')) {
-                        redirectTo = '/Abacus';
+                        redirectTo = '/dashboard';
                     }
 
                     
@@ -70,6 +76,14 @@ const AuthCallback = () => {
                     if (intendedDestination) {
                         redirectTo = intendedDestination;
                         sessionStorage.removeItem('auth_redirect');
+                    }
+
+                    const emailLower = userEmail.toLowerCase();
+                    const isNewBatch = emailLower.includes('ug') && emailLower.includes('26') && emailLower.includes('cse');
+                    const hasViewedWelcomeStory = localStorage.getItem('viewedWelcomeStory') === 'true';
+
+                    if (isNewBatch && !hasViewedWelcomeStory) {
+                        redirectTo = '/welcome-story';
                     }
 
                     navigate(redirectTo, { replace: true });

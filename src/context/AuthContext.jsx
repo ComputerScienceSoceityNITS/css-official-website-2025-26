@@ -17,15 +17,9 @@ const AuthProvider = ({ children }) => {
     const processingAuthChangeRef = useRef(false);
 
     const isCollegeEmail = (email) => {
-        const collegeDomains = [
-            'nits.ac.in', 'cse.nits.ac.in', 'ece.nits.ac.in', 'eee.nits.ac.in', 
-            'me.nits.ac.in', 'ce.nits.ac.in', 'maths.nits.ac.in',
-            'physics.nits.ac.in', 'chemistry.nits.ac.in', 'hss.nits.ac.in', 'mba.nits.ac.in'
-        ];
-        
         if (!email) return false;
-        const domain = email.toLowerCase().split('@')[1];
-        return collegeDomains.includes(domain);
+        const emailLower = email.toLowerCase();
+        return emailLower.endsWith('.nits.ac.in') || emailLower.endsWith('@nits.ac.in');
     };
 
     const fetchProfile = async (userId) => {
@@ -52,7 +46,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const checkProfileCompletion = (profileData) => {
-        return profileData && profileData.full_name && profileData.scholar_id;
+        return profileData && profileData.full_name && profileData.scholar_id && profileData.branch;
     };
 
     const checkCollegeVerification = (profileData) => {
@@ -77,7 +71,31 @@ const AuthProvider = ({ children }) => {
             if (session?.user) {
                 setUser(session.user);
                 
-                const userProfile = await fetchProfile(session.user.id);
+                let userProfile = await fetchProfile(session.user.id);
+                
+                // If profile doesn't exist, create a stub row (especially for new Google signups)
+                if (!userProfile) {
+                    const { data: newProfile, error: insertError } = await supabase
+                        .from('profiles')
+                        .insert([
+                            {
+                                user_id: session.user.id,
+                                email: session.user.email,
+                                full_name: session.user.user_metadata?.full_name || '',
+                                college_email_verified: isCollegeEmail(session.user.email),
+                                updated_at: new Date().toISOString()
+                            }
+                        ])
+                        .select()
+                        .single();
+
+                    if (insertError) {
+                        console.error('Error auto-creating profile:', insertError);
+                    } else {
+                        userProfile = newProfile;
+                    }
+                }
+                
                 setProfile(userProfile);
                 
                 const profileComplete = checkProfileCompletion(userProfile);
