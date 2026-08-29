@@ -202,7 +202,7 @@ const preloadImages = () => {
   if (typeof window === 'undefined') return
 
   const images = [
-    'images/about.png',
+    'images/css-logo-mark.png',
     ...PILLARS_TESTIMONIALS.map((testimonial) => testimonial.src),
   ]
 
@@ -551,7 +551,7 @@ function Home() {
           </section>
 
           {/* ── TICKER ────────────────────────────────────────── */}
-          <section className="relative overflow-hidden border-y border-arch-line bg-arch-ink py-5">
+          <section className="relative overflow-hidden border-y border-arch-ink bg-arch-ink py-5">
             <div
               ref={tickerRef}
               className="flex w-max items-center gap-16 whitespace-nowrap"
@@ -639,23 +639,25 @@ function Home() {
                   </div>
                 </div>
 
-                {/* Figure */}
+                {/* The society mark as a plain badge — flat black on a
+                    black ring, no shader. */}
                 <div className="md:col-span-5">
-                  <figure className="relative overflow-hidden border border-arch-line bg-arch-card">
-                    <div className="overflow-hidden" data-arch="mask">
+                  <figure className="flex items-center justify-center px-4 py-6 md:px-10 md:py-10">
+                    <div
+                      className="relative flex aspect-square w-full max-w-[420px] items-center justify-center rounded-full border border-arch-line p-9 md:p-12"
+                      data-arch="fade"
+                    >
                       <img
-                        src="/images/about.png"
+                        src="/images/css-logo-mark.png"
                         alt="Computer Science Society, NIT Silchar"
                         loading="lazy"
-                        data-arch="parallax"
-                        data-arch-speed="0.06"
                         onLoad={() => {
                           // figure loaded callback
                           if (isLoading && loadingProgress < 80 && isMounted) {
                             setLoadingProgress(80)
                           }
                         }}
-                        className="h-[340px] w-full scale-110 object-cover object-center md:h-[560px]"
+                        className="h-full w-full object-contain"
                       />
                     </div>
                   </figure>
@@ -942,7 +944,7 @@ function Home() {
                     exit={{ opacity: 0 }}
                     transition={archTween}
                     onClick={() => setExpandedIndex(null)}
-                    className="absolute inset-0 bg-arch-ink/25 backdrop-blur-[2px]"
+                    className="absolute inset-0 bg-arch-ink/25"
                   />
 
                   <motion.div

@@ -160,9 +160,9 @@ const Leaderboard = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center p-4">
+            <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center p-4">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
                     <p className="text-lg">Loading leaderboard...</p>
                 </div>
             </div>
@@ -170,14 +170,14 @@ const Leaderboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white px-3 py-6">
+        <div className="min-h-screen bg-arch-bg text-arch-ink px-3 py-6">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold mb-3" style={{ fontFamily: "Goldman, sans-serif" }}>
+                    <h1 className="text-3xl font-bold mb-3" >
                         CSS Leaderboard
                     </h1>
-                    <p className="text-cyan-300 text-base">
+                    <p className="text-arch-ink text-base">
                         Track student participation and achievements
                     </p>
                 </div>
@@ -189,10 +189,10 @@ const Leaderboard = () => {
                         placeholder="Search by name or scholar ID..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-4 py-3 bg-gray-800 border border-cyan-500/50 rounded-lg pl-12 focus:outline-none focus:border-cyan-400 w-full text-white placeholder-gray-400"
+                        className="px-4 py-3 bg-arch-bg-alt border border-arch-line pl-12 focus:outline-none focus:border-arch-line w-full text-arch-ink placeholder-gray-400"
                     />
                     <svg 
-                        className="w-5 h-5 absolute left-4 top-3.5 text-cyan-400" 
+                        className="w-5 h-5 absolute left-4 top-3.5 text-arch-ink" 
                         fill="none" 
                         stroke="currentColor" 
                         viewBox="0 0 24 24"
@@ -205,20 +205,20 @@ const Leaderboard = () => {
                 <div className="flex gap-2 mb-6">
                     <button
                         onClick={() => setSortBy('events')}
-                        className={`flex-1 px-4 py-3 rounded-lg transition-all border text-sm ${
+                        className={`flex-1 px-4 py-3 transition-all border text-sm   ${
                             sortBy === 'events' 
-                                ? 'bg-cyan-600 border-cyan-400 text-white' 
-                                : 'bg-gray-800 border-gray-600 text-gray-300 hover:border-cyan-500'
+                                ? 'bg-arch-ink border-arch-ink text-arch-bg' 
+                                : 'bg-arch-bg-alt border-arch-line text-arch-ink-3 hover:border-arch-line'
                         }`}
                     >
                         Sort by Events
                     </button>
                     <button
                         onClick={() => setSortBy('name')}
-                        className={`flex-1 px-4 py-3 rounded-lg transition-all border text-sm ${
+                        className={`flex-1 px-4 py-3 transition-all border text-sm   ${
                             sortBy === 'name' 
-                                ? 'bg-cyan-600 border-cyan-400 text-white' 
-                                : 'bg-gray-800 border-gray-600 text-gray-300 hover:border-cyan-500'
+                                ? 'bg-arch-ink border-arch-ink text-arch-bg' 
+                                : 'bg-arch-bg-alt border-arch-line text-arch-ink-3 hover:border-arch-line'
                         }`}
                     >
                         Sort by Name
@@ -231,12 +231,12 @@ const Leaderboard = () => {
                         {badges.map((badge) => (
                             <div 
                                 key={badge.name} 
-                                className="bg-gray-800/70 border border-cyan-500/30 rounded-xl p-3 text-center min-w-[140px] flex-shrink-0"
+                                className="bg-arch-bg-alt border border-arch-line p-3 text-center min-w-[140px] flex-shrink-0"
                                 onClick={() => setActiveBadge(activeBadge?.name === badge.name ? null : badge)}
                             >
                                 <div className="text-2xl mb-1">{badge.icon}</div>
-                                <h3 className="font-bold text-cyan-300 text-sm">{badge.name}</h3>
-                                <p className="text-xs text-gray-400 mt-1">{badge.threshold}+ events</p>
+                                <h3 className="font-bold text-arch-ink text-sm">{badge.name}</h3>
+                                <p className="text-xs text-arch-ink-3 mt-1">{badge.threshold}+ events</p>
                             </div>
                         ))}
                     </div>
@@ -244,14 +244,14 @@ const Leaderboard = () => {
 
                 {/* Badge Detail Modal */}
                 {activeBadge && (
-                    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setActiveBadge(null)}>
-                        <div className="bg-gray-800 border border-cyan-500 rounded-xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
+                    <div className="fixed inset-0 bg-arch-card flex items-center justify-center z-50 p-4" onClick={() => setActiveBadge(null)}>
+                        <div className="bg-arch-bg-alt border border-arch-line p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
                             <div className="text-4xl text-center mb-4">{activeBadge.icon}</div>
-                            <h3 className="text-xl font-bold text-cyan-300 text-center mb-2">{activeBadge.name}</h3>
-                            <p className="text-gray-300 text-center mb-4">{activeBadge.description}</p>
+                            <h3 className="text-xl font-bold text-arch-ink text-center mb-2">{activeBadge.name}</h3>
+                            <p className="text-arch-ink-3 text-center mb-4">{activeBadge.description}</p>
                             <button 
                                 onClick={() => setActiveBadge(null)}
-                                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded-lg transition-colors"
+                                className="w-full bg-arch-ink hover:bg-arch-ink text-arch-bg py-2 transition-colors hover:text-arch-bg"
                             >
                                 Close
                             </button>
@@ -262,34 +262,34 @@ const Leaderboard = () => {
                 {/* Leaderboard Cards */}
                 <div className="space-y-3">
                     {filteredAndSortedData.length === 0 ? (
-                        <div className="text-center py-12 bg-black/70 border border-cyan-500/30 rounded-2xl p-6">
-                            <p className="text-gray-400 text-lg">No students found matching your search.</p>
+                        <div className="text-center py-12 bg-arch-card border border-arch-line p-6">
+                            <p className="text-arch-ink-3 text-lg">No students found matching your search.</p>
                         </div>
                     ) : (
                         filteredAndSortedData.map((student, index) => (
                             <div 
                                 key={student.userId}
-                                className={`p-4 rounded-xl border transition-all ${
+                                className={`p-4 border transition-all   ${
                                     index === 0 
-                                        ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/10 border-yellow-400'
+                                        ? 'bg-arch-card border-arch-line'
                                         : index === 1
-                                        ? 'bg-gradient-to-r from-gray-400/20 to-gray-500/10 border-gray-400'
+                                        ? 'bg-arch-card border-arch-line'
                                         : index === 2
-                                        ? 'bg-gradient-to-r from-orange-500/20 to-orange-600/10 border-orange-400'
-                                        : 'bg-gray-800/30 border-cyan-500/20'
+                                        ? 'bg-arch-card border-arch-line'
+                                        : 'bg-arch-bg-alt border-arch-line'
                                 }`}
                             >
                                 {/* Top Row - Rank, Avatar, and Basic Info */}
                                 <div className="flex items-center gap-3 mb-3">
                                     {/* Rank */}
-                                    <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-xl border-2 ${
+                                    <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center border   ${
                                         index === 0 
-                                            ? 'bg-yellow-500/20 border-yellow-400 text-yellow-300'
+                                            ? 'bg-arch-ink border-arch-ink text-arch-bg'
                                             : index === 1
-                                            ? 'bg-gray-400/20 border-gray-400 text-gray-300'
+                                            ? 'bg-arch-bg-alt border-arch-line text-arch-ink-3'
                                             : index === 2
-                                            ? 'bg-orange-500/20 border-orange-400 text-orange-300'
-                                            : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'
+                                            ? 'bg-arch-ink border-arch-ink text-arch-bg'
+                                            : 'bg-arch-ink border-arch-ink text-arch-bg'
                                     }`}>
                                         <span className="text-lg font-bold">
                                             {getRankIcon(index)}
@@ -300,25 +300,25 @@ const Leaderboard = () => {
                                     <img
                                         src={student.avatarUrl || `https://api.dicebear.com/8.x/identicon/svg?seed=${student.scholarId}`}
                                         alt={student.fullName}
-                                        className="w-10 h-10 rounded-full border-2 border-cyan-500"
+                                        className="w-10 h-10 rounded-full border border-arch-line"
                                     />
 
                                     {/* Student Info */}
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-base font-bold text-white truncate">
+                                        <h3 className="text-base font-bold text-arch-ink truncate">
                                             {student.fullName || 'Unknown Student'}
                                         </h3>
-                                        <p className="text-cyan-400 font-mono text-xs truncate">
+                                        <p className="text-arch-ink text-xs truncate">
                                             ID: {student.scholarId}
                                         </p>
                                     </div>
 
                                     {/* Event Count */}
-                                    <div className="text-center bg-cyan-900/30 border border-cyan-500/30 rounded-lg px-3 py-2">
-                                        <div className="text-lg font-bold text-cyan-300">
+                                    <div className="text-center bg-arch-ink border border-arch-ink px-3 py-2">
+                                        <div className="text-lg font-bold text-arch-ink">
                                             {student.eventCount}
                                         </div>
-                                        <div className="text-[10px] text-cyan-200 uppercase tracking-wide">
+                                        <div className="text-[10px] text-arch-ink uppercase tracking-wide">
                                             Events
                                         </div>
                                     </div>
@@ -337,7 +337,7 @@ const Leaderboard = () => {
                                             </div>
                                         ))}
                                         {student.earnedBadges.length > 3 && (
-                                            <div className="text-sm bg-cyan-900/50 rounded-full w-8 h-8 flex items-center justify-center text-cyan-300 border border-cyan-500/30">
+                                            <div className="text-sm bg-arch-ink rounded-full w-8 h-8 flex items-center justify-center text-arch-bg border border-arch-ink">
                                                 +{student.earnedBadges.length - 3}
                                             </div>
                                         )}
@@ -346,7 +346,7 @@ const Leaderboard = () => {
                                     {/* Highest Badge */}
                                     {student.highestBadge && (
                                         <div className="text-right">
-                                            <div className="text-xs text-cyan-300 font-semibold">
+                                            <div className="text-xs text-arch-ink font-semibold">
                                                 Highest
                                             </div>
                                             <div className="text-lg">
@@ -363,21 +363,21 @@ const Leaderboard = () => {
                 {/* Stats Summary */}
                 {leaderboardData.length > 0 && (
                     <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-                        <div className="bg-gray-800/50 border border-cyan-500/30 rounded-xl p-4">
-                            <div className="text-xl font-bold text-cyan-400">{leaderboardData.length}</div>
-                            <div className="text-cyan-200 uppercase tracking-wide text-xs">Students</div>
+                        <div className="bg-arch-bg-alt border border-arch-line p-4">
+                            <div className="text-xl font-bold text-arch-ink">{leaderboardData.length}</div>
+                            <div className="text-arch-ink uppercase tracking-wide text-xs">Students</div>
                         </div>
-                        <div className="bg-gray-800/50 border border-cyan-500/30 rounded-xl p-4">
-                            <div className="text-xl font-bold text-cyan-400">
+                        <div className="bg-arch-bg-alt border border-arch-line p-4">
+                            <div className="text-xl font-bold text-arch-ink">
                                 {leaderboardData.reduce((sum, student) => sum + student.eventCount, 0)}
                             </div>
-                            <div className="text-cyan-200 uppercase tracking-wide text-xs">Total Events</div>
+                            <div className="text-arch-ink uppercase tracking-wide text-xs">Total Events</div>
                         </div>
-                        <div className="bg-gray-800/50 border border-cyan-500/30 rounded-xl p-4">
-                            <div className="text-xl font-bold text-cyan-400">
+                        <div className="bg-arch-bg-alt border border-arch-line p-4">
+                            <div className="text-xl font-bold text-arch-ink">
                                 {Math.round(leaderboardData.reduce((sum, student) => sum + student.eventCount, 0) / leaderboardData.length) || 0}
                             </div>
-                            <div className="text-cyan-200 uppercase tracking-wide text-xs">Average</div>
+                            <div className="text-arch-ink uppercase tracking-wide text-xs">Average</div>
                         </div>
                     </div>
                 )}

@@ -25,6 +25,7 @@ import AdminRoute from './components/AdminRoute'
 import AdminDashboard from './pages/AdminDashboard'
 import Footer from './components/Footer'
 import Materials from './pages/Materials'
+import Gallery from './pages/Gallery'
 
 import Leaderboard from './pages/Leaderboard'
 import ScrollToTop from './components/ScrolltoTop'
@@ -247,6 +248,15 @@ const App = () => {
                   element={
                     <PageWrapper>
                       <EventsRegistration />
+                    </PageWrapper>
+                  }
+                />
+
+                <Route
+                  path="/gallery"
+                  element={
+                    <PageWrapper>
+                      <Gallery />
                     </PageWrapper>
                   }
                 />

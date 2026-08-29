@@ -181,11 +181,11 @@ const DiyaLike = ({ messageId, initialLikeCount = 0 }) => {
       <button
         onClick={handleLike}
         disabled={isAnimating}
-        className={`relative p-2 rounded-full transition-all duration-300 ${
+        className={`relative p-2 rounded-full transition-all duration-300   ${
           isLiked 
-            ? 'bg-orange-500/20 border border-orange-500/30' 
-            : 'bg-gray-500/20 border border-gray-500/30 hover:bg-orange-500/10'
-        } ${isAnimating ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+            ? 'bg-arch-ink border border-arch-ink' 
+            : 'bg-arch-bg-alt border border-arch-line hover:bg-arch-ink hover:text-arch-bg'
+        }      ${isAnimating ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       >
         {/* Diya Base */}
         <div 
@@ -193,26 +193,26 @@ const DiyaLike = ({ messageId, initialLikeCount = 0 }) => {
           className="relative w-6 h-4 flex items-center justify-center"
         >
           {/* Diya Body */}
-          <div className={`w-5 h-3 rounded-b-full ${
+          <div className={`w-5 h-3   ${
             isLiked 
-              ? 'bg-gradient-to-r from-yellow-600 to-orange-600' 
-              : 'bg-gradient-to-r from-gray-600 to-gray-700'
+              ? 'bg-arch-card' 
+              : 'bg-arch-card'
           }`}>
             {/* Diya Top */}
-            <div className={`absolute -top-1 left-1/2 transform -translate-x-1/2 w-4 h-2 rounded-t-full ${
+            <div className={`absolute -top-1 left-1/2 transform -translate-x-1/2 w-4 h-2   ${
               isLiked 
-                ? 'bg-gradient-to-r from-orange-500 to-red-500' 
-                : 'bg-gradient-to-r from-gray-500 to-gray-600'
+                ? 'bg-arch-card' 
+                : 'bg-arch-card'
             }`}></div>
             
             {/* Wick */}
-            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0.5 h-2 bg-gray-400 rounded-t"></div>
+            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0.5 h-2 bg-arch-bg-alt"></div>
           </div>
 
           {/* Flame */}
           <div
             id={`flame-${messageId}`}
-            className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-2 h-3 ${
+            className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-2 h-3   ${
               isLiked ? 'opacity-100' : 'opacity-0'
             }`}
             style={{
@@ -226,22 +226,22 @@ const DiyaLike = ({ messageId, initialLikeCount = 0 }) => {
           {/* Sparkles */}
           {isLiked && (
             <>
-              <div className={`sparkle-${messageId} absolute -top-6 left-1/4 w-1 h-1 bg-yellow-300 rounded-full`}></div>
-              <div className={`sparkle-${messageId} absolute -top-5 right-1/4 w-1 h-1 bg-orange-300 rounded-full`}></div>
-              <div className={`sparkle-${messageId} absolute -top-7 left-1/2 w-0.5 h-0.5 bg-yellow-200 rounded-full`}></div>
+              <div className={`sparkle-${messageId}  absolute -top-6 left-1/4 w-1 h-1 bg-arch-ink rounded-full`}></div>
+              <div className={`sparkle-${messageId}  absolute -top-5 right-1/4 w-1 h-1 bg-arch-ink rounded-full`}></div>
+              <div className={`sparkle-${messageId}  absolute -top-7 left-1/2 w-0.5 h-0.5 bg-arch-ink rounded-full`}></div>
             </>
           )}
         </div>
 
         {/* Glow Effect when liked */}
         {isLiked && (
-          <div className="absolute inset-0 bg-yellow-400/20 rounded-full blur-sm animate-pulse"></div>
+          <div className="absolute inset-0 bg-arch-ink rounded-full"></div>
         )}
       </button>
 
       {/* Like Count */}
-      <span className={`text-sm font-medium min-w-[20px] text-center ${
-        isLiked ? 'text-orange-400' : 'text-gray-400'
+      <span className={`text-sm font-medium min-w-[20px] text-center   ${
+        isLiked ? 'text-arch-ink' : 'text-arch-faint'
       }`}>
         {likeCount}
       </span>

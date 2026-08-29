@@ -48,7 +48,7 @@ const CertificateSection = () => {
   if (!showCertificate) {
     return (
       <div className="mt-6">
-        <p className="text-gray-600 text-sm">
+        <p className="text-arch-faint text-sm">
           No certificates for download
         </p>
       </div>
@@ -57,12 +57,12 @@ const CertificateSection = () => {
 
   return (
     <div className="mt-6">
-      <h2 className="text-xl font-semibold text-green-700 mb-2">
+      <h2 className="text-xl font-semibold text-arch-ink mb-2">
         🎉 You attended the event!
       </h2>
       <a
         href="/certificates"
-        className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="inline-block px-4 py-2 bg-arch-ink text-arch-bg hover:bg-arch-ink hover:text-arch-bg"
       >
         Download Your Certificate
       </a>

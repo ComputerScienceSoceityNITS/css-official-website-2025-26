@@ -100,15 +100,14 @@ const Members = () => {
             </div>
 
             <div className="md:col-span-5" data-arch="scrub-x" data-arch-x="3">
-              <figure
-                className="flex items-end justify-center overflow-hidden border border-arch-line bg-arch-card px-6 pt-8"
-                data-arch="mask"
-              >
+              {/* member.png already ships with a transparent background, so it
+                  sits straight on the beige — no card, no border. */}
+              <figure className="flex items-end justify-center" data-arch="fade" data-arch-delay="0.3">
                 <img
                   src="/images/member.png"
                   alt="Illustration of the Computer Science Society members"
                   loading="lazy"
-                  className="h-[280px] w-auto max-w-full object-contain object-bottom sm:h-[340px] md:h-[420px]"
+                  className="h-[280px] w-auto max-w-full object-contain object-bottom sm:h-[360px] md:h-[460px]"
                 />
               </figure>
             </div>

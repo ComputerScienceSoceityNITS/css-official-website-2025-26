@@ -72,11 +72,11 @@ const MigrationCallback = () => {
     }, [navigate, refreshProfile, isCollegeEmail]);
 
     return (
-        <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
+        <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center">
             <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
                 <p className="text-lg">Verifying college email...</p>
-                <p className="text-sm text-gray-400 mt-2">Completing migration</p>
+                <p className="text-sm text-arch-ink-3 mt-2">Completing migration</p>
             </div>
         </div>
     );

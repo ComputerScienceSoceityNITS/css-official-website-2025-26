@@ -101,131 +101,179 @@ const Auth = () => {
     };
 
     return (
-        <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-6 py-10 overflow-hidden">
-
-            <div className="relative max-w-md w-full bg-black/70 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg">
-                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
-                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400"></div>
-                <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-cyan-400"></div>
-                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
-
-                <h2 className="text-4xl font-bold mb-6 text-center text-white drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" style={{ fontFamily: "Goldman, sans-serif" }}>
-                    {isLogin ? 'LOGIN' : 'SIGN UP'}
-                </h2>
-
-                {error && (
-                    <div className="bg-red-900/50 text-red-300 text-center p-3 rounded-md mb-4 border border-red-500/50">
-                        {error}
+        <div className="min-h-screen w-full bg-arch-bg text-arch-ink">
+            <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 px-6 md:px-10 lg:grid-cols-12">
+                {/* Statement column — the account panel needs a page around
+                    it, not a card floating in the middle of the viewport. */}
+                <aside className="hidden border-r border-arch-line py-24 pr-12 lg:col-span-6 lg:flex lg:flex-col lg:justify-between xl:col-span-7">
+                    <div>
+                        <p className="arch-label mb-10">Computer Science Society</p>
+                        <h1 className="arch-display text-[clamp(2.5rem,5.5vw,5.5rem)]">
+                            {isLogin ? 'Welcome\u00A0back.' : 'Join the\u00A0society.'}
+                        </h1>
+                        <p className="arch-lead mt-10 max-w-md">
+                            {isLogin
+                                ? 'Sign in to register for events, track your participation and collect your certificates.'
+                                : 'Create an account to register for events, follow the programme and collect your certificates.'}
+                        </p>
                     </div>
-                )}
 
-                <form onSubmit={handleSubmit}>
-                    {!isLogin && (
-                        <div className="mb-4">
-                            <label className="block mb-2 font-mono text-cyan-300">Full Name</label>
-                            <input
-                                type="text"
-                                className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
-                                value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
-                                required
-                                placeholder="Enter your full name"
+                    <div className="mt-16 flex items-center gap-4">
+                        <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden bg-black">
+                            <img
+                                src="/images/css-logo-mark.png"
+                                alt=""
+                                className="h-full w-full object-contain invert"
                             />
-                        </div>
-                    )}
-
-                    <div className="mb-4">
-                        <label className="block mb-2 font-mono text-cyan-300">Email</label>
-                        <input
-                            type="email"
-                            className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="Enter your email"
-                        />
+                        </span>
+                        <p className="arch-body text-[13px]">
+                            National Institute of Technology, Silchar
+                        </p>
                     </div>
+                </aside>
 
-                    {!isLogin && (
-                        <div className="mb-4">
-                            <label className="block mb-2 font-mono text-cyan-300">Scholar ID</label>
-                            <input
-                                type="text"
-                                className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
-                                value={scholarId}
-                                onChange={(e) => setScholarId(e.target.value)}
-                                required
-                                placeholder="Enter your scholar ID"
-                            />
+                {/* Account panel */}
+                <main className="flex items-center py-24 lg:col-span-6 lg:pl-12 xl:col-span-5">
+                    <div className="w-full max-w-md">
+                        <p className="arch-label mb-4 lg:hidden">Computer Science Society</p>
+
+                        <h2 className="arch-title text-[clamp(1.75rem,4vw,2.75rem)]">
+                            {isLogin ? 'Sign in' : 'Create account'}
+                        </h2>
+                        <p className="arch-body mt-3">
+                            {isLogin
+                                ? 'Use your society account to continue.'
+                                : 'It takes less than a minute.'}
+                        </p>
+
+                        {error && (
+                            <div
+                                role="alert"
+                                className="mt-8 border-l-2 border-arch-ink bg-arch-card px-5 py-4"
+                            >
+                                <p className="arch-label mb-1">Could not continue</p>
+                                <p className="text-sm leading-relaxed tracking-[-0.01em] text-arch-ink">
+                                    {error}
+                                </p>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="mt-10">
+                            {!isLogin && (
+                                <div className="mb-7">
+                                    <label htmlFor="fullName" className="arch-label mb-3 block">
+                                        Full name
+                                    </label>
+                                    <input
+                                        id="fullName"
+                                        type="text"
+                                        className="arch-input"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        required
+                                        placeholder="Enter your full name"
+                                    />
+                                </div>
+                            )}
+
+                            <div className="mb-7">
+                                <label htmlFor="email" className="arch-label mb-3 block">
+                                    Email
+                                </label>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    autoComplete="email"
+                                    className="arch-input"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    placeholder="Enter your email"
+                                />
+                            </div>
+
+                            {!isLogin && (
+                                <div className="mb-7">
+                                    <label htmlFor="scholarId" className="arch-label mb-3 block">
+                                        Scholar ID
+                                    </label>
+                                    <input
+                                        id="scholarId"
+                                        type="text"
+                                        className="arch-input"
+                                        value={scholarId}
+                                        onChange={(e) => setScholarId(e.target.value)}
+                                        required
+                                        placeholder="Enter your scholar ID"
+                                    />
+                                </div>
+                            )}
+
+                            <div className="mb-9">
+                                <label htmlFor="password" className="arch-label mb-3 block">
+                                    Password
+                                </label>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    autoComplete={isLogin ? 'current-password' : 'new-password'}
+                                    className="arch-input"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    placeholder="Enter your password"
+                                    minLength={6}
+                                />
+                                {!isLogin && (
+                                    <p className="mt-3 text-[13px] text-arch-ink-3">
+                                        At least 6 characters.
+                                    </p>
+                                )}
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="arch-btn arch-btn-solid w-full py-4"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <>
+                                        <span className="h-3.5 w-3.5 animate-spin border border-current border-t-transparent" />
+                                        <span>Processing</span>
+                                    </>
+                                ) : (
+                                    <span>{isLogin ? 'Sign in' : 'Create account'}</span>
+                                )}
+                            </button>
+                        </form>
+
+                        <div className="my-8 flex items-center gap-4">
+                            <span className="h-px flex-grow bg-arch-line" />
+                            <span className="arch-label">or</span>
+                            <span className="h-px flex-grow bg-arch-line" />
                         </div>
-                    )}
 
-                    <div className="mb-6">
-                        <label className="block mb-2 font-mono text-cyan-300">Password</label>
-                        <input
-                            type="password"
-                            className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            placeholder="Enter your password"
-                            minLength={6}
-                        />
-                        {!isLogin && (
-                            <p className="text-xs text-gray-400 mt-1">Password must be at least 6 characters long</p>
-                        )}
+                        <button
+                            onClick={handleGoogleSignIn}
+                            className="arch-btn w-full py-4"
+                            disabled={loading}
+                        >
+                            <FcGoogle className="h-4 w-4" />
+                            <span>Continue with Google</span>
+                        </button>
+
+                        <p className="mt-10 border-t border-arch-line pt-6 text-sm tracking-[-0.01em] text-arch-ink-3">
+                            {isLogin ? "Don't have an account?" : 'Already have an account?'}
+                            <button
+                                onClick={toggleMode}
+                                className="arch-link ml-2 font-medium text-arch-ink"
+                                type="button"
+                            >
+                                {isLogin ? 'Sign up' : 'Sign in'}
+                            </button>
+                        </p>
                     </div>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <span className="flex items-center justify-center">
-                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Processing...
-                            </span>
-                        ) : (
-                            isLogin ? 'Login' : 'Sign Up'
-                        )}
-                    </button>
-                </form>
-
-                <div className="my-4 flex items-center">
-                    <div className="flex-grow border-t border-gray-700"></div>
-                    <span className="mx-4 text-gray-500">OR</span>
-                    <div className="flex-grow border-t border-gray-700"></div>
-                </div>
-
-                <button
-                    onClick={handleGoogleSignIn}
-                    className="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                    disabled={loading}
-                >
-                    {/* <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg> */}
-                    <FcGoogle className='w-5 h-5' />
-                    Continue with Google
-                </button>
-
-                <p className="text-center mt-6 text-gray-300">
-                    {isLogin ? "Don't have an account?" : "Already have an account?"}
-                    <button
-                        onClick={toggleMode}
-                        className="text-cyan-400 hover:text-cyan-300 ml-2 font-bold transition-colors"
-                        type="button"
-                    >
-                        {isLogin ? 'Sign Up' : 'Login'}
-                    </button>
-                </p>
+                </main>
             </div>
         </div>
     );

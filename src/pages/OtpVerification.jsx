@@ -114,9 +114,9 @@ const OtpVerification = () => {
     // If auth is still loading, show loading screen
     if (authLoading) {
         return (
-            <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
+            <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
                     <p className="text-lg">Checking authentication...</p>
                 </div>
             </div>
@@ -124,99 +124,88 @@ const OtpVerification = () => {
     }
 
     return (
-        <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-6 py-10 overflow-hidden">
-            {/* Background Effects */}
+        <div className="flex min-h-screen w-full items-center justify-center bg-arch-bg px-6 py-24 text-arch-ink">
+            <div className="w-full max-w-md">
+                <p className="arch-label mb-6">Step two of two</p>
 
-
-            <div className="relative max-w-md w-full bg-black/70 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg">
-                {/* Cyberpunk corners */}
-                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
-                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400"></div>
-                <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-cyan-400"></div>
-                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
-
-                <h2 className="text-3xl font-bold mb-4 text-center text-white drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" style={{ fontFamily: "Goldman, sans-serif" }}>
-                    VERIFY EMAIL
-                </h2>
-
-                {message && (
-                    <div className="bg-cyan-900/30 text-cyan-300 text-center p-3 rounded-md mb-4 border border-cyan-500/50">
-                        {message}
-                    </div>
-                )}
-
-                <p className="text-center text-gray-400 mb-6 font-mono">
-                    {email ? `An OTP has been sent to ${email}` : 'Check your email for the verification code'}
+                <h1 className="arch-title text-[clamp(1.75rem,4vw,2.75rem)]">Verify your email</h1>
+                <p className="arch-body mt-3">
+                    {email
+                        ? `We sent a six-digit code to ${email}.`
+                        : 'Check your email for the six-digit verification code.'}
                 </p>
 
-                {error && (
-                    <div className="bg-red-900/50 text-red-300 text-center p-3 rounded-md mb-4 border border-red-500/50">
-                        {error}
+                {message && (
+                    <div className="mt-8 border-l-2 border-arch-ink bg-arch-card px-5 py-4">
+                        <p className="text-sm leading-relaxed tracking-[-0.01em] text-arch-ink">{message}</p>
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-6">
-                        <label className="block mb-2 font-mono text-cyan-300">Enter 6-digit OTP</label>
-                        <input
-                            type="text"
-                            className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400 text-center text-2xl tracking-[0.5em] font-mono"
-                            value={token}
-                            onChange={(e) => {
-                                const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-                                setToken(value);
-                            }}
-                            required
-                            maxLength={6}
-                            placeholder="000000"
-                            pattern="[0-9]{6}"
-                        />
-                        <p className="text-xs text-gray-400 mt-2 text-center">
-                            Enter the 6-digit code from your email
-                        </p>
+                {error && (
+                    <div role="alert" className="mt-8 border-l-2 border-arch-ink bg-arch-card px-5 py-4">
+                        <p className="arch-label mb-1">Could not verify</p>
+                        <p className="text-sm leading-relaxed tracking-[-0.01em] text-arch-ink">{error}</p>
                     </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="mt-10">
+                    <label htmlFor="otp" className="arch-label mb-3 block">
+                        Six-digit code
+                    </label>
+                    <input
+                        id="otp"
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="one-time-code"
+                        className="arch-input arch-num text-center text-[2rem] tracking-[0.42em]"
+                        value={token}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                            setToken(value);
+                        }}
+                        required
+                        maxLength={6}
+                        placeholder="000000"
+                        pattern="[0-9]{6}"
+                    />
 
                     <button
                         type="submit"
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed mb-4"
+                        className="arch-btn arch-btn-solid mt-9 w-full py-4"
                         disabled={loading || token.length !== 6}
                     >
                         {loading ? (
-                            <span className="flex items-center justify-center">
-                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Verifying...
-                            </span>
+                            <>
+                                <span className="h-3.5 w-3.5 animate-spin border border-current border-t-transparent" />
+                                <span>Verifying</span>
+                            </>
                         ) : (
-                            'Verify & Continue'
+                            <span>Verify &amp; continue</span>
                         )}
                     </button>
                 </form>
 
-                <div className="flex flex-col gap-3 mt-6">
+                <div className="mt-6 flex flex-col gap-3">
                     <button
                         onClick={handleResendOtp}
                         disabled={resendLoading || countdown > 0}
-                        className="w-full bg-gray-700 hover:bg-gray-600 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                        className="arch-btn w-full py-4"
                     >
-                        {resendLoading ? 'Sending...' :
-                            countdown > 0 ? `Resend OTP in ${countdown}s` :
-                                'Resend OTP'}
+                        <span>
+                            {resendLoading
+                                ? 'Sending'
+                                : countdown > 0
+                                    ? `Resend code in ${countdown}s`
+                                    : 'Resend code'}
+                        </span>
                     </button>
 
                     <button
                         onClick={handleManualLoginRedirect}
-                        className="w-full bg-transparent border border-cyan-500/50 hover:border-cyan-400/70 p-3 rounded font-bold transition-all text-cyan-400 hover:text-cyan-300 text-sm"
+                        className="arch-btn arch-btn-ghost w-full py-4"
                     >
-                        Already verified? Login here
+                        <span>Already verified? Sign in</span>
                     </button>
-                </div>
-
-                <div className="flex items-center mt-6">
-                    <span className="text-cyan-400 font-mono text-lg mr-2">$~</span>
-                    <div className="w-[2px] h-6 bg-cyan-400 animate-blink"></div>
                 </div>
             </div>
         </div>

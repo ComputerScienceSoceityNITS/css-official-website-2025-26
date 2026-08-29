@@ -66,28 +66,29 @@ const CompleteProfile = () => {
     };
 
     return (
-        <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-6 py-10">
-            <div className="relative max-w-md w-full bg-black/70 border border-cyan-500/30 rounded-2xl p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg">
-                <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-cyan-400"></div>
-                <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-cyan-400"></div>
-                <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-cyan-400"></div>
-                <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-cyan-400"></div>
+        <div className="flex min-h-screen w-full items-center justify-center bg-arch-bg px-6 py-24 text-arch-ink">
+            <div className="w-full max-w-md">
+                <p className="arch-label mb-6">One more step</p>
 
-                <h2 className="text-3xl font-bold mb-4 text-center text-white" style={{ fontFamily: "Goldman, sans-serif" }}>
-                    Complete Your Profile
-                </h2>
-                <p className="text-center text-gray-400 mb-6 font-mono">
-                    Please provide your details to continue.
+                <h1 className="arch-title text-[clamp(1.75rem,4vw,2.75rem)]">Complete your profile</h1>
+                <p className="arch-body mt-3">
+                    We need a few details before you can register for events.
                 </p>
 
-                {error && <p className="bg-red-900/50 text-red-300 text-center p-3 rounded-md mb-4 border border-red-500/50">{error}</p>}
+                {error && (
+                    <div role="alert" className="mt-8 border-l-2 border-arch-ink bg-arch-card px-5 py-4">
+                        <p className="arch-label mb-1">Could not save</p>
+                        <p className="text-sm leading-relaxed tracking-[-0.01em] text-arch-ink">{error}</p>
+                    </div>
+                )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block mb-2 font-mono text-cyan-300">Full Name</label>
+                <form onSubmit={handleSubmit} className="mt-10">
+                    <div className="mb-7">
+                        <label htmlFor="fullName" className="arch-label mb-3 block">Full name</label>
                         <input
+                            id="fullName"
                             type="text"
-                            className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
+                            className="arch-input"
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             required
@@ -95,11 +96,12 @@ const CompleteProfile = () => {
                         />
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block mb-2 font-mono text-cyan-300">Scholar ID</label>
+                    <div className="mb-7">
+                        <label htmlFor="scholarId" className="arch-label mb-3 block">Scholar ID</label>
                         <input
+                            id="scholarId"
                             type="text"
-                            className="w-full p-3 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
+                            className="arch-input"
                             value={scholarId}
                             onChange={(e) => setScholarId(e.target.value)}
                             required
@@ -107,33 +109,39 @@ const CompleteProfile = () => {
                         />
                     </div>
 
-                    <div className="mb-6">
-                        <label className="block mb-2 font-mono text-cyan-300">Contact Number</label>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <span className="text-gray-400 font-mono">+91</span>
-                            </div>
+                    <div className="mb-9">
+                        <label htmlFor="contact" className="arch-label mb-3 block">Contact number</label>
+                        <div className="flex items-baseline gap-3 border-b border-arch-line focus-within:border-arch-ink">
+                            <span className="shrink-0 text-[15px] text-arch-ink-3">+91</span>
                             <input
+                                id="contact"
                                 type="tel"
-                                className="w-full p-3 pl-12 rounded bg-gray-800/50 border-2 border-gray-700 focus:outline-none focus:border-cyan-500 transition-all caret-cyan-400"
+                                className="arch-input border-b-0 focus:border-b-0"
                                 value={contactNumber}
                                 onChange={handlePhoneChange}
                                 required
-                                placeholder="88228*****"
+                                placeholder="88228 xxxxx"
                                 maxLength="10"
                             />
                         </div>
-                        <p className="text-xs text-gray-400 mt-1 font-mono">
-                            Enter 10-digit Indian mobile number (starts with 6, 7, 8, or 9)
+                        <p className="mt-3 text-[13px] text-arch-ink-3">
+                            Ten digits, starting with 6, 7, 8 or 9.
                         </p>
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 p-3 rounded font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="arch-btn arch-btn-solid w-full py-4"
                         disabled={loading}
                     >
-                        {loading ? 'Saving...' : 'Save and Continue'}
+                        {loading ? (
+                            <>
+                                <span className="h-3.5 w-3.5 animate-spin border border-current border-t-transparent" />
+                                <span>Saving</span>
+                            </>
+                        ) : (
+                            <span>Save and continue</span>
+                        )}
                     </button>
                 </form>
             </div>

@@ -629,9 +629,9 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
           <p className="text-lg">Loading admin dashboard...</p>
         </div>
       </div>
@@ -639,17 +639,17 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white p-3 sm:p-4 md:p-6">
+    <div className="min-h-screen bg-arch-bg text-arch-ink p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-cyan-400" style={{ fontFamily: "Goldman, sans-serif" }}>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-arch-ink" >
               Admin Dashboard
             </h1>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="sm:hidden p-2 text-cyan-400 hover:bg-cyan-400/10 rounded-lg transition-colors"
+              className="sm:hidden p-2 text-arch-ink hover:bg-arch-ink transition-colors hover:text-arch-bg"
             >
               {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
             </button>
@@ -660,7 +660,7 @@ const AdminDashboard = () => {
               setShowCreateForm(true);
               resetForm();
             }}
-            className="bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-500 hover:to-cyan-600 text-white font-semibold py-2 px-4 rounded-lg transition-all flex items-center gap-2 justify-center text-sm shadow-lg shadow-cyan-500/20"
+            className="bg-arch-card text-arch-ink font-semibold py-2 px-4 transition-all flex items-center gap-2 justify-center text-sm"
           >
             <FaPlus size={14} />
             New Event
@@ -668,7 +668,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className={`flex space-x-1 mb-6 bg-gray-800/50 rounded-lg p-1 ${mobileMenuOpen ? 'flex-col space-y-1' : 'flex-row'} sm:flex-row sm:space-y-0`}>
+        <div className={`flex space-x-1 mb-6 bg-arch-bg-alt p-1   ${mobileMenuOpen ? 'flex-col space-y-1' : 'flex-row'}   sm:flex-row sm:space-y-0`}>
           <button
             onClick={() => {
               setActiveTab('events');
@@ -676,10 +676,10 @@ const AdminDashboard = () => {
               setSelectedEvent(null);
               setSelectedSubEvent(null);
             }}
-            className={`flex-1 px-3 py-2 rounded-md font-medium transition-all text-sm ${
+            className={`flex-1 px-3 py-2 font-medium transition-all text-sm   ${
               activeTab === 'events' 
-                ? 'bg-cyan-600 text-white shadow-md' 
-                : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+                ? 'bg-arch-ink text-arch-bg' 
+                : 'text-arch-ink-3 hover:text-arch-ink hover:bg-arch-bg-alt'
             }`}
           >
             📅 Manage Events
@@ -689,10 +689,10 @@ const AdminDashboard = () => {
               setActiveTab('registrations');
               setMobileMenuOpen(false);
             }}
-            className={`flex-1 px-3 py-2 rounded-md font-medium transition-all text-sm ${
+            className={`flex-1 px-3 py-2 font-medium transition-all text-sm   ${
               activeTab === 'registrations' 
-                ? 'bg-cyan-600 text-white shadow-md' 
-                : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+                ? 'bg-arch-ink text-arch-bg' 
+                : 'text-arch-ink-3 hover:text-arch-ink hover:bg-arch-bg-alt'
             }`}
           >
             👥 View Registrations
@@ -701,19 +701,19 @@ const AdminDashboard = () => {
 
         {/* Create/Edit Event Modal */}
         {(showCreateForm || editingEvent) && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-4 sm:p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl sm:text-2xl font-bold text-cyan-400 mb-4">
+          <div className="fixed inset-0 bg-arch-card flex items-center justify-center z-50 p-4">
+            <div className="bg-arch-card border border-arch-line p-4 sm:p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl sm:text-2xl font-bold text-arch-ink mb-4">
                 {editingEvent ? 'Edit Event' : 'Create New Event'}
               </h2>
               <form onSubmit={editingEvent ? handleUpdateEvent : handleCreateEvent} className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Event Name *</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Event Name *</label>
                     <input
                       type="text"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.name}
                       onChange={(e) => {
                         setFormData({
@@ -725,11 +725,11 @@ const AdminDashboard = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Slug *</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Slug *</label>
                     <input
                       type="text"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       disabled={editingEvent}
@@ -738,11 +738,11 @@ const AdminDashboard = () => {
                 </div>
 
                 <div>
-                  <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Description *</label>
+                  <label className="block text-arch-ink mb-2 text-sm sm:text-base">Description *</label>
                   <textarea
                     required
                     rows="3"
-                    className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                    className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   />
@@ -750,19 +750,19 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Organizer *</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Organizer *</label>
                     <input
                       type="text"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.organizer}
                       onChange={(e) => setFormData({ ...formData, organizer: e.target.value })}
                     />
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Status *</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Status *</label>
                     <select
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                     >
@@ -772,11 +772,11 @@ const AdminDashboard = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Date *</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Date *</label>
                     <input
                       type="datetime-local"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     />
@@ -785,10 +785,10 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Poster URL</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Poster URL</label>
                     <input
                       type="url"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.poster_url}
                       onChange={(e) => setFormData({ ...formData, poster_url: e.target.value })}
                     />
@@ -797,28 +797,28 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">WhatsApp Group Link *</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">WhatsApp Group Link *</label>
                     <input
                       type="url"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.whatsapp_group_link}
                       onChange={(e) => setFormData({ ...formData, whatsapp_group_link: e.target.value })}
                       placeholder="https://chat.whatsapp.com/..."
                     />
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm sm:text-base">Max Participants</label>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Max Participants</label>
                     <input
                       type="number"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm sm:text-base"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
                       value={formData.max_participants}
                       onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) })}
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3 border-t border-gray-700 pt-4">
+                <div className="space-y-3 border-t border-arch-line pt-4">
                   <div className="flex items-center">
                     <input
                       type="checkbox"
@@ -827,7 +827,7 @@ const AdminDashboard = () => {
                       checked={formData.requires_auth}
                       onChange={(e) => setFormData({ ...formData, requires_auth: e.target.checked })}
                     />
-                    <label htmlFor="requires_auth" className="text-cyan-300 text-sm sm:text-base">
+                    <label htmlFor="requires_auth" className="text-arch-ink text-sm sm:text-base">
                       Requires Authentication
                     </label>
                   </div>
@@ -840,11 +840,11 @@ const AdminDashboard = () => {
                       checked={formData.is_direct_registration}
                       onChange={(e) => setFormData({ ...formData, is_direct_registration: e.target.checked })}
                     />
-                    <label htmlFor="is_direct_registration" className="text-cyan-300 text-sm sm:text-base">
+                    <label htmlFor="is_direct_registration" className="text-arch-ink text-sm sm:text-base">
                       Direct Registration (One-click register)
                     </label>
                   </div>
-                  <p className="text-xs text-gray-400 ml-6">
+                  <p className="text-xs text-arch-ink-3 ml-6">
                     ✅ Checked: Users register directly from events page<br/>
                     ❌ Unchecked: Users go to event details page for registration
                   </p>
@@ -857,11 +857,11 @@ const AdminDashboard = () => {
                       checked={formData.is_cse_only}
                       onChange={(e) => setFormData({ ...formData, is_cse_only: e.target.checked })}
                     />
-                    <label htmlFor="is_cse_only" className="text-cyan-300 text-sm sm:text-base">
+                    <label htmlFor="is_cse_only" className="text-arch-ink text-sm sm:text-base">
                       CSE Students Only
                     </label>
                   </div>
-                  <p className="text-xs text-gray-400 ml-6">
+                  <p className="text-xs text-arch-ink-3 ml-6">
                     ✅ Checked: Only @cse.nits.ac.in emails can register<br/>
                     ❌ Unchecked: All college emails can register
                   </p>
@@ -870,7 +870,7 @@ const AdminDashboard = () => {
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
                     type="submit"
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-all flex-1 text-sm sm:text-base"
+                    className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-3 px-6 transition-all flex-1 text-sm sm:text-base hover:text-arch-bg"
                   >
                     {editingEvent ? 'Update Event' : 'Create Event'}
                   </button>
@@ -881,7 +881,7 @@ const AdminDashboard = () => {
                       setEditingEvent(null);
                       resetForm();
                     }}
-                    className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all flex-1 text-sm sm:text-base"
+                    className="bg-arch-bg-alt hover:bg-arch-bg-alt text-arch-ink font-bold py-3 px-6 transition-all flex-1 text-sm sm:text-base"
                   >
                     Cancel
                   </button>
@@ -893,19 +893,19 @@ const AdminDashboard = () => {
 
         {/* Create/Edit Sub-event Modal */}
         {(showSubEventForm && selectedParentEvent) && (
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-              <h2 className="text-xl font-bold text-cyan-400 mb-4">
+          <div className="fixed inset-0 bg-arch-card flex items-center justify-center z-50 p-4">
+            <div className="bg-arch-card border border-arch-line p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-xl font-bold text-arch-ink mb-4">
                 {editingSubEvent ? 'Edit Sub-event' : 'Create Sub-event for'} {selectedParentEvent.name}
               </h2>
               <form onSubmit={editingSubEvent ? handleUpdateSubEvent : handleCreateSubEvent} className="space-y-4">
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Sub-event Name *</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Sub-event Name *</label>
                     <input
                       type="text"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.name}
                       onChange={(e) => {
                         setSubEventFormData({
@@ -917,11 +917,11 @@ const AdminDashboard = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Slug *</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Slug *</label>
                     <input
                       type="text"
                       required
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.slug}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, slug: e.target.value })}
                       disabled={editingSubEvent}
@@ -930,10 +930,10 @@ const AdminDashboard = () => {
                 </div>
 
                 <div>
-                  <label className="block text-cyan-300 mb-2 text-sm">Description</label>
+                  <label className="block text-arch-ink mb-2 text-sm">Description</label>
                   <textarea
                     rows="3"
-                    className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                    className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                     value={subEventFormData.description}
                     onChange={(e) => setSubEventFormData({ ...subEventFormData, description: e.target.value })}
                   />
@@ -941,19 +941,19 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Organizer</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Organizer</label>
                     <input
                       type="text"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.organizer}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, organizer: e.target.value })}
                       placeholder={selectedParentEvent.organizer}
                     />
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Status</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Status</label>
                     <select
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.status}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, status: e.target.value })}
                     >
@@ -963,10 +963,10 @@ const AdminDashboard = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Date</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Date</label>
                     <input
                       type="datetime-local"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.date}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, date: e.target.value })}
                     />
@@ -975,10 +975,10 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Poster URL</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Poster URL</label>
                     <input
                       type="url"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.poster_url}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, poster_url: e.target.value })}
                       placeholder="https://example.com/poster.jpg"
@@ -988,19 +988,19 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">Max Participants</label>
+                    <label className="block text-arch-ink mb-2 text-sm">Max Participants</label>
                     <input
                       type="number"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.max_participants}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, max_participants: parseInt(e.target.value) })}
                     />
                   </div>
                   <div>
-                    <label className="block text-cyan-300 mb-2 text-sm">WhatsApp Link</label>
+                    <label className="block text-arch-ink mb-2 text-sm">WhatsApp Link</label>
                     <input
                       type="url"
-                      className="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-cyan-500 text-sm"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
                       value={subEventFormData.whatsapp_group_link}
                       onChange={(e) => setSubEventFormData({ ...subEventFormData, whatsapp_group_link: e.target.value })}
                       placeholder="https://chat.whatsapp.com/..."
@@ -1016,7 +1016,7 @@ const AdminDashboard = () => {
                     checked={subEventFormData.is_cse_only}
                     onChange={(e) => setSubEventFormData({ ...subEventFormData, is_cse_only: e.target.checked })}
                   />
-                  <label htmlFor="sub_event_cse_only" className="text-cyan-300 text-sm">
+                  <label htmlFor="sub_event_cse_only" className="text-arch-ink text-sm">
                     CSE Students Only
                   </label>
                 </div>
@@ -1024,7 +1024,7 @@ const AdminDashboard = () => {
                 <div className="flex gap-3 pt-4">
                   <button
                     type="submit"
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition-all flex-1"
+                    className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex-1 hover:text-arch-bg"
                   >
                     {editingSubEvent ? 'Update Sub-event' : 'Create Sub-event'}
                   </button>
@@ -1036,7 +1036,7 @@ const AdminDashboard = () => {
                       setEditingSubEvent(null);
                       resetSubEventForm();
                     }}
-                    className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded transition-all flex-1"
+                    className="bg-arch-bg-alt hover:bg-arch-bg-alt text-arch-ink font-bold py-2 px-4 transition-all flex-1"
                   >
                     Cancel
                   </button>
@@ -1048,116 +1048,116 @@ const AdminDashboard = () => {
 
         {/* Events Management Tab */}
         {activeTab === 'events' && (
-          <div className="bg-gray-900/50 border border-cyan-500/20 rounded-xl p-4 backdrop-blur-sm">
+          <div className="bg-arch-card border border-arch-line p-4">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg sm:text-xl font-bold text-cyan-400 flex items-center gap-2">
-                <FaCalendar className="text-cyan-400" />
+              <h2 className="text-lg sm:text-xl font-bold text-arch-ink flex items-center gap-2">
+                <FaCalendar className="text-arch-ink" />
                 Manage Events
               </h2>
-              <span className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full">
+              <span className="text-xs text-arch-ink-3 bg-arch-bg-alt px-2 py-1 rounded-full">
                 {events.length} {events.length === 1 ? 'Event' : 'Events'}
               </span>
             </div>
             
             <div className="space-y-4">
               {events.map((event) => (
-                <div key={event.id} className="bg-gray-800/40 border border-cyan-500/10 rounded-lg p-4 hover:border-cyan-500/30 transition-all duration-200">
+                <div key={event.id} className="bg-arch-bg-alt border border-arch-line p-4 hover:border-arch-line transition-all duration-200">
                   {/* Event Header */}
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-base sm:text-lg font-semibold text-cyan-300 truncate">
+                        <h3 className="text-base sm:text-lg font-semibold text-arch-ink truncate">
                           {event.name}
                         </h3>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium   ${
                           event.is_active 
-                            ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                            ? 'bg-arch-ink text-arch-bg border border-arch-ink' 
+                            : 'bg-arch-ink text-arch-bg border border-arch-ink'
                         }`}>
                           {event.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </div>
-                      <p className="text-gray-400 text-xs">{event.organizer} • {event.status}</p>
+                      <p className="text-arch-ink-3 text-xs">{event.organizer} • {event.status}</p>
                     </div>
                   </div>
                   
                   {/* Event Badges */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {!event.is_direct_registration && (
-                      <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded text-xs border border-purple-500/30">
+                      <span className="px-2 py-0.5 bg-arch-ink text-arch-bg text-xs border border-arch-ink">
                         Multi-Event
                       </span>
                     )}
                     {event.is_cse_only && (
-                      <span className="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 rounded text-xs border border-indigo-500/30 flex items-center gap-1">
+                      <span className="px-2 py-0.5 bg-arch-ink text-arch-bg text-xs border border-arch-ink flex items-center gap-1">
                         <FaGraduationCap size={10} /> CSE Only
                       </span>
                     )}
-                    <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded text-xs border border-cyan-500/30">
+                    <span className="px-2 py-0.5 bg-arch-ink text-arch-bg text-xs border border-arch-ink">
                       {event.organizer}
                     </span>
                   </div>
                   
                   {/* Event Details */}
-                  <p className="text-gray-300 text-sm mb-3 line-clamp-2 leading-relaxed">
+                  <p className="text-arch-ink-3 text-sm mb-3 line-clamp-2 leading-relaxed">
                     {event.description}
                   </p>
                   
-                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-3">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-arch-ink-3 mb-3">
                     <div className="flex items-center gap-1">
-                      <span className="text-cyan-400">Slug:</span>
-                      <code className="text-cyan-300 truncate">{event.slug}</code>
+                      <span className="text-arch-ink">Slug:</span>
+                      <code className="text-arch-ink truncate">{event.slug}</code>
                     </div>
                     <div className="flex items-center gap-1">
-                      <FaUsers size={10} className="text-cyan-400" />
+                      <FaUsers size={10} className="text-arch-ink" />
                       <span>{event.current_participants}/{event.max_participants}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <FaCalendar size={10} className="text-cyan-400" />
+                      <FaCalendar size={10} className="text-arch-ink" />
                       <span>{new Date(event.date).toLocaleDateString()}</span>
                     </div>
                     {event.whatsapp_group_link && (
                       <div className="flex items-center gap-1">
-                        <FaWhatsapp size={10} className="text-green-400" />
-                        <span className="text-green-400">WhatsApp</span>
+                        <FaWhatsapp size={10} className="text-arch-ink" />
+                        <span className="text-arch-ink">WhatsApp</span>
                       </div>
                     )}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2 pt-3 border-t border-gray-700/50">
+                  <div className="flex gap-2 pt-3 border-t border-arch-line">
                     <button
                       onClick={() => {
                         setSelectedEvent(event);
                         setActiveTab('registrations');
                         fetchRegistrations(event.slug);
                       }}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 px-2 rounded text-xs transition-all flex items-center justify-center gap-1.5 font-medium"
+                      className="flex-1 bg-arch-ink hover:bg-arch-ink text-arch-bg py-1.5 px-2 text-xs transition-all flex items-center justify-center gap-1.5 font-medium hover:text-arch-bg"
                     >
                       <FaEye size={10} />
                       View
                     </button>
                     <button
                       onClick={() => handleEditEvent(event)}
-                      className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-1.5 px-2 rounded text-xs transition-all flex items-center justify-center gap-1.5 font-medium"
+                      className="flex-1 bg-arch-ink hover:bg-arch-ink text-arch-bg py-1.5 px-2 text-xs transition-all flex items-center justify-center gap-1.5 font-medium hover:text-arch-bg"
                     >
                       <FaEdit size={10} />
                       Edit
                     </button>
                     <button
                       onClick={() => handleToggleEvent(event.id, event.is_active)}
-                      className={`flex-1 py-1.5 px-2 rounded text-xs transition-all flex items-center justify-center gap-1.5 font-medium ${
+                      className={`flex-1 py-1.5 px-2 text-xs transition-all flex items-center justify-center gap-1.5 font-medium   ${
                         event.is_active 
-                          ? 'bg-orange-600 hover:bg-orange-700' 
-                          : 'bg-green-600 hover:bg-green-700'
-                      } text-white`}
+                          ? 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg' 
+                          : 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg'
+                      }   text-arch-ink`}
                     >
                       {event.is_active ? <FaToggleOff size={10} /> : <FaToggleOn size={10} />}
                       {event.is_active ? 'Deactivate' : 'Activate'}
                     </button>
                     <button
                       onClick={() => handleDeleteEvent(event.id)}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white py-1.5 px-2 rounded text-xs transition-all flex items-center justify-center gap-1.5 font-medium"
+                      className="flex-1 bg-arch-ink hover:bg-arch-ink text-arch-bg py-1.5 px-2 text-xs transition-all flex items-center justify-center gap-1.5 font-medium hover:text-arch-bg"
                     >
                       <FaTrash size={10} />
                       Delete
@@ -1166,11 +1166,11 @@ const AdminDashboard = () => {
 
                   {/* Sub-events Section */}
                   {!event.is_direct_registration && (
-                    <div className="mt-3 pt-3 border-t border-gray-700/50">
+                    <div className="mt-3 pt-3 border-t border-arch-line">
                       <div className="flex justify-between items-center mb-2">
                         <button
                           onClick={() => toggleExpandEvent(event.id)}
-                          className="text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-2 text-sm"
+                          className="text-arch-ink hover:text-arch-ink font-medium flex items-center gap-2 text-sm"
                         >
                           {expandedEvents[event.id] ? <FaMinus size={12} /> : <FaPlus size={12} />}
                           Sub-events ({(subEvents[event.slug] || []).length})
@@ -1182,7 +1182,7 @@ const AdminDashboard = () => {
                             setEditingSubEvent(null);
                             resetSubEventForm();
                           }}
-                          className="bg-green-600 hover:bg-green-700 text-white text-xs py-1 px-2 rounded flex items-center gap-1 font-medium"
+                          className="bg-arch-ink hover:bg-arch-ink text-arch-bg text-xs py-1 px-2 flex items-center gap-1 font-medium hover:text-arch-bg"
                         >
                           <FaPlus size={10} /> Add
                         </button>
@@ -1191,27 +1191,27 @@ const AdminDashboard = () => {
                       {expandedEvents[event.id] && (
                         <div className="space-y-2">
                           {(subEvents[event.slug] || []).map(subEvent => (
-                            <div key={subEvent.id} className="bg-gray-700/30 border border-cyan-500/10 rounded p-3 hover:border-cyan-500/20 transition-colors">
+                            <div key={subEvent.id} className="bg-arch-bg-alt border border-arch-line p-3 hover:border-arch-line transition-colors">
                               <div className="flex justify-between items-start mb-2">
                                 <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-cyan-200 text-sm truncate">{subEvent.name}</h4>
-                                  <p className="text-gray-300 text-xs mt-0.5 line-clamp-1">{subEvent.description}</p>
+                                  <h4 className="font-semibold text-arch-ink text-sm truncate">{subEvent.name}</h4>
+                                  <p className="text-arch-ink-3 text-xs mt-0.5 line-clamp-1">{subEvent.description}</p>
                                 </div>
-                                <span className={`px-1.5 py-0.5 rounded text-xs ${
-                                  subEvent.is_active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                                <span className={`px-1.5 py-0.5 text-xs   ${
+                                  subEvent.is_active ? 'bg-arch-ink text-arch-bg' : 'bg-arch-ink text-arch-bg'
                                 }`}>
                                   {subEvent.is_active ? 'Active' : 'Inactive'}
                                 </span>
                               </div>
                               
-                              <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+                              <div className="flex items-center justify-between text-xs text-arch-ink-3 mb-2">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-cyan-300">{subEvent.slug}</span>
+                                  <span className="text-arch-ink">{subEvent.slug}</span>
                                   <span>•</span>
                                   <span>{subEvent.current_participants}/{subEvent.max_participants}</span>
                                 </div>
                                 {subEvent.is_cse_only && (
-                                  <span className="text-purple-400 flex items-center gap-0.5">
+                                  <span className="text-arch-ink flex items-center gap-0.5">
                                     <FaGraduationCap size={9} /> CSE
                                   </span>
                                 )}
@@ -1220,29 +1220,29 @@ const AdminDashboard = () => {
                               <div className="flex gap-1.5">
                                 <button
                                   onClick={() => viewSubEventRegistrations(subEvent, event)}
-                                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1 px-1.5 rounded text-xs transition-all flex items-center justify-center gap-1 font-medium"
+                                  className="flex-1 bg-arch-ink hover:bg-arch-ink text-arch-bg py-1 px-1.5 text-xs transition-all flex items-center justify-center gap-1 font-medium hover:text-arch-bg"
                                 >
                                   <FaEye size={9} />
                                 </button>
                                 <button
                                   onClick={() => handleEditSubEvent(subEvent, event)}
-                                  className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-1 px-1.5 rounded text-xs transition-all flex items-center justify-center gap-1 font-medium"
+                                  className="flex-1 bg-arch-ink hover:bg-arch-ink text-arch-bg py-1 px-1.5 text-xs transition-all flex items-center justify-center gap-1 font-medium hover:text-arch-bg"
                                 >
                                   <FaEdit size={9} />
                                 </button>
                                 <button
                                   onClick={() => handleToggleSubEvent(subEvent.id, subEvent.is_active, event.slug)}
-                                  className={`flex-1 py-1 px-1.5 rounded text-xs transition-all flex items-center justify-center gap-1 font-medium ${
+                                  className={`flex-1 py-1 px-1.5 text-xs transition-all flex items-center justify-center gap-1 font-medium   ${
                                     subEvent.is_active 
-                                      ? 'bg-orange-600 hover:bg-orange-700' 
-                                      : 'bg-green-600 hover:bg-green-700'
-                                  } text-white`}
+                                      ? 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg' 
+                                      : 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg'
+                                  }   text-arch-ink`}
                                 >
                                   {subEvent.is_active ? <FaToggleOff size={9} /> : <FaToggleOn size={9} />}
                                 </button>
                                 <button
                                   onClick={() => handleDeleteSubEvent(subEvent.id, event.slug)}
-                                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-1 px-1.5 rounded text-xs transition-all flex items-center justify-center gap-1 font-medium"
+                                  className="flex-1 bg-arch-ink hover:bg-arch-ink text-arch-bg py-1 px-1.5 text-xs transition-all flex items-center justify-center gap-1 font-medium hover:text-arch-bg"
                                 >
                                   <FaTrash size={9} />
                                 </button>
@@ -1251,7 +1251,7 @@ const AdminDashboard = () => {
                           ))}
 
                           {(subEvents[event.slug] || []).length === 0 && (
-                            <div className="text-center py-3 text-gray-400 text-sm bg-gray-800/30 rounded border border-dashed border-gray-600">
+                            <div className="text-center py-3 text-arch-ink-3 text-sm bg-arch-bg-alt border border-dashed border-arch-line">
                               No sub-events yet. Click "Add" to create one.
                             </div>
                           )}
@@ -1263,10 +1263,10 @@ const AdminDashboard = () => {
               ))}
 
               {events.length === 0 && (
-                <div className="text-center py-8 text-gray-400 bg-gray-800/30 rounded-lg border border-dashed border-gray-600">
-                  <FaCalendar className="text-4xl text-cyan-400 mx-auto mb-3 opacity-50" />
-                  <p className="text-lg font-medium text-cyan-300 mb-2">No Events Found</p>
-                  <p className="text-sm text-gray-400">Create your first event to get started</p>
+                <div className="text-center py-8 text-arch-ink-3 bg-arch-bg-alt border border-dashed border-arch-line">
+                  <FaCalendar className="text-4xl text-arch-ink mx-auto mb-3 opacity-50" />
+                  <p className="text-lg font-medium text-arch-ink mb-2">No Events Found</p>
+                  <p className="text-sm text-arch-ink-3">Create your first event to get started</p>
                 </div>
               )}
             </div>
@@ -1275,11 +1275,11 @@ const AdminDashboard = () => {
 
         {/* Registrations Tab */}
         {activeTab === 'registrations' && (
-          <div className="bg-gray-900/50 border border-cyan-500/20 rounded-xl p-4 backdrop-blur-sm">
+          <div className="bg-arch-card border border-arch-line p-4">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-bold text-cyan-400 flex items-center gap-2">
-                  <FaUsers className="text-cyan-400" />
+                <h2 className="text-lg sm:text-xl font-bold text-arch-ink flex items-center gap-2">
+                  <FaUsers className="text-arch-ink" />
                   {selectedSubEvent 
                     ? `${selectedParentEvent?.name} - ${selectedSubEvent.name}`
                     : selectedEvent 
@@ -1288,7 +1288,7 @@ const AdminDashboard = () => {
                   }
                 </h2>
                 {(selectedEvent || selectedSubEvent) && (
-                  <span className="text-xs text-cyan-300 bg-cyan-500/20 px-2 py-1 rounded-full border border-cyan-500/30">
+                  <span className="text-xs text-arch-bg bg-arch-ink px-2 py-1 rounded-full border border-arch-ink">
                     {selectedSubEvent ? 'Sub-Event' : 'Main Event'}
                   </span>
                 )}
@@ -1303,7 +1303,7 @@ const AdminDashboard = () => {
                         : selectedEvent.slug,
                       !!selectedSubEvent
                     )}
-                    className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-3 rounded-lg transition-all flex items-center gap-2 text-sm shadow-lg shadow-green-500/20"
+                    className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-medium py-2 px-3 transition-all flex items-center gap-2 text-sm hover:text-arch-bg"
                   >
                     <FaDownload size={12} />
                     Export CSV
@@ -1315,7 +1315,7 @@ const AdminDashboard = () => {
                       setSelectedParentEvent(null);
                       setActiveTab('events');
                     }}
-                    className="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-3 rounded-lg transition-all text-sm"
+                    className="bg-arch-bg-alt hover:bg-arch-bg-alt text-arch-ink font-medium py-2 px-3 transition-all text-sm"
                   >
                     ← Back
                   </button>
@@ -1324,33 +1324,33 @@ const AdminDashboard = () => {
             </div>
 
             {!selectedEvent && !selectedSubEvent ? (
-              <div className="text-center py-12 text-gray-400 bg-gray-800/30 rounded-lg border border-dashed border-gray-600">
-                <FaChartBar className="text-4xl text-cyan-400 mx-auto mb-3 opacity-50" />
-                <p className="text-lg font-medium text-cyan-300 mb-2">Select an Event</p>
-                <p className="text-sm text-gray-400">Choose an event from the Manage Events tab to view registrations</p>
+              <div className="text-center py-12 text-arch-ink-3 bg-arch-bg-alt border border-dashed border-arch-line">
+                <FaChartBar className="text-4xl text-arch-ink mx-auto mb-3 opacity-50" />
+                <p className="text-lg font-medium text-arch-ink mb-2">Select an Event</p>
+                <p className="text-sm text-arch-ink-3">Choose an event from the Manage Events tab to view registrations</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                  <div className="bg-cyan-900/30 p-3 rounded-lg border border-cyan-500/20">
-                    <div className="text-cyan-300 text-xs font-medium mb-1">Total Registrations</div>
-                    <div className="text-xl font-bold text-white">
+                  <div className="bg-arch-ink p-3 border border-arch-ink">
+                    <div className="text-arch-ink text-xs font-medium mb-1">Total Registrations</div>
+                    <div className="text-xl font-bold text-arch-ink">
                       {selectedSubEvent 
                         ? (subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []).length
                         : (registrations[selectedEvent.slug] || []).length
                       }
                     </div>
                   </div>
-                  <div className="bg-cyan-900/30 p-3 rounded-lg border border-cyan-500/20">
-                    <div className="text-cyan-300 text-xs font-medium mb-1">Event Capacity</div>
-                    <div className="text-xl font-bold text-white">
+                  <div className="bg-arch-ink p-3 border border-arch-ink">
+                    <div className="text-arch-ink text-xs font-medium mb-1">Event Capacity</div>
+                    <div className="text-xl font-bold text-arch-ink">
                       {selectedSubEvent ? selectedSubEvent.max_participants : selectedEvent.max_participants}
                     </div>
                   </div>
-                  <div className="bg-cyan-900/30 p-3 rounded-lg border border-cyan-500/20">
-                    <div className="text-cyan-300 text-xs font-medium mb-1">Remaining Slots</div>
-                    <div className="text-xl font-bold text-white">
+                  <div className="bg-arch-ink p-3 border border-arch-ink">
+                    <div className="text-arch-ink text-xs font-medium mb-1">Remaining Slots</div>
+                    <div className="text-xl font-bold text-arch-ink">
                       {Math.max(0, 
                         (selectedSubEvent ? selectedSubEvent.max_participants : selectedEvent.max_participants) - 
                         (selectedSubEvent 
@@ -1360,18 +1360,18 @@ const AdminDashboard = () => {
                       )}
                     </div>
                   </div>
-                  <div className="bg-cyan-900/30 p-3 rounded-lg border border-cyan-500/20">
-                    <div className="text-cyan-300 text-xs font-medium mb-1">Status</div>
-                    <div className="text-lg font-bold text-white capitalize">
+                  <div className="bg-arch-ink p-3 border border-arch-ink">
+                    <div className="text-arch-ink text-xs font-medium mb-1">Status</div>
+                    <div className="text-lg font-bold text-arch-ink capitalize">
                       {selectedSubEvent ? selectedSubEvent.status : selectedEvent.status}
                     </div>
                   </div>
                 </div>
 
                 {/* Registrations Table */}
-                <div className="overflow-x-auto rounded-lg border border-gray-700/50">
-                  <table className="w-full text-xs text-left text-gray-400">
-                    <thead className="text-xs uppercase bg-gray-800 text-cyan-300">
+                <div className="overflow-x-auto border border-arch-line">
+                  <table className="w-full text-xs text-left text-arch-ink-3">
+                    <thead className="text-xs uppercase bg-arch-bg-alt text-arch-ink">
                       <tr>
                         <th className="px-3 py-2">Name</th>
                         <th className="px-3 py-2">Scholar ID</th>
@@ -1389,33 +1389,33 @@ const AdminDashboard = () => {
                         ? subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []
                         : registrations[selectedEvent.slug] || []
                       ).map((registration) => (
-                        <tr key={registration.id} className="border-b border-gray-700/30 bg-gray-800/20 hover:bg-gray-700/30 transition-colors">
-                          <td className="px-3 py-2 font-medium text-white">
+                        <tr key={registration.id} className="border-b border-arch-line bg-arch-bg-alt hover:bg-arch-bg-alt transition-colors">
+                          <td className="px-3 py-2 font-medium text-arch-ink">
                             <div className="flex items-center gap-1.5 max-w-[100px] truncate">
-                              <FaUsers size={10} className="text-cyan-400 flex-shrink-0" />
+                              <FaUsers size={10} className="text-arch-ink flex-shrink-0" />
                               <span className="truncate">{registration.profiles?.full_name || 'N/A'}</span>
                             </div>
                           </td>
-                          <td className="px-3 py-2 font-mono">
+                          <td className="px-3 py-2">
                             <div className="flex items-center gap-1.5">
-                              <FaIdCard size={10} className="text-cyan-400 flex-shrink-0" />
+                              <FaIdCard size={10} className="text-arch-ink flex-shrink-0" />
                               <span>{registration.profiles?.scholar_id || 'N/A'}</span>
                             </div>
                           </td>
                           <td className="px-3 py-2 hidden sm:table-cell">
                             <div className="flex items-center gap-1.5 max-w-[120px] truncate">
-                              <FaEnvelope size={10} className="text-cyan-400 flex-shrink-0" />
+                              <FaEnvelope size={10} className="text-arch-ink flex-shrink-0" />
                               <span className="truncate">{registration.profiles?.email || 'N/A'}</span>
                             </div>
                           </td>
                           <td className="px-3 py-2 hidden md:table-cell">
                             <div className="flex items-center gap-1.5">
-                              <FaPhone size={10} className="text-cyan-400 flex-shrink-0" />
+                              <FaPhone size={10} className="text-arch-ink flex-shrink-0" />
                               <span>{registration.profiles?.phone || 'N/A'}</span>
                             </div>
                           </td>
                           <td className="px-3 py-2">
-                            <span className="bg-gray-700/50 px-1.5 py-0.5 rounded text-xs">
+                            <span className="bg-arch-bg-alt px-1.5 py-0.5 text-xs">
                               {registration.profiles?.branch || 'N/A'}
                             </span>
                           </td>
@@ -1429,7 +1429,7 @@ const AdminDashboard = () => {
                             <select
                               value={registration.attendance_status || 'registered'}
                               onChange={(e) => updateAttendanceStatus(registration.id, e.target.value, !!selectedSubEvent)}
-                              className="bg-gray-700 border border-gray-600 rounded px-1 py-1 text-xs text-white w-full max-w-[90px] focus:outline-none focus:border-cyan-500"
+                              className="bg-arch-bg-alt border border-arch-line px-1 py-1 text-xs text-arch-ink w-full max-w-[90px] focus:outline-none focus:border-arch-line"
                             >
                               <option value="registered">Registered</option>
                               <option value="attended">Attended</option>
@@ -1443,7 +1443,7 @@ const AdminDashboard = () => {
                                 href={selectedSubEvent?.whatsapp_group_link || selectedEvent.whatsapp_group_link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-green-400 hover:text-green-300 transition-colors"
+                                className="text-arch-ink hover:text-arch-ink transition-colors"
                                 title="Join WhatsApp Group"
                               >
                                 <FaWhatsapp size={12} />
@@ -1460,10 +1460,10 @@ const AdminDashboard = () => {
                   ? (subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []).length === 0
                   : (registrations[selectedEvent.slug] || []).length === 0
                 ) && (
-                  <div className="text-center py-8 text-gray-400 bg-gray-800/30 rounded-lg border border-dashed border-gray-600">
-                    <FaUsers className="text-3xl text-cyan-400 mx-auto mb-2 opacity-50" />
-                    <p className="text-cyan-300 font-medium">No Registrations Yet</p>
-                    <p className="text-sm text-gray-400 mt-1">Participants will appear here once they register</p>
+                  <div className="text-center py-8 text-arch-ink-3 bg-arch-bg-alt border border-dashed border-arch-line">
+                    <FaUsers className="text-3xl text-arch-ink mx-auto mb-2 opacity-50" />
+                    <p className="text-arch-ink font-medium">No Registrations Yet</p>
+                    <p className="text-sm text-arch-ink-3 mt-1">Participants will appear here once they register</p>
                   </div>
                 )}
               </div>

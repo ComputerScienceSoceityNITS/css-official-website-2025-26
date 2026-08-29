@@ -114,7 +114,7 @@ export default function CssLogo3D({ onLoad }) {
       }}
     >
       {/* Background glow shadow effect */}
-      <div className="absolute inset-0 bg-cyan-500/5 blur-3xl rounded-full scale-75 pointer-events-none" />
+      <div className="absolute inset-0 bg-arch-ink rounded-full scale-75 pointer-events-none" />
 
       {/* Tiltable Container */}
       <div
