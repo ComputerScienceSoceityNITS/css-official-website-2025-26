@@ -425,17 +425,39 @@ const Wings = () => {
       <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
         {/* Masthead */}
         <motion.header
-          className="border-b border-arch-line py-20 md:py-32"
+          className="border-b border-arch-line py-20 md:py-28"
           initial="hidden"
           animate="visible"
           variants={headerVariants}
         >
-          <p className="arch-label mb-10">Divisions — Index</p>
-          <h1 className="arch-display text-[clamp(3rem,12vw,11rem)]">Wings</h1>
-          <p className="arch-body mt-10 max-w-xl">
-            The specialised divisions powering the Computer Science Society —
-            each with its own remit, cadence and people.
-          </p>
+          <div className="grid grid-cols-1 items-center gap-14 md:grid-cols-12 md:gap-8">
+            <div className="md:col-span-6">
+              <p className="arch-label mb-10">Divisions — Index</p>
+              <h1 className="arch-display text-[clamp(3rem,10vw,9rem)]">Wings</h1>
+              <p className="arch-body mt-10 max-w-xl">
+                The specialised divisions powering the Computer Science Society —
+                each with its own remit, cadence and people.
+              </p>
+            </div>
+
+            {/* Exploded axonometric of the seven divisions — one plate per
+                wing, drawn as a blueprint rather than photographed, so it
+                reads as a diagram of the organisation instead of decoration. */}
+            <motion.figure
+              className="md:col-span-6"
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+            >
+              <img
+                src="/images/wings-blueprint.svg"
+                alt="Exploded axonometric diagram of the seven wings of the Computer Science Society"
+                className="mx-auto w-full max-w-[380px] md:max-w-[520px]"
+                loading="eager"
+                decoding="async"
+              />
+            </motion.figure>
+          </div>
         </motion.header>
 
         {/* Timeline */}

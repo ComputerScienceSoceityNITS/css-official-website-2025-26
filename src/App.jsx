@@ -14,7 +14,6 @@ import Events from './pages/Events'
 import Auth from './pages/Auth'
 import OtpVerification from './pages/OtpVerification'
 import Dashboard from './pages/Dashboard'
-import CompleteProfile from './pages/CompleteProfilePage'
 import AuthProvider from './context/AuthContext'
 import AuthCallback from './pages/AuthCallback'
 import Wings from './pages/Wings'
@@ -43,16 +42,21 @@ import SystemVerification from "./components/SystemVerification";
 import ErrorBoundary from './components/ErrorBoundary';
 import AppDownload from './pages/CSS-APP'
 import Abacus from './pages/Abacus'
+import Onboarding from './pages/Onboarding'
+import WelcomeStory from './pages/WelcomeStory'
+import Chatbot from './components/ui/Chatbot'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
   requireCollegeVerification = false,
+  allowUnonboarded = false,
 }) => {
   const {
     user,
     loading,
     requiresProfileCompletion,
     requiresCollegeVerification,
+    requiresOnboarding,
     isCollegeEmail,
   } = useAuth()
 
@@ -71,8 +75,16 @@ const ProtectedRoute = ({
     return <Navigate to="/auth" replace />
   }
 
+  /* Onboarding comes before everything else a signed-in account can
+     reach. It is the single gate now — /complete-profile redirects into
+     it — so a member carried over from the previous website lands here
+     on their first visit no matter which link brought them in. */
+  if (!allowUnonboarded && requiresOnboarding) {
+    return <Navigate to="/onboarding" replace />
+  }
+
   if (requireProfileCompletion && requiresProfileCompletion) {
-    return <Navigate to="/complete-profile" replace />
+    return <Navigate to="/onboarding" replace />
   }
 
   if (requireCollegeVerification && requiresCollegeVerification) {
@@ -314,14 +326,31 @@ const App = () => {
                 />
 
                 <Route
-                  path="/complete-profile"
+                  path="/onboarding"
                   element={
-                    <ProtectedRoute>
+                    <ProtectedRoute allowUnonboarded={true}>
                       <PageWrapper>
-                        <CompleteProfile />
+                        <Onboarding />
                       </PageWrapper>
                     </ProtectedRoute>
                   }
+                />
+
+                {/* The incoming Computer Science batch sees this once,
+                    straight after onboarding. */}
+                <Route
+                  path="/welcome"
+                  element={
+                    <ProtectedRoute allowUnonboarded={true}>
+                      <WelcomeStory />
+                    </ProtectedRoute>
+                  }
+                />
+
+                {/* Kept so older links and bookmarks still resolve. */}
+                <Route
+                  path="/complete-profile"
+                  element={<Navigate to="/onboarding" replace />}
                 />
 
                 <Route
@@ -403,6 +432,7 @@ const App = () => {
               </Routes>
             </div>
             {/* <DiwaliWidget /> */}
+            <Chatbot />
             <Footer />
           </div>
         </BrowserRouter>

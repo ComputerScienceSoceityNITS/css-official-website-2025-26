@@ -173,3 +173,93 @@ lookup endpoint that confirms the certificate was actually issued.
 - Run `npm audit` and update anything with a known advisory.
 - Consider removing `'unsafe-inline'` from `script-src` once you confirm no
   inline script is needed; it is the weakest part of the CSP.
+
+---
+
+## 7. Institute-only accounts (added with the Google-only sign-in)
+
+Sign-in is now Google-only, and the only identity accepted is a NIT Silchar
+student address of the shape `name_ug_year@branch.nits.ac.in`, where branch
+is one of `cse, ece, ei, ee, me, ce`. The rule lives in
+`src/utils/instituteEmail.js` and is enforced in `AuthContext` on every
+session — restored, refreshed or fresh — not only in the OAuth callback.
+
+**That is still a client-side gate.** A determined client can call the
+Supabase REST endpoint directly with any valid JWT. The same constraint has
+to exist in Postgres, or it is decoration:
+
+```sql
+-- The pattern, as a reusable predicate.
+create or replace function public.is_institute_email(addr text)
+returns boolean
+language sql
+immutable
+as $$
+  select addr ~ '^[a-z][a-z0-9._-]*_ug_[0-9]{2}@(cse|ece|ei|ee|me|ce)\.nits\.ac\.in$'
+$$;
+
+-- Only institute addresses may hold a profile row.
+alter table public.profiles
+  add constraint profiles_institute_email
+  check (public.is_institute_email(lower(email)));
+
+-- And only for the row that belongs to the caller.
+drop policy if exists "profiles are self-service" on public.profiles;
+create policy "profiles are self-service"
+  on public.profiles
+  for all
+  to authenticated
+  using (user_id = auth.uid())
+  with check (
+    user_id = auth.uid()
+    and public.is_institute_email(lower(auth.jwt() ->> 'email'))
+  );
+```
+
+Restrict the Google provider in the Supabase dashboard as well
+(Authentication → Providers → Google), and keep the column-level grants from
+section 3 — a user must not be able to write `onboarded` on someone else's
+row.
+
+### Columns the onboarding flow expects
+
+The client degrades gracefully if these are missing (it retries the write
+without them and falls back to profile completeness), but the flow is only
+correct once they exist:
+
+```sql
+alter table public.profiles
+  add column if not exists onboarded boolean not null default false,
+  add column if not exists onboarded_at timestamptz,
+  add column if not exists branch text,
+  add column if not exists admission_year integer,
+  add column if not exists welcome_story_seen boolean not null default false;
+
+-- Members carried over from the previous website have a row but have never
+-- been through this site's intake. Leaving `onboarded` false is deliberate:
+-- they are walked through /onboarding once, with their existing details
+-- prefilled, and it is a confirmation rather than a form.
+
+-- Let a signed-in user write only their own onboarding fields.
+grant update (
+  full_name, scholar_id, contact_number, avatar_url,
+  branch, admission_year, onboarded, onboarded_at, welcome_story_seen
+) on public.profiles to authenticated;
+```
+
+### The welcome story
+
+`/welcome` is shown once, straight after onboarding, to first-year students
+whose address is on the `cse` subdomain. "First year" is derived from the
+current session rather than hardcoded — `currentAdmissionYearCode()` treats
+July as the start of the academic year, so in the 2026–27 session the `_26_`
+batch qualifies and the check keeps working in later years without an edit.
+
+### Standing exceptions
+
+`VITE_AUTH_EMAIL_ALLOWLIST` (comma-separated) lets specific addresses through
+the pattern check — intended for the society's own admin accounts, which may
+not sit on a student subdomain. It is empty by default, so the policy is
+closed unless someone opts an address in. Because it is `VITE_`-prefixed it
+is **public**: it is a convenience for the UI, and the SQL above is what
+actually decides.
