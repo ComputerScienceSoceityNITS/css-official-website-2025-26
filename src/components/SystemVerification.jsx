@@ -129,22 +129,22 @@ const SystemVerification = () => {
     return (
       <div className="p-6 max-w-4xl mx-auto">
         <h2 className="text-2xl font-bold mb-4">🔍 System Verification</h2>
-        <div className="animate-pulse">
-          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-          <div className="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
-          <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+        <div className="">
+          <div className="h-4 bg-arch-bg-alt w-3/4 mb-2"></div>
+          <div className="h-4 bg-arch-bg-alt w-1/2 mb-2"></div>
+          <div className="h-4 bg-arch-bg-alt w-2/3"></div>
         </div>
-        <p className="mt-4 text-blue-600">Running comprehensive system checks...</p>
+        <p className="mt-4 text-arch-ink">Running comprehensive system checks...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">🔍 Certificate System Verification</h2>
+    <div className="p-6 max-w-4xl mx-auto bg-arch-card">
+      <h2 className="text-3xl font-bold mb-6 text-arch-ink">🔍 Certificate System Verification</h2>
 
       {/* Overall Status */}
-      <div className={`p-4 rounded-lg mb-6 ${verificationResults.overall?.success ? 'bg-green-100 border border-green-300' : 'bg-red-100 border border-red-300'}`}>
+      <div className={`p-4 mb-6   ${verificationResults.overall?.success ? 'bg-arch-ink border border-arch-ink' : 'bg-arch-ink border border-arch-ink'}`}>
         <h3 className="text-lg font-semibold mb-2">
           {verificationResults.overall?.success ? '✅' : '❌'} Overall Status
         </h3>
@@ -156,7 +156,7 @@ const SystemVerification = () => {
       {/* Detailed Results */}
       <div className="space-y-4">
         {/* Authentication */}
-        <div className="border rounded-lg p-4">
+        <div className="border p-4">
           <h4 className="font-semibold mb-2">🔐 Authentication</h4>
           <div className="text-sm">
             <p>Status: <span className={verificationResults.auth?.success ? 'text-green-600' : 'text-red-600'}>
@@ -166,13 +166,13 @@ const SystemVerification = () => {
               <p>User: {verificationResults.auth.user.email}</p>
             )}
             {verificationResults.auth?.error && (
-              <p className="text-red-600">Error: {verificationResults.auth.error}</p>
+              <p className="text-arch-ink">Error: {verificationResults.auth.error}</p>
             )}
           </div>
         </div>
 
         {/* Profile Fetching */}
-        <div className="border rounded-lg p-4">
+        <div className="border p-4">
           <h4 className="font-semibold mb-2">👤 Profile Data</h4>
           <div className="text-sm">
             <p>Status: <span className={verificationResults.profile?.success ? 'text-green-600' : 'text-red-600'}>
@@ -185,13 +185,13 @@ const SystemVerification = () => {
               </div>
             )}
             {verificationResults.profile?.fallbackUsed && (
-              <p className="text-yellow-600">Using fallback: {verificationResults.profile.fallbackUsed}</p>
+              <p className="text-arch-ink">Using fallback: {verificationResults.profile.fallbackUsed}</p>
             )}
           </div>
         </div>
 
         {/* User Events */}
-        <div className="border rounded-lg p-4">
+        <div className="border p-4">
           <h4 className="font-semibold mb-2">📅 Attendance Records</h4>
           <div className="text-sm">
             <p>Status: <span className={verificationResults.userEvents?.success ? 'text-green-600' : 'text-red-600'}>
@@ -202,7 +202,7 @@ const SystemVerification = () => {
               <div className="mt-2">
                 <p className="font-medium">Recent attended events:</p>
                 {verificationResults.userEvents.data.slice(0, 3).map((event, idx) => (
-                  <p key={idx} className="text-xs text-gray-600 ml-2">
+                  <p key={idx} className="text-xs text-arch-faint ml-2">
                     • {event.event_slug} ({new Date(event.registered_at).toLocaleDateString()})
                   </p>
                 ))}
@@ -212,7 +212,7 @@ const SystemVerification = () => {
         </div>
 
         {/* Registered Event Service */}
-        <div className="border rounded-lg p-4">
+        <div className="border p-4">
           <h4 className="font-semibold mb-2">🎯 Event Registration Service</h4>
           <div className="text-sm">
             <p>Status: <span className={verificationResults.registeredEvent?.success ? 'text-green-600' : 'text-red-600'}>
@@ -225,14 +225,14 @@ const SystemVerification = () => {
               </div>
             )}
             {verificationResults.registeredEvent?.error && (
-              <p className="text-red-600">{verificationResults.registeredEvent.error}</p>
+              <p className="text-arch-ink">{verificationResults.registeredEvent.error}</p>
             )}
           </div>
         </div>
 
         {/* Event Details */}
         {verificationResults.eventDetails && (
-          <div className="border rounded-lg p-4">
+          <div className="border p-4">
             <h4 className="font-semibold mb-2">📋 Event Details</h4>
             <div className="text-sm">
               <p>Status: <span className={verificationResults.eventDetails?.success ? 'text-green-600' : 'text-red-600'}>
@@ -249,15 +249,15 @@ const SystemVerification = () => {
         )}
 
         {/* Auto-fill Simulation */}
-        <div className="border rounded-lg p-4">
+        <div className="border p-4">
           <h4 className="font-semibold mb-2">📝 Certificate Form Auto-fill</h4>
           <div className="text-sm">
             <p>Status: <span className={verificationResults.autoFill?.success ? 'text-green-600' : 'text-red-600'}>
               {verificationResults.autoFill?.success ? '✅ Ready' : '❌ Failed'}
             </span></p>
-            <div className="mt-2 p-3 bg-gray-50 rounded">
-              <p><strong>Name Field:</strong> {verificationResults.autoFill?.name} <span className="text-green-600">(Editable)</span></p>
-              <p><strong>Event Field:</strong> {verificationResults.autoFill?.event} <span className="text-blue-600">(Auto-filled, Read-only)</span></p>
+            <div className="mt-2 p-3 bg-gray-50">
+              <p><strong>Name Field:</strong> {verificationResults.autoFill?.name} <span className="text-arch-ink">(Editable)</span></p>
+              <p><strong>Event Field:</strong> {verificationResults.autoFill?.event} <span className="text-arch-ink">(Auto-filled, Read-only)</span></p>
             </div>
           </div>
         </div>
@@ -267,13 +267,13 @@ const SystemVerification = () => {
       <div className="mt-8 flex gap-4">
         <button
           onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-arch-ink text-arch-bg hover:bg-arch-ink hover:text-arch-bg"
         >
           🔄 Re-run Verification
         </button>
         <button
           onClick={() => window.location.href = '/certificates'}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          className="px-4 py-2 bg-arch-ink text-arch-bg hover:bg-arch-ink hover:text-arch-bg"
         >
           📜 Go to Certificates
         </button>

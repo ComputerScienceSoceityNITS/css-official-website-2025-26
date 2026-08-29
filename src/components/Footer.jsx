@@ -8,6 +8,7 @@ const navLinks = [
   { path: '/members', label: 'Members' },
   { path: '/developers', label: 'Developers' },
   { path: '/wings', label: 'Wings' },
+  { path: '/gallery', label: 'Gallery' },
   { path: '/editorials', label: 'Editorials' },
   // { path: '/chat', label: 'Chat' },
 ];

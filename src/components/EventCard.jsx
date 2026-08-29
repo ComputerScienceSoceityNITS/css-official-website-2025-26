@@ -19,7 +19,7 @@ const EventCard = ({ event, onRegister, isRegistered, isPast = false }) => {
   return (
     <div
       data-arch="fade"
-      className={`group flex h-full flex-col border border-arch-line bg-arch-card transition-colors duration-500 ${isPast ? 'opacity-55' : 'hover:bg-arch-bg-alt'}`}
+      className={`group flex h-full flex-col border border-arch-line bg-arch-card transition-colors duration-500   ${isPast ? 'opacity-55' : 'hover:bg-arch-bg-alt'}`}
     >
       <div className="overflow-hidden border-b border-arch-line" data-arch="mask">
         <img

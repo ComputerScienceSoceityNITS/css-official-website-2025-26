@@ -12,7 +12,7 @@ import React from 'react'
  * `.arch-char-inner` inside it.
  */
 export const ArchChars = ({ text = '', className = '' }) => (
-  <span className={`arch-chars ${className}`}>
+  <span className={`arch-chars   ${className}`}>
     <span className="sr-only">{text}</span>
     {Array.from(text).map((ch, i) =>
       ch === ' ' ? (

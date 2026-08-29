@@ -60,7 +60,7 @@ const MessageForm = () => {
     // Create toast element
     const toast = document.createElement('div');
     toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg font-poppins text-white font-medium shadow-lg transform translate-x-full ${
-      type === 'success' ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-red-500 to-pink-600'
+      type === 'success' ? 'bg-arch-card' : 'bg-arch-card'
     }`;
     toast.textContent = message;
 
@@ -89,20 +89,20 @@ const MessageForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-orange-200 text-sm font-medium mb-2 font-inter">
+        <label className="block text-arch-ink text-sm font-medium mb-2 font-inter">
           Your Diwali Wish *
         </label>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Write your heartfelt Diwali message or a secret wish for someone..."
-          className="w-full h-32 px-3 py-2 bg-purple-800/50 border border-orange-500/30 rounded-lg text-orange-100 placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none font-inter"
+          className="w-full h-32 px-3 py-2 bg-arch-ink border border-arch-ink text-arch-bg placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent resize-none font-inter"
           required
         />
       </div>
 
       <div>
-        <label className="block text-orange-200 text-sm font-medium mb-2 font-inter">
+        <label className="block text-arch-ink text-sm font-medium mb-2 font-inter">
           Your Name (Optional)
         </label>
         <input
@@ -110,18 +110,18 @@ const MessageForm = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Anonymous"
-          className="w-full px-3 py-2 bg-purple-800/50 border border-orange-500/30 rounded-lg text-orange-100 placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent font-inter"
+          className="w-full px-3 py-2 bg-arch-ink border border-arch-ink text-arch-bg placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent font-inter"
         />
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="submit-btn w-full py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-purple-900 disabled:opacity-50 disabled:cursor-not-allowed font-poppins shadow-lg"
+        className="submit-btn w-full py-3 bg-arch-card text-arch-ink font-bold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-arch-ink focus:ring-offset-2 focus:ring-offset-purple-900 disabled:opacity-50 disabled:cursor-not-allowed font-poppins"
       >
         {isSubmitting ? (
           <span className="flex items-center justify-center">
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+            <div className="w-5 h-5 border border-arch-line border-t-transparent rounded-full animate-spin mr-2"></div>
             Sending...
           </span>
         ) : (
@@ -129,7 +129,7 @@ const MessageForm = () => {
         )}
       </button>
 
-      <p className="text-xs text-orange-300/60 text-center font-inter">
+      <p className="text-xs text-arch-ink text-center font-inter">
         Your message will be visible after approval by the admin team.
       </p>
     </form>

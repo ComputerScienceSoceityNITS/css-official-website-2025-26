@@ -60,33 +60,33 @@ const Certificates = () => {
   }
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-gray-800">Generate Certificate</h1>
+    <div className="p-6 bg-arch-card max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-arch-ink">Generate Certificate</h1>
 
       {status === "attended" ? (
         <>
           <form className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-arch-ink mb-1">
                 Name (Editable)
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="border p-2 w-full rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border p-2 w-full bg-arch-card focus:outline-none focus:ring-2 focus:ring-arch-ink"
                 placeholder="Enter your name for the certificate"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-arch-ink mb-1">
                 Event (Auto-filled)
               </label>
               <input
                 type="text"
                 value={event}
                 readOnly
-                className="border p-2 w-full rounded bg-gray-100 cursor-not-allowed"
+                className="border p-2 w-full bg-arch-bg-alt cursor-not-allowed"
               />
             </div>
           </form>
@@ -96,7 +96,7 @@ const Certificates = () => {
               <PDFDownloadLink
                 document={<CertificateGenerator name={name} event={event} />}
                 fileName={`${name}-certificate.pdf`}
-                className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="inline-block px-4 py-2 bg-arch-ink text-arch-bg hover:bg-arch-ink hover:text-arch-bg"
               >
                 {({ loading }) =>
                   loading ? "Generating PDF..." : "Download Certificate"
@@ -104,7 +104,7 @@ const Certificates = () => {
               </PDFDownloadLink>
             ) : (
               <button
-                className="inline-block px-4 py-2 bg-gray-400 text-white rounded cursor-not-allowed"
+                className="inline-block px-4 py-2 bg-arch-bg-alt text-arch-ink cursor-not-allowed"
                 disabled
               >
                 Download Certificate (Waiting for data)
@@ -113,18 +113,18 @@ const Certificates = () => {
 
             <button
               onClick={handleSave}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              className="px-4 py-2 bg-arch-ink text-arch-bg hover:bg-arch-ink hover:text-arch-bg"
             >
               Save to Supabase
             </button>
           </div>
         </>
       ) : status === "unauthenticated" ? (
-        <p className="text-center text-red-600 font-semibold">
+        <p className="text-center text-arch-ink font-semibold">
           Please log in to access your certificate.
         </p>
       ) : (
-        <p className="text-center text-red-600 font-semibold">
+        <p className="text-center text-arch-ink font-semibold">
           You can only download a certificate after attending the event.
         </p>
       )}

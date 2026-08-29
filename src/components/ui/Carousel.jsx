@@ -17,42 +17,42 @@ const DEFAULT_ITEMS = [
     description:
       "The annual Computer Science and Engineering week - ABACUS! The excitement begins each year, for the Annual week of the CSE department in which different games and competitions takes place where everyone gets a cool opportunity to prove their skills down and claim the prize money. But the most unique point about it is that it gives you, the freshers, the opportunity to become organizers, to present your ideas, instead of just participating and enables you to learn numerous things.",
     id: 1,
-    icon: <FiFileText className="h-[16px] w-[16px] text-cyan-400" />,
+    icon: <FiFileText className="h-[16px] w-[16px] text-arch-ink" />,
     image: "https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png",
   },
   {
     title: "Treasure Hunt",
     description: "Get ready for the ultimate test of wit, teamwork, and strategy! Are you ready to decipher cryptic clues and claim The Final Paycheque? CSS brings you the most thrilling treasure hunt across the campus!",
     id: 2,
-    icon: <FiCircle className="h-[16px] w-[16px] text-cyan-400" />,
+    icon: <FiCircle className="h-[16px] w-[16px] text-arch-ink" />,
     image: "https://res.cloudinary.com/dp4sknsba/image/upload/v1765814717/Screenshot_2025-12-15_213240_uykp1a.png",
   },
   {
     title: "Abacus Got Latent",
     description: "Aspiring to become Samay Raina but don't want to go to JAIL! Welcome to 'ABACUS Got LATENT', the ultimate talent showdown where self-awareness meets creativity! This is your chance to showcase your hidden talent- whether it's dark comedy, mimicry, singing, acting, or any unique skill.",
     id: 3,
-    icon: <FiCircle className="h-[16px] w-[16px] text-cyan-400" />,
+    icon: <FiCircle className="h-[16px] w-[16px] text-arch-ink" />,
     image: "https://res.cloudinary.com/dp4sknsba/image/upload/v1765814720/Screenshot_2025-12-15_213452_nmotey.png",
   },
   {
     title: "Chase Cloud 9",
     description: "Chase Cloud 9, an intense challenge brought by the Computer Science Society. It's the ultimate test to find the next tech masterminds—designed to simulate the most rigorous real-world recruitment processes.",
     id: 4,
-    icon: <FiLayers className="h-[16px] w-[16px] text-cyan-400" />,
+    icon: <FiLayers className="h-[16px] w-[16px] text-arch-ink" />,
     image: "https://res.cloudinary.com/dp4sknsba/image/upload/v1765814719/Screenshot_2025-12-15_213418_txqdki.png",
   },
   {
     title: "ENIGMA",
     description: "ENIGMA provides an opportunity for the freshman of the college to get introduced to the field of competitive programming. It prepares the students for internship/placement season by providing an opportunity to take a shot at real time Coding Round Problems. Our alumni have also, at many times appreciated this highly esteemed initiative by the CP Wing of the Society, given the value addition it has accentuated in the brightest of minds",
     id: 5,
-    icon: <FiLayout className="h-[16px] w-[16px] text-cyan-400" />,
+    icon: <FiLayout className="h-[16px] w-[16px] text-arch-ink" />,
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop",
   },
   {
     title: "DATATHON",
     description: "Dive into the world of data science with DATATHON! Analyze, visualize, and derive insights from complex datasets. Perfect for aspiring data scientists and ML enthusiasts.",
     id: 6,
-    icon: <FiCode className="h-[16px] w-[16px] text-cyan-400" />,
+    icon: <FiCode className="h-[16px] w-[16px] text-arch-ink" />,
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
   },
 ];
@@ -249,7 +249,7 @@ export default function Carousel() {
   ).current;
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gradient-to-br from-black to-[#021547] p-2 md:p-4 relative overflow-hidden w-full min-h-screen">
+    <div className="flex flex-col items-center justify-center bg-arch-card p-2 md:p-4 relative overflow-hidden w-full min-h-screen">
       <style>{styles}</style>
       
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -259,7 +259,7 @@ export default function Carousel() {
       <div className="w-full flex items-center justify-center relative z-10 px-2 md:px-4">
         <button
           onClick={goToPrev}
-          className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 mr-4 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] transition-all duration-300"
+          className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-arch-bg-alt border border-arch-line text-arch-ink mr-4 transition-all duration-300"
           aria-label="Previous slide"
         >
           <FiArrowLeft />
@@ -267,7 +267,7 @@ export default function Carousel() {
 
         <div
           ref={containerRef}
-          className="relative overflow-hidden p-2 md:p-6 rounded-2xl border border-cyan-500/30 backdrop-blur-lg bg-black/60 w-full max-w-full"
+          className="relative overflow-hidden p-2 md:p-6 border border-arch-line bg-arch-card w-full max-w-full"
           style={{ 
             width: containerWidth || "100%", 
             maxWidth: "1200px",
@@ -303,11 +303,7 @@ export default function Carousel() {
               return (
                 <motion.div
                   key={`${item.id}-${index}`}
-                  className="relative shrink-0 flex flex-col items-start justify-between 
-                             bg-gradient-to-br from-[#0a0a0a] to-[#021547] 
-                             border border-cyan-500/40 
-                             rounded-xl overflow-hidden cursor-grab active:cursor-grabbing 
-                             group p-3 md:p-5 shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+                  className="relative shrink-0 flex flex-col items-start justify-between bg-arch-card border border-arch-line overflow-hidden cursor-grab active:cursor-grabbing group p-3 md:p-5"
                   style={{
                     width: itemWidth,
                     minHeight: typeof window !== 'undefined' && window.innerWidth < 768 ? "280px" : "360px",
@@ -322,9 +318,9 @@ export default function Carousel() {
                   }}
                   transition={effectiveTransition}
                 >
-                  <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-60"></div>
+                  <div className="absolute top-0 left-0 w-full h-[3px] bg-arch-card opacity-60"></div>
 
-                  <div className="w-full mb-2 md:mb-4 overflow-hidden rounded-lg border border-cyan-500/20">
+                  <div className="w-full mb-2 md:mb-4 overflow-hidden border border-arch-line">
                     <img
                       src={item.image}
                       alt={item.title}
@@ -333,28 +329,26 @@ export default function Carousel() {
                     />
                   </div>
 
-                  <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-cyan-400/70 group-hover:border-purple-400 transition-all duration-300"></div>
-                  <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-cyan-400/70 group-hover:border-purple-400 transition-all duration-300"></div>
-                  <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-cyan-400/70 group-hover:border-purple-400 transition-all duration-300"></div>
-                  <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-cyan-400/70 group-hover:border-purple-400 transition-all duration-300"></div>
+                  <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-arch-line group-hover:border-arch-line transition-all duration-300"></div>
+                  <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-arch-line group-hover:border-arch-line transition-all duration-300"></div>
+                  <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-arch-line group-hover:border-arch-line transition-all duration-300"></div>
+                  <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-arch-line group-hover:border-arch-line transition-all duration-300"></div>
 
                   <div className="mb-2 md:mb-4">
-                    <span className="flex h-[24px] w-[24px] md:h-[32px] md:w-[32px] items-center justify-center 
-                                   rounded-full bg-cyan-900/60 border border-cyan-400/30 
-                                   shadow-[0_0_10px_rgba(0,255,255,0.3)]">
+                    <span className="flex h-[24px] w-[24px] md:h-[32px] md:w-[32px] items-center justify-center rounded-full bg-arch-bg-alt border border-arch-line">
                       {item.icon}
                     </span>
                   </div>
                   <div className="w-full">
-                    <div className="mb-1 md:mb-2 font-black text-sm md:text-lg text-cyan-300 group-hover:text-purple-300 transition-colors duration-300 tracking-wide">
+                    <div className="mb-1 md:mb-2 font-black text-sm md:text-lg text-arch-ink group-hover:text-arch-ink transition-colors duration-300 tracking-wide">
                       {item.title}
                     </div>
-                    <p className="text-xs md:text-sm text-gray-300 group-hover:text-gray-100 transition-colors duration-300 leading-relaxed line-clamp-2">
+                    <p className="text-xs md:text-sm text-arch-ink-3 group-hover:text-arch-ink-3 transition-colors duration-300 leading-relaxed line-clamp-2">
                       {item.description}
                     </p>
                   </div>
 
-                  <div className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent top-1/3 animate-scan opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
+                  <div className="absolute w-full h-0.5 bg-arch-card top-1/3 animate-scan opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
                 </motion.div>
               );
             })}
@@ -368,10 +362,10 @@ export default function Carousel() {
               return (
                 <button
                   key={index}
-                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                  className={`h-2 w-2 rounded-full transition-all duration-300   ${
                     dotIndex === index
-                      ? "bg-cyan-400 shadow-[0_0_8px_rgba(0,255,255,0.8)]"
-                      : "bg-cyan-900"
+                      ? "bg-arch-ink"
+                      : "bg-arch-bg-alt"
                   }`}
                   onClick={() => setCurrentIndex(index + 1)}
                   aria-label={`Go to slide ${index + 1}`}
@@ -383,7 +377,7 @@ export default function Carousel() {
 
         <button
           onClick={goToNext}
-          className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 ml-4 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] transition-all duration-300"
+          className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-arch-bg-alt border border-arch-line text-arch-ink ml-4 transition-all duration-300"
           aria-label="Next slide"
         >
           <FiArrowRight />
@@ -393,14 +387,14 @@ export default function Carousel() {
       <div className="md:hidden flex justify-center space-x-8 mt-4">
         <button
           onClick={goToPrev}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] transition-all duration-300"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-arch-bg-alt border border-arch-line text-arch-ink transition-all duration-300"
           aria-label="Previous slide"
         >
           <FiArrowLeft />
         </button>
         <button
           onClick={goToNext}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-cyan-900/50 border border-cyan-500/40 text-cyan-300 hover:shadow-[0_0_15px_rgba(0,255,255,0.6)] transition-all duration-300"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-arch-bg-alt border border-arch-line text-arch-ink transition-all duration-300"
           aria-label="Next slide"
         >
           <FiArrowRight />

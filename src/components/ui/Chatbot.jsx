@@ -84,7 +84,7 @@ const Chatbot = () => {
         </svg>
       </div>
 
-      <div className={`chat-widget ${isOpen ? 'active' : ''}`} ref={chatWidgetRef}>
+      <div className={`chat-widget   ${isOpen ? 'active' : ''}`} ref={chatWidgetRef}>
         <div className="chat-header">
           <div className="header-content">
             <h3 className="header-title">HelpBot</h3>
@@ -119,7 +119,7 @@ const Chatbot = () => {
           ) : (
             <div className="chat-messages">
               {messages.map((msg, index) => (
-                <div key={index} className={`message ${msg.sender}-message`}>
+                <div key={index} className={`message   ${msg.sender}-message`}>
                   <div className="message-bubble">{msg.text}</div>
                 </div>
               ))}

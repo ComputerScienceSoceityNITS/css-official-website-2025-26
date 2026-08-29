@@ -233,9 +233,9 @@ const Dashboard = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-4">
+            <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center px-4">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
                     <p className="text-lg">Loading your dashboard...</p>
                 </div>
             </div>
@@ -249,37 +249,37 @@ const Dashboard = () => {
     const earnedBadges = badges.filter(badge => attendedEvents.length >= badge.threshold);
 
     return (
-        <div className="relative min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white px-4 py-6 sm:py-10 overflow-hidden">
+        <div className="relative min-h-screen bg-arch-bg text-arch-ink px-4 py-6 sm:py-10 overflow-hidden">
             {/* WhatsApp Modal */}
             {showWhatsappModal && selectedEvent && (
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                    <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 max-w-md w-full backdrop-blur-lg mx-4">
-                        <h3 className="text-xl font-bold text-cyan-400 mb-4">Join WhatsApp Group</h3>
-                        <p className="text-gray-300 mb-2">
+                <div className="fixed inset-0 bg-arch-card flex items-center justify-center z-50 p-4">
+                    <div className="bg-arch-card border border-arch-line p-6 max-w-md w-full mx-4">
+                        <h3 className="text-xl font-bold text-arch-ink mb-4">Join WhatsApp Group</h3>
+                        <p className="text-arch-ink-3 mb-2">
                             You've successfully registered for:
                         </p>
-                        <p className="text-white font-bold mb-4 text-lg">{selectedEvent.event_name}</p>
+                        <p className="text-arch-ink font-bold mb-4 text-lg">{selectedEvent.event_name}</p>
                         
                         {selectedEvent.event_organizer && (
-                            <p className="text-cyan-300 mb-2">
+                            <p className="text-arch-ink mb-2">
                                 <strong>Organizer:</strong> {selectedEvent.event_organizer}
                             </p>
                         )}
                         
                         {selectedEvent.event_description && (
-                            <p className="text-gray-300 mb-4 text-sm">
+                            <p className="text-arch-ink-3 mb-4 text-sm">
                                 {selectedEvent.event_description}
                             </p>
                         )}
                         
-                        <p className="text-gray-300 mb-6">
+                        <p className="text-arch-ink-3 mb-6">
                             Click below to join the WhatsApp group for updates and discussions:
                         </p>
                         
                         <div className="flex flex-col gap-3">
                             <button
                                 onClick={openWhatsappLink}
-                                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
+                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-3 px-4 transition-all flex items-center justify-center gap-2 hover:text-arch-bg"
                             >
                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.18-1.24-6.17-3.495-8.418"/>
@@ -289,7 +289,7 @@ const Dashboard = () => {
                             
                             <button
                                 onClick={copyWhatsappLink}
-                                className="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
+                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-3 px-4 transition-all flex items-center justify-center gap-2 hover:text-arch-bg"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -302,7 +302,7 @@ const Dashboard = () => {
                                     setShowWhatsappModal(false);
                                     setSelectedEvent(null);
                                 }}
-                                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all"
+                                className="bg-arch-bg-alt hover:bg-arch-bg-alt text-arch-ink font-bold py-3 px-4 transition-all"
                             >
                                 Close
                             </button>
@@ -311,7 +311,7 @@ const Dashboard = () => {
                 </div>
             )}
 
-            <div className="relative max-w-4xl mx-auto bg-black/70 border border-cyan-500/30 rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg">
+            <div className="relative max-w-4xl mx-auto bg-arch-card border border-arch-line p-4 sm:p-6 md:p-8">
                 {/* Profile Section with All Buttons in One Line */}
                 <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 mb-8">
                     {/* Left Side - Profile Info */}
@@ -319,20 +319,20 @@ const Dashboard = () => {
                         <img
                             src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
                             alt="Profile"
-                            className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full border-4 border-cyan-500 shadow-lg flex-shrink-0"
+                            className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full border border-arch-line flex-shrink-0"
                         />
                         <div className="flex-1 min-w-0">
-                            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold truncate" style={{ fontFamily: "Goldman, sans-serif" }}>
+                            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold truncate" >
                                 {profile?.full_name || user?.email}
                             </h1>
-                            <p className="text-cyan-400 font-mono text-sm sm:text-base truncate">
+                            <p className="text-arch-ink text-sm sm:text-base truncate">
                                 Scholar ID: {profile?.scholar_id || 'N/A'}
                             </p>
-                            <p className="text-gray-400 text-sm sm:text-base">
+                            <p className="text-arch-ink-3 text-sm sm:text-base">
                                 Events Registered: {attendedEvents.length}
                             </p>
                             {isAdmin && (
-                                <p className="text-red-400 font-semibold text-sm sm:text-base flex items-center gap-1 mt-1">
+                                <p className="text-arch-ink font-semibold text-sm sm:text-base flex items-center gap-1 mt-1">
                                     <span>🛡️</span> Administrator
                                 </p>
                             )}
@@ -343,7 +343,7 @@ const Dashboard = () => {
                     <div className="flex flex-wrap gap-3 w-full lg:w-auto justify-center lg:justify-end">
                         <button 
                             onClick={navigateToChat}
-                            className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-all flex items-center gap-2 text-sm flex-shrink-0"
+                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg"
                         >
                             💬 Chat
                         </button>
@@ -351,7 +351,7 @@ const Dashboard = () => {
                         {isAdmin && (
                             <button 
                                 onClick={navigateToAdminDashboard}
-                                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-all flex items-center gap-2 text-sm flex-shrink-0"
+                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg"
                             >
                                 🛡️ Admin
                             </button>
@@ -359,43 +359,43 @@ const Dashboard = () => {
                         
                         <button 
                             onClick={handleLogout} 
-                            className="bg-red-600/80 hover:bg-red-700/80 text-white font-bold py-2 px-4 rounded transition-all text-sm flex-shrink-0"
+                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all text-sm flex-shrink-0 hover:text-arch-bg"
                         >
                             Logout
                         </button>
                     </div>
                 </div>
 
-                <div className="my-6 sm:my-8 border-t border-cyan-500/20"></div>
+                <div className="my-6 sm:my-8 border-t border-arch-line"></div>
 
                 {/* --- Badges Section --- */}
                 <div className="mb-8">
-                    <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ fontFamily: "Goldman, sans-serif" }}>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4" >
                         Badges Earned
                     </h2>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                         {badges.map((badge) => (
                             <div 
                                 key={badge.name} 
-                                className={`p-3 sm:p-4 rounded-lg text-center transition-all ${
+                                className={`p-3 sm:p-4 text-center transition-all   ${
                                     earnedBadges.some(b => b.name === badge.name) 
-                                        ? 'bg-cyan-900/50 border border-cyan-700' 
-                                        : 'bg-gray-800/50 border border-gray-700 opacity-40'
+                                        ? 'bg-arch-ink border border-arch-ink' 
+                                        : 'bg-arch-bg-alt border border-arch-line opacity-40'
                                 }`}
                             >
                                 <div className="text-3xl sm:text-4xl md:text-5xl">{badge.icon}</div>
                                 <h3 className="font-bold mt-2 text-xs sm:text-sm md:text-base">{badge.name}</h3>
-                                <p className="text-xs text-gray-400 mt-1 hidden xs:block">{badge.description}</p>
+                                <p className="text-xs text-arch-ink-3 mt-1 hidden xs:block">{badge.description}</p>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="my-6 sm:my-8 border-t border-cyan-500/20"></div>
+                <div className="my-6 sm:my-8 border-t border-arch-line"></div>
 
                 {/* --- Registered Events Section --- */}
                 <div>
-                    <h2 className="text-xl sm:text-2xl font-bold mb-4" style={{ fontFamily: "Goldman, sans-serif" }}>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4" >
                         Your Registered Events
                     </h2>
                     <div className="space-y-3">
@@ -403,15 +403,15 @@ const Dashboard = () => {
                             attendedEvents.map((event, index) => (
                                 <div 
                                     key={index} 
-                                    className="bg-gray-800/50 p-4 rounded-lg border border-cyan-500/20 hover:border-cyan-500/40 transition-all"
+                                    className="bg-arch-bg-alt p-4 border border-arch-line hover:border-arch-line transition-all"
                                 >
                                     <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                                         {/* Event Details - Left Side */}
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="text-base sm:text-lg font-bold text-cyan-300 mb-2 truncate">
+                                            <h3 className="text-base sm:text-lg font-bold text-arch-ink mb-2 truncate">
                                                 {event.event_name}
                                             </h3>
-                                            <p className="text-gray-400 text-xs sm:text-sm mb-2">
+                                            <p className="text-arch-ink-3 text-xs sm:text-sm mb-2">
                                                 Registered on: {new Date(event.registered_at).toLocaleDateString('en-US', {
                                                     weekday: 'short',
                                                     year: 'numeric',
@@ -422,7 +422,7 @@ const Dashboard = () => {
                                                 })}
                                             </p>
                                             {event.event_organizer && (
-                                                <p className="text-cyan-200 text-xs sm:text-sm truncate">
+                                                <p className="text-arch-ink text-xs sm:text-sm truncate">
                                                     <strong>Organizer:</strong> {event.event_organizer}
                                                 </p>
                                             )}
@@ -433,7 +433,7 @@ const Dashboard = () => {
                                             {event.whatsapp_link && (
                                                 <button
                                                     onClick={() => handleJoinWhatsappGroup(event)}
-                                                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center gap-2 text-xs sm:text-sm w-full lg:w-auto justify-center min-w-[140px]"
+                                                    className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-3 px-4 transition-all flex items-center gap-2 text-xs sm:text-sm w-full lg:w-auto justify-center min-w-[140px] hover:text-arch-bg"
                                                 >
                                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.18-1.24-6.17-3.495-8.418"/>
@@ -446,10 +446,10 @@ const Dashboard = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="text-center p-6 bg-gray-800/30 rounded-lg border border-cyan-500/20">
-                                <p className="text-gray-400 text-base sm:text-lg mb-3">No events registered yet.</p>
-                                <p className="text-cyan-400 text-sm sm:text-base">
-                                    <Link to="/events" className="underline hover:text-cyan-300 transition-colors">
+                            <div className="text-center p-6 bg-arch-bg-alt border border-arch-line">
+                                <p className="text-arch-ink-3 text-base sm:text-lg mb-3">No events registered yet.</p>
+                                <p className="text-arch-ink text-sm sm:text-base">
+                                    <Link to="/events" className="underline hover:text-arch-ink transition-colors">
                                         Go to Events page
                                     </Link> and register for upcoming events!
                                 </p>

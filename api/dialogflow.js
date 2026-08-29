@@ -1,24 +1,42 @@
 import { GoogleAuth } from 'google-auth-library';
+import { resolveOrigin, validateBody, rateLimit, clientKey } from './_guard.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Only our own origins may call this — it spends the society's Dialogflow
+  // quota against a service account, so '*' was effectively an open wallet.
+  const origin = resolveOrigin(req.headers.origin);
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    return res.status(origin ? 200 : 403).end();
   }
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  try {
-    const { message, sessionId, isEvent } = req.body;
+  if (req.headers.origin && !origin) {
+    return res.status(403).json({ error: 'Origin not allowed' });
+  }
 
-    if (!sessionId) {
-      return res.status(400).json({ error: 'Session ID is required' });
+  const limit = rateLimit(clientKey(req));
+  if (!limit.allowed) {
+    res.setHeader('Retry-After', String(limit.retryAfter));
+    return res.status(429).json({ error: 'Too many requests' });
+  }
+
+  try {
+    const checked = validateBody(req.body);
+    if (!checked.ok) {
+      return res.status(400).json({ error: checked.error });
     }
+    const { message, sessionId, isEvent } = checked.value;
 
     const projectId = process.env.GOOGLE_PROJECT_ID || 'whatever-ceyu';
     const credentialsString = process.env.GOOGLE_CREDENTIALS_JSON || '{}';
@@ -94,4 +112,4 @@ export default async function handler(req, res) {
       details: error.message,
     });
   }
-}
+}

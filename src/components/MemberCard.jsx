@@ -47,7 +47,7 @@ const MemberCard = ({ member, flipped, onFlip, index }) => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={archSpring}
-              className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-3 bg-arch-card/95 py-5 backdrop-blur-sm"
+              className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-3 bg-arch-card/95 py-5"
             >
               {socials.map(({ href, Icon, label }) => (
                 <a

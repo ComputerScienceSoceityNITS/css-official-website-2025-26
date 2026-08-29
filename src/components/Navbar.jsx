@@ -11,6 +11,7 @@ const menuItems = [
     { path: '/members', label: 'Members' },
     { path: '/events', label: 'Events' },
     { path: '/wings', label: 'Wings' },
+    { path: '/gallery', label: 'Gallery' },
     { path: '/materials', label: 'Materials' }
 ]
 
@@ -23,7 +24,7 @@ const LOGO = 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Unti
  * background, and looks deliberate rather than patched.
  */
 const LogoMark = ({ className = 'h-11 w-11' }) => (
-    <span className={`flex shrink-0 items-center justify-center overflow-hidden bg-black ${className}`}>
+    <span className={`flex shrink-0 items-center justify-center overflow-hidden bg-black   ${className}`}>
         <img src={LOGO} alt="Computer Science Society" className="h-full w-full object-contain" />
     </span>
 )
@@ -60,7 +61,7 @@ export const NavbarDemo = () => {
     return (
         <>
             <motion.nav
-                className={`fixed top-0 left-0 z-[200] w-full font-sans transition-[background-color,border-color,backdrop-filter] duration-500 ${
+                className={`fixed top-0 left-0 z-[200] w-full font-sans transition-[background-color,border-color,backdrop-filter] duration-500   ${
                     solid
                         ? 'border-b border-arch-line bg-arch-bg/94 backdrop-blur-xl'
                         : 'border-b border-transparent bg-transparent'
@@ -99,7 +100,7 @@ export const NavbarDemo = () => {
                                     className="group relative px-4 py-2.5"
                                 >
                                     <span
-                                        className={`relative z-10 text-[15px] font-medium tracking-[-0.01em] transition-colors duration-300 ${
+                                        className={`relative z-10 text-[15px] font-medium tracking-[-0.01em] transition-colors duration-300   ${
                                             active ? 'text-arch-ink' : 'text-arch-ink-3 group-hover:text-arch-ink'
                                         }`}
                                     >
@@ -194,7 +195,7 @@ export const NavbarDemo = () => {
                                         <Link
                                             to={item.path}
                                             onClick={() => setIsOpen(false)}
-                                            className={`block py-5 ${
+                                            className={`block py-5   ${
                                                 location.pathname === item.path ? 'text-arch-ink' : 'text-arch-ink-3'
                                             }`}
                                         >

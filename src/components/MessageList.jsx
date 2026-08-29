@@ -197,7 +197,7 @@ const MessageList = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-8">
-        <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border border-arch-line border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -207,7 +207,7 @@ const MessageList = () => {
       {messages.length === 0 ? (
         <div className="text-center py-8">
           <div className="text-4xl mb-2">🪔</div>
-          <p className="text-orange-300/70 font-inter">
+          <p className="text-arch-ink font-inter">
             No wishes yet. Be the first to share your Diwali wishes!
           </p>
         </div>
@@ -217,17 +217,17 @@ const MessageList = () => {
             key={message.id}
             id={`message-${message.id}`}
             data-message-id={message.id}
-            className="message-card bg-gradient-to-r from-purple-800/40 to-pink-800/40 border border-orange-500/20 rounded-xl p-4 shadow-lg backdrop-blur-sm hover:border-orange-500/40 transition-all duration-300 cursor-pointer select-none"
+            className="message-card bg-arch-card border border-arch-line p-4 hover:border-arch-line transition-all duration-300 cursor-pointer select-none"
             onClick={(e) => handleMessageTap(message.id, e)}
             onTouchStart={(e) => handleMessageTap(message.id, e)}
           >
-            <p className="text-orange-100 text-sm leading-relaxed font-inter mb-3">
+            <p className="text-arch-ink text-sm leading-relaxed font-inter mb-3">
               {message.message}
             </p>
             
-            <div className="flex justify-between items-center mt-3 pt-3 border-t border-orange-500/20">
+            <div className="flex justify-between items-center mt-3 pt-3 border-t border-arch-line">
               <div className="flex items-center gap-4">
-                <span className="text-orange-300/70 text-xs font-medium font-poppins">
+                <span className="text-arch-ink text-xs font-medium font-poppins">
                   {message.name || 'Anonymous'}
                 </span>
                 
@@ -240,14 +240,14 @@ const MessageList = () => {
                 </div>
               </div>
               
-              <span className="text-orange-400/60 text-xs font-inter">
+              <span className="text-arch-ink text-xs font-inter">
                 {formatDate(message.timestamp)}
               </span>
             </div>
 
             {/* Decorative elements */}
-            <div className="absolute top-2 right-2 w-1 h-1 bg-yellow-400 rounded-full opacity-60"></div>
-            <div className="absolute bottom-2 left-2 w-1 h-1 bg-orange-400 rounded-full opacity-60"></div>
+            <div className="absolute top-2 right-2 w-1 h-1 bg-arch-ink rounded-full opacity-60"></div>
+            <div className="absolute bottom-2 left-2 w-1 h-1 bg-arch-ink rounded-full opacity-60"></div>
           </div>
         ))
       )}

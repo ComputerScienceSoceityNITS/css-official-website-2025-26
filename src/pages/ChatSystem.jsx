@@ -606,9 +606,9 @@ const ChatSystem = () => {
     
     if (user && requiresCollegeVerification) {
         return (
-            <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] flex items-center justify-center">
-                <div className="text-white text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+            <div className="min-h-screen bg-arch-bg flex items-center justify-center">
+                <div className="text-arch-ink text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
                     <p>Redirecting to verification...</p>
                 </div>
             </div>
@@ -616,16 +616,16 @@ const ChatSystem = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white">
+        <div className="min-h-screen bg-arch-bg text-arch-ink">
             {/* Mobile Header  */}
-            <div className="sticky top-0 z-10 bg-black/90 border-b border-cyan-500/30 backdrop-blur-lg md:hidden">
+            <div className="sticky top-0 z-10 bg-arch-card border-b border-arch-line md:hidden">
                 <div className="p-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-                            <h1 className="text-lg font-bold text-cyan-300">CSS Chat</h1>
+                            <div className={`w-2 h-2 rounded-full   ${isConnected ? 'bg-arch-ink' : 'bg-arch-ink'}`}></div>
+                            <h1 className="text-lg font-bold text-arch-ink">CSS Chat</h1>
                             {isAdmin && (
-                                <span className="text-xs bg-red-500/20 text-red-300 px-2 py-1 rounded border border-red-500/30">
+                                <span className="text-xs bg-arch-ink text-arch-bg px-2 py-1 border border-arch-ink">
                                     Admin
                                 </span>
                             )}
@@ -633,7 +633,7 @@ const ChatSystem = () => {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setShowSidebar(!showSidebar)}
-                                className="p-2 rounded-lg bg-cyan-600/20 border border-cyan-500/30"
+                                className="p-2 bg-arch-ink border border-arch-ink"
                             >
                                 ℹ️
                             </button>
@@ -645,7 +645,7 @@ const ChatSystem = () => {
                         <select
                             value={room}
                             onChange={(e) => setRoom(e.target.value)}
-                            className="w-full p-3 bg-gray-800/50 border border-cyan-500/30 rounded-lg text-white appearance-none cursor-pointer"
+                            className="w-full p-3 bg-arch-bg-alt border border-arch-line text-arch-ink appearance-none cursor-pointer"
                             style={{
                                 backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
                                 backgroundRepeat: 'no-repeat',
@@ -658,7 +658,7 @@ const ChatSystem = () => {
                                 <option 
                                     key={roomItem.id} 
                                     value={roomItem.id}
-                                    className="bg-gray-800 text-white"
+                                    className="bg-arch-bg-alt text-arch-ink"
                                 >
                                     {roomItem.icon} {roomItem.name}
                                 </option>
@@ -673,28 +673,28 @@ const ChatSystem = () => {
                 {/* Desktop Header */}
                 <div className="hidden md:flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                     <div className="text-center md:text-left">
-                        <h1 className="text-4xl font-bold mb-2" style={{ fontFamily: "Goldman, sans-serif" }}>
+                        <h1 className="text-4xl font-bold mb-2" >
                             CSS Community Chat
                         </h1>
-                        <p className="text-cyan-300 text-lg">
+                        <p className="text-arch-ink text-lg">
                             Anonymous real-time chat - No registration required!
                         </p>
                     </div>
                     
                     {/* Admin Controls */}
                     {isAdmin && (
-                        <div className="flex flex-col gap-2 bg-red-900/20 border border-red-500/30 rounded-lg p-4">
-                            <h3 className="text-red-300 font-bold text-sm mb-2">🛡️ Admin Controls</h3>
+                        <div className="flex flex-col gap-2 bg-arch-bg-alt border border-arch-line p-4">
+                            <h3 className="text-arch-ink font-bold text-sm mb-2">🛡️ Admin Controls</h3>
                             <div className="flex gap-2">
                                 <button
                                     onClick={clearChat}
-                                    className="px-3 py-2 bg-red-600/20 border border-red-500/30 rounded text-red-300 hover:bg-red-600/30 transition-all text-sm"
+                                    className="px-3 py-2 bg-arch-ink border border-arch-ink text-arch-bg hover:bg-arch-ink transition-all text-sm hover:text-arch-bg"
                                 >
                                     Clear Room
                                 </button>
                                 <button
                                     onClick={clearAllChats}
-                                    className="px-3 py-2 bg-red-700/20 border border-red-600/30 rounded text-red-400 hover:bg-red-700/30 transition-all text-sm"
+                                    className="px-3 py-2 bg-arch-ink border border-arch-ink text-arch-bg hover:bg-arch-ink transition-all text-sm hover:text-arch-bg"
                                     title="Clear ALL chat rooms"
                                 >
                                     Clear All
@@ -704,16 +704,16 @@ const ChatSystem = () => {
                     )}
 
                     <div className="flex justify-center items-center gap-4 text-sm">
-                        <div className={`flex items-center gap-2 ${isConnected ? 'text-green-400' : 'text-red-400'}`}>
-                            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
+                        <div className={`flex items-center gap-2   ${isConnected ? 'text-arch-ink' : 'text-arch-ink'}`}>
+                            <div className={`w-3 h-3 rounded-full   ${isConnected ? 'bg-arch-ink' : 'bg-arch-ink'}`}></div>
                             {isConnected ? 'Real-time Connected' : 'Real-time Disconnected'}
                         </div>
-                        <div className="text-cyan-400">
+                        <div className="text-arch-ink">
                             💬 {messages.length} messages
                         </div>
                         {isAdmin && (
-                            <div className="text-red-400 flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-red-400"></div>
+                            <div className="text-arch-ink flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-arch-ink"></div>
                                 Admin Mode
                             </div>
                         )}
@@ -721,18 +721,18 @@ const ChatSystem = () => {
                 </div>
 
                 {/* MAIN CHAT CONTAINER */}
-                <div className="bg-black/70 border border-cyan-500/30 rounded-2xl shadow-[0_0_25px_rgba(6,182,212,0.4)] backdrop-blur-lg overflow-hidden">
+                <div className="bg-arch-card border border-arch-line overflow-hidden">
                     {/* Desktop Room Selection */}
-                    <div className="hidden md:block border-b border-cyan-500/20 p-4 bg-gray-900/50">
+                    <div className="hidden md:block border-b border-arch-line p-4 bg-arch-card">
                         <div className="flex flex-wrap gap-2 justify-center">
                             {rooms.map(roomItem => (
                                 <button
                                     key={roomItem.id}
                                     onClick={() => setRoom(roomItem.id)}
-                                    className={`px-4 py-2 rounded-lg border transition-all flex items-center gap-2 ${
+                                    className={`px-4 py-2 border transition-all flex items-center gap-2   ${
                                         room === roomItem.id
-                                            ? 'bg-cyan-600 border-cyan-400 text-white'
-                                            : 'bg-gray-800 border-gray-600 text-gray-300 hover:border-cyan-500'
+                                            ? 'bg-arch-ink border-arch-ink text-arch-bg'
+                                            : 'bg-arch-bg-alt border-arch-line text-arch-ink-3 hover:border-arch-line'
                                     }`}
                                 >
                                     <span>{roomItem.icon}</span>
@@ -746,15 +746,15 @@ const ChatSystem = () => {
                         {/* Chat Container */}
                         <div className="flex-1 flex flex-col">
                             {/* Messages Header */}
-                            <div className="border-b border-cyan-500/20 p-3 md:p-4 bg-gray-900/30 flex justify-between items-center">
-                                <h3 className="text-sm md:text-lg font-bold text-cyan-300 flex items-center gap-2">
+                            <div className="border-b border-arch-line p-3 md:p-4 bg-arch-card flex justify-between items-center">
+                                <h3 className="text-sm md:text-lg font-bold text-arch-ink flex items-center gap-2">
                                     <span className="hidden md:inline">{currentRoom?.icon}</span>
                                     <span>{currentRoom?.name}</span>
                                 </h3>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={loadMessages}
-                                        className="px-2 py-1 md:px-3 md:py-1 bg-cyan-600/20 border border-cyan-500/30 rounded text-cyan-300 hover:bg-cyan-600/30 transition-all text-xs md:text-sm"
+                                        className="px-2 py-1 md:px-3 md:py-1 bg-arch-ink border border-arch-ink text-arch-bg hover:bg-arch-ink transition-all text-xs md:text-sm hover:text-arch-bg"
                                     >
                                         🔄
                                     </button>
@@ -764,7 +764,7 @@ const ChatSystem = () => {
                             {/* Messages Container*/}
                             <div 
                                 ref={messagesContainerRef}
-                                className="flex-1 overflow-y-auto p-3 md:p-4 space-y-2 md:space-y-3 bg-gray-900/10"
+                                className="flex-1 overflow-y-auto p-3 md:p-4 space-y-2 md:space-y-3 bg-arch-card"
                                 style={{ 
                                     height: '60vh', 
                                     maxHeight: '60vh',
@@ -773,7 +773,7 @@ const ChatSystem = () => {
                                 }}
                             >
                                 {messages.length === 0 ? (
-                                    <div className="text-center text-gray-400 py-8 h-full flex items-center justify-center">
+                                    <div className="text-center text-arch-ink-3 py-8 h-full flex items-center justify-center">
                                         <div>
                                             <div className="text-4xl mb-2">💬</div>
                                             <p className="text-sm md:text-base">No messages yet. Start the conversation!</p>
@@ -783,17 +783,17 @@ const ChatSystem = () => {
                                     messages.map((msg) => (
                                        <div
   key={msg.id}
-  className={`group p-3 rounded-lg border transition-all relative ${
+  className={`group p-3 border transition-all relative   ${
     msg.isOwnMessage
-      ? 'bg-cyan-900/20 border-cyan-500/30 md:ml-8'
-      : 'bg-gray-800/20 border-gray-600/30 md:mr-8'
-  } ${msg.isSending ? 'opacity-70 animate-pulse' : ''}`}
+      ? 'bg-arch-ink border-arch-ink md:ml-8'
+      : 'bg-arch-bg-alt border-arch-line md:mr-8'
+  }      ${msg.isSending ? 'opacity-70' : ''}`}
 >
   {/* Admin Delete Button */}
   {isAdmin && !msg.isSending && !msg.isOwnMessage && (
     <button
       onClick={() => deleteMessage(msg.id)}
-      className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs border border-red-400 shadow-lg transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
+      className="absolute -top-2 -right-2 bg-arch-ink hover:bg-arch-ink text-arch-bg rounded-full w-6 h-6 flex items-center justify-center text-xs border border-arch-ink transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:text-arch-bg"
       title="Delete message (Admin)"
     >
       ×
@@ -802,32 +802,32 @@ const ChatSystem = () => {
   
   <div className="flex justify-between items-start mb-1">
     <div className="flex items-center gap-2">
-      <span className={`font-bold text-sm md:text-base ${
+      <span className={`font-bold text-sm md:text-base   ${
         msg.isOwnMessage
-          ? 'text-cyan-300' 
+          ? 'text-arch-ink' 
           : msg.username === 'System'
-          ? 'text-purple-300'
-          : 'text-green-300'
+          ? 'text-arch-ink'
+          : 'text-arch-ink'
       }`}>
         {/* {msg.username} */}
         Anonymous
       </span>
       {msg.isOwnMessage && (
-        <span className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
+        <span className="text-xs bg-arch-ink text-arch-bg px-2 py-1">
           {msg.isSending ? 'Sending...' : 'You'}
         </span>
       )}
       {msg.room !== room && (
-        <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded border border-purple-500/30">
+        <span className="text-xs bg-arch-ink text-arch-bg px-2 py-1 border border-arch-ink">
           {rooms.find(r => r.id === msg.room)?.icon} {msg.room}
         </span>
       )}
     </div>
-    <span className="text-xs text-gray-400">
+    <span className="text-xs text-arch-ink-3">
       {formatTime(msg.created_at)}
     </span>
   </div>
-  <p className="text-gray-200 text-sm whitespace-pre-wrap break-words">
+  <p className="text-arch-ink-3 text-sm whitespace-pre-wrap break-words">
     {msg.message}
   </p>
 </div>
@@ -837,14 +837,14 @@ const ChatSystem = () => {
                             </div>
 
                             {/* Message Input */}
-                            <div className="border-t border-cyan-500/20 p-3 md:p-4 bg-gray-900/30">
+                            <div className="border-t border-arch-line p-3 md:p-4 bg-arch-card">
                                 <form onSubmit={sendMessage} className="flex gap-2">
                                     <input
                                         type="text"
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                         placeholder="Type your message..."
-                                        className="flex-1 px-3 py-2 md:px-4 md:py-3 bg-gray-800 border border-cyan-500/30 rounded-lg focus:outline-none focus:border-cyan-400 text-white placeholder-gray-400 text-sm md:text-base"
+                                        className="flex-1 px-3 py-2 md:px-4 md:py-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-arch-ink placeholder-gray-400 text-sm md:text-base"
                                         maxLength={500}
                                         disabled={loading}
                                         onFocus={() => userHasScrolledRef.current = true}
@@ -852,15 +852,15 @@ const ChatSystem = () => {
                                     <button
                                         type="submit"
                                         disabled={!newMessage.trim() || loading}
-                                        className="px-4 py-2 md:px-6 md:py-3 bg-cyan-600 border border-cyan-400 rounded-lg text-white font-semibold hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm md:text-base"
+                                        className="px-4 py-2 md:px-6 md:py-3 bg-arch-ink border border-arch-ink text-arch-bg font-semibold hover:bg-arch-ink disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm md:text-base hover:text-arch-bg"
                                     >
                                         {loading ? '⏳' : 'Send'}
                                     </button>
                                 </form>
-                                <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
+                                <div className="flex justify-between items-center mt-2 text-xs text-arch-ink-3">
                                     <div>
-                                        You: <span className="text-cyan-300">{username}</span>
-                                        {isAdmin && <span className="text-red-300 ml-2">• Admin</span>}
+                                        You: <span className="text-arch-ink">{username}</span>
+                                        {isAdmin && <span className="text-arch-ink ml-2">• Admin</span>}
                                     </div>
                                     <div>
                                         {newMessage.length}/500
@@ -871,28 +871,28 @@ const ChatSystem = () => {
 
                         {/* Sidebar */}
                         {(showSidebar || window.innerWidth >= 768) && (
-                            <div className={`fixed inset-0 z-40 md:relative md:z-auto bg-black/95 md:bg-gray-900/50 ${
+                            <div className={`fixed inset-0 z-40 md:relative md:z-auto bg-arch-card md:bg-arch-card   ${
                                 showSidebar ? 'block' : 'hidden md:block'
                             }`}>
-                                <div className="absolute top-0 right-0 bottom-0 w-80 max-w-full bg-gray-900 border-l border-cyan-500/30 md:border-l-0 md:border-cyan-500/20 md:relative md:w-80">
+                                <div className="absolute top-0 right-0 bottom-0 w-80 max-w-full bg-arch-card border-l border-arch-line md:border-l-0 md:border-arch-line md:relative md:w-80">
                                     {/* Mobile Close Button */}
-                                    <div className="md:hidden p-4 border-b border-cyan-500/20 flex justify-between items-center">
-                                        <h4 className="font-bold text-cyan-300">Chat Info</h4>
+                                    <div className="md:hidden p-4 border-b border-arch-line flex justify-between items-center">
+                                        <h4 className="font-bold text-arch-ink">Chat Info</h4>
                                         <button
                                             onClick={() => setShowSidebar(false)}
-                                            className="p-2 rounded-lg bg-red-600/20 border border-red-500/30 text-red-300"
+                                            className="p-2 bg-arch-ink border border-arch-ink text-arch-bg"
                                         >
                                             ✕
                                         </button>
                                     </div>
 
                                     <div className="p-4 h-full overflow-y-auto">
-                                        <h4 className="hidden md:block font-bold text-cyan-300 mb-4">Chat Info</h4>
+                                        <h4 className="hidden md:block font-bold text-arch-ink mb-4">Chat Info</h4>
                                         
                                         <div className="space-y-4">
-                                            <div className="bg-gray-800/30 rounded-lg p-3 border border-cyan-500/20">
+                                            <div className="bg-arch-bg-alt p-3 border border-arch-line">
                                                 <h5 className="font-semibold text-sm mb-2">📝 Chat Rules</h5>
-                                                <ul className="text-xs text-gray-300 space-y-1">
+                                                <ul className="text-xs text-arch-ink-3 space-y-1">
                                                     <li>• Be respectful to others</li>
                                                     <li>• No spam or advertising</li>
                                                     <li>• Keep conversations appropriate</li>
@@ -900,14 +900,14 @@ const ChatSystem = () => {
                                                 </ul>
                                             </div>
 
-                                            <div className="bg-gray-800/30 rounded-lg p-3 border border-cyan-500/20">
+                                            <div className="bg-arch-bg-alt p-3 border border-arch-line">
                                                 <h5 className="font-semibold text-sm mb-2">🌐 Rooms</h5>
-                                                <div className="text-xs text-gray-300">
+                                                <div className="text-xs text-arch-ink-3">
                                                     {rooms.map(roomItem => (
                                                         <div 
                                                             key={roomItem.id}
-                                                            className={`flex items-center gap-2 py-1 ${
-                                                                room === roomItem.id ? 'text-cyan-300' : ''
+                                                            className={`flex items-center gap-2 py-1   ${
+                                                                room === roomItem.id ? 'text-arch-ink' : ''
                                                             }`}
                                                         >
                                                             {roomItem.icon} {roomItem.name}
@@ -916,9 +916,9 @@ const ChatSystem = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="bg-gray-800/30 rounded-lg p-3 border border-cyan-500/20">
+                                            <div className="bg-arch-bg-alt p-3 border border-arch-line">
                                                 <h5 className="font-semibold text-sm mb-2">⚡ Real-time Status</h5>
-                                                <ul className="text-xs text-gray-300 space-y-1">
+                                                <ul className="text-xs text-arch-ink-3 space-y-1">
                                                     <li className={isConnected ? 'text-green-400' : 'text-red-400'}>
                                                         • {isConnected ? 'Connected to real-time' : 'Disconnected from real-time'}
                                                     </li>
@@ -938,7 +938,7 @@ const ChatSystem = () => {
 
             {showSidebar && (
                 <div 
-                    className="fixed inset-0 z-30 bg-black/50 md:hidden"
+                    className="fixed inset-0 z-30 bg-arch-card md:hidden"
                     onClick={() => setShowSidebar(false)}
                 />
             )}

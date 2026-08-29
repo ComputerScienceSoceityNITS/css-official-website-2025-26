@@ -17,15 +17,15 @@ const Toast = ({ message, type = 'success', onClose }) => {
     const borderColor = type === 'success' ? 'border-green-500' : 'border-red-500';
 
     return (
-        <div className={`fixed top-4 right-4 left-4 sm:left-auto ${bgColor} border ${borderColor} text-white px-4 py-3 rounded-lg shadow-lg z-50 transform transition-transform duration-300 animate-in slide-in-from-right`}>
+        <div className={`fixed top-4 right-4 left-4 sm:left-auto   ${bgColor}   border   ${borderColor}   text-arch-ink px-4 py-3 z-50 transform transition-transform duration-300 animate-in slide-in-from-right`}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     {type === 'success' ? (
-                        <svg className="w-5 h-5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-5 h-5 text-arch-ink flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                     ) : (
-                        <svg className="w-5 h-5 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-5 h-5 text-arch-ink flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
                     )}
@@ -33,7 +33,7 @@ const Toast = ({ message, type = 'success', onClose }) => {
                 </div>
                 <button
                     onClick={onClose}
-                    className="ml-2 text-white hover:text-gray-200 transition-colors flex-shrink-0"
+                    className="ml-2 text-arch-ink hover:text-arch-ink-3 transition-colors flex-shrink-0"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -47,8 +47,8 @@ const Toast = ({ message, type = 'success', onClose }) => {
 // Form Components
 const FormInput = ({ id, label, type = 'text', value, onChange, placeholder, required = false, disabled = false }) => (
     <div className="mb-4">
-        <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">
-            {label} {required && <span className="text-red-400">*</span>}
+        <label htmlFor={id} className="block text-sm font-medium text-arch-ink-3 mb-2">
+            {label} {required && <span className="text-arch-ink">*</span>}
         </label>
         <input
             type={type}
@@ -58,15 +58,15 @@ const FormInput = ({ id, label, type = 'text', value, onChange, placeholder, req
             placeholder={placeholder}
             required={required}
             disabled={disabled}
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent disabled:bg-gray-700 disabled:cursor-not-allowed text-base"
+            className="w-full p-3 bg-arch-bg-alt border border-arch-line text-arch-ink focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent disabled:bg-arch-bg-alt disabled:cursor-not-allowed text-base"
         />
     </div>
 );
 
 const FormTextarea = ({ id, label, value, onChange, placeholder, required = false, rows = 4 }) => (
     <div className="mb-4">
-        <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-2">
-            {label} {required && <span className="text-red-400">*</span>}
+        <label htmlFor={id} className="block text-sm font-medium text-arch-ink-3 mb-2">
+            {label} {required && <span className="text-arch-ink">*</span>}
         </label>
         <textarea
             id={id}
@@ -75,7 +75,7 @@ const FormTextarea = ({ id, label, value, onChange, placeholder, required = fals
             placeholder={placeholder}
             required={required}
             rows={rows}
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-base resize-vertical"
+            className="w-full p-3 bg-arch-bg-alt border border-arch-line text-arch-ink focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent text-base resize-vertical"
         />
     </div>
 );
@@ -84,11 +84,11 @@ const SubmitButton = ({ text, loading = false, disabled = false }) => (
     <button
         type="submit"
         disabled={loading || disabled}
-        className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 px-6 rounded-lg font-semibold transition duration-300 disabled:bg-cyan-800 disabled:cursor-not-allowed text-base touch-manipulation active:scale-95"
+        className="w-full bg-arch-ink hover:bg-arch-ink text-arch-bg py-3 px-6 font-semibold transition duration-300 disabled:bg-arch-ink disabled:cursor-not-allowed text-base touch-manipulation active:scale-95 disabled:text-arch-bg hover:text-arch-bg"
     >
         {loading ? (
             <div className="flex items-center justify-center gap-2">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-arch-line"></div>
                 <span>Registering...</span>
             </div>
         ) : (
@@ -163,12 +163,12 @@ const RampwalkForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
     if (isAlreadyRegistered) {
         return (
             <div className="text-center py-6">
-                <div className="text-green-400 text-5xl mb-4">✓</div>
-                <h2 className="text-xl font-semibold mb-3 text-white">Already Registered!</h2>
-                <p className="text-gray-300 mb-4 text-sm">
+                <div className="text-arch-ink text-5xl mb-4">✓</div>
+                <h2 className="text-xl font-semibold mb-3 text-arch-ink">Already Registered!</h2>
+                <p className="text-arch-ink-3 mb-4 text-sm">
                     You have successfully registered for Rampwalk.
                 </p>
-                <p className="text-cyan-400 text-sm">
+                <p className="text-arch-ink text-sm">
                     You can now join the WhatsApp group using the button below.
                 </p>
             </div>
@@ -177,7 +177,7 @@ const RampwalkForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <h2 className="text-xl font-semibold mb-2 text-white">Register for Rampwalk</h2>
+            <h2 className="text-xl font-semibold mb-2 text-arch-ink">Register for Rampwalk</h2>
             
             <FormInput
                 id="name"
@@ -222,12 +222,12 @@ const RampwalkForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
                         onChange={(e) => setHasPartner(e.target.checked)}
                         className="mr-3 w-4 h-4"
                     />
-                    <span className="text-gray-300 text-sm">I have a partner</span>
+                    <span className="text-arch-ink-3 text-sm">I have a partner</span>
                 </label>
             </div>
 
             {hasPartner && (
-                <div className="space-y-4 pl-4 border-l-2 border-cyan-500/30">
+                <div className="space-y-4 pl-4 border-l-2 border-arch-line">
                     <FormInput
                         id="partnerName"
                         label="Partner's Name"
@@ -318,12 +318,12 @@ const RizzShowForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
     if (isAlreadyRegistered) {
         return (
             <div className="text-center py-6">
-                <div className="text-green-400 text-5xl mb-4">✓</div>
-                <h2 className="text-xl font-semibold mb-3 text-white">Already Registered!</h2>
-                <p className="text-gray-300 mb-4 text-sm">
+                <div className="text-arch-ink text-5xl mb-4">✓</div>
+                <h2 className="text-xl font-semibold mb-3 text-arch-ink">Already Registered!</h2>
+                <p className="text-arch-ink-3 mb-4 text-sm">
                     You have successfully registered for Rizz Show.
                 </p>
-                <p className="text-cyan-400 text-sm">
+                <p className="text-arch-ink text-sm">
                     You can now join the WhatsApp group using the button below.
                 </p>
             </div>
@@ -332,7 +332,7 @@ const RizzShowForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <h2 className="text-xl font-semibold mb-2 text-white">Register for Rizz Show</h2>
+            <h2 className="text-xl font-semibold mb-2 text-arch-ink">Register for Rizz Show</h2>
             
             <FormInput
                 id="name"
@@ -453,12 +453,12 @@ const CulturalForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
     if (isAlreadyRegistered) {
         return (
             <div className="text-center py-6">
-                <div className="text-green-400 text-5xl mb-4">✓</div>
-                <h2 className="text-xl font-semibold mb-3 text-white">Already Registered!</h2>
-                <p className="text-gray-300 mb-4 text-sm">
+                <div className="text-arch-ink text-5xl mb-4">✓</div>
+                <h2 className="text-xl font-semibold mb-3 text-arch-ink">Already Registered!</h2>
+                <p className="text-arch-ink-3 mb-4 text-sm">
                     You have successfully registered for Cultural Event.
                 </p>
-                <p className="text-cyan-400 text-sm">
+                <p className="text-arch-ink text-sm">
                     You can now join the WhatsApp group using the button below.
                 </p>
             </div>
@@ -467,7 +467,7 @@ const CulturalForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <h2 className="text-xl font-semibold mb-2 text-white">Register for Cultural Event</h2>
+            <h2 className="text-xl font-semibold mb-2 text-arch-ink">Register for Cultural Event</h2>
             
             <FormInput
                 id="name"
@@ -505,15 +505,15 @@ const CulturalForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
             />
 
             <div className="mb-4">
-                <label htmlFor="performanceType" className="block text-sm font-medium text-gray-300 mb-2">
-                    Performance Type <span className="text-red-400">*</span>
+                <label htmlFor="performanceType" className="block text-sm font-medium text-arch-ink-3 mb-2">
+                    Performance Type <span className="text-arch-ink">*</span>
                 </label>
                 <select
                     id="performanceType"
                     value={performanceType}
                     onChange={(e) => setPerformanceType(e.target.value)}
                     required
-                    className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-base"
+                    className="w-full p-3 bg-arch-bg-alt border border-arch-line text-arch-ink focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent text-base"
                 >
                     <option value="solo">Solo Performance</option>
                     <option value="group">Group Performance</option>
@@ -794,9 +794,9 @@ const EventsRegistration = () => {
 
     if (!user || loadingStatus) {
         return (
-            <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white flex items-center justify-center px-4">
+            <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center px-4">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-arch-line mx-auto mb-4"></div>
                     <p className="text-lg">Loading...</p>
                 </div>
             </div>
@@ -807,7 +807,7 @@ const EventsRegistration = () => {
     const isRegisteredForCurrentEvent = registrationStatus[currentEventSlug];
 
     return (
-        <div className="min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white">
+        <div className="min-h-screen bg-arch-bg text-arch-ink">
             {/* Toast Container */}
             {toast && (
                 <Toast 
@@ -820,13 +820,13 @@ const EventsRegistration = () => {
             <div className="container mx-auto px-4 py-6">
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-cyan-400 text-center sm:text-left">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-arch-ink text-center sm:text-left">
                         Event Registration for ESPERANZA
                     </h1>
                     {isAdmin && (
                         <button 
                             onClick={() => exportToCSV(currentEventSlug)}
-                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition-colors w-full sm:w-auto text-center"
+                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg px-4 py-2 text-sm transition-colors w-full sm:w-auto text-center hover:text-arch-bg"
                         >
                             Export {events[activeTab]?.name} CSV
                         </button>
@@ -834,15 +834,15 @@ const EventsRegistration = () => {
                 </div>
 
                 {/* Tab Navigation - Mobile Friendly */}
-                <div className="flex overflow-x-auto mb-6 border-b border-gray-700 hide-scrollbar">
+                <div className="flex overflow-x-auto mb-6 border-b border-arch-line hide-scrollbar">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex-shrink-0 py-3 px-4 font-medium text-sm sm:text-base transition-colors duration-300 whitespace-nowrap ${
+                            className={`flex-shrink-0 py-3 px-4 font-medium text-sm sm:text-base transition-colors duration-300 whitespace-nowrap   ${
                                 activeTab === tab.id
-                                    ? 'border-b-2 border-cyan-500 text-cyan-400'
-                                    : 'text-gray-400 hover:text-white border-b-2 border-transparent'
+                                    ? 'border-b-2 border-arch-line text-arch-ink'
+                                    : 'text-arch-ink-3 hover:text-arch-ink border-b-2 border-transparent'
                             }`}
                         >
                             {tab.name}
@@ -851,7 +851,7 @@ const EventsRegistration = () => {
                 </div>
 
                 {/* Form Container */}
-                <div className="bg-gray-900 bg-opacity-50 p-4 sm:p-6 rounded-xl shadow-xl border border-cyan-500/30 mb-6">
+                <div className="bg-arch-card bg-opacity-50 p-4 sm:p-6 border border-arch-line mb-6">
                     {activeTab === 'rampwalk' && (
                         <RampwalkForm 
                             onRegistrationSuccess={handleRegistrationSuccess}
@@ -880,7 +880,7 @@ const EventsRegistration = () => {
                     <div className="text-center">
                         <button
                             onClick={() => setShowWhatsappModal(true)}
-                            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 mx-auto w-full sm:w-auto active:scale-95 touch-manipulation"
+                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-semibold py-3 px-6 transition-all flex items-center justify-center gap-2 mx-auto w-full sm:w-auto active:scale-95 touch-manipulation hover:text-arch-bg"
                         >
                             <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.18-1.24-6.17-3.495-8.418"/>
@@ -892,22 +892,22 @@ const EventsRegistration = () => {
 
                 {/* WhatsApp Modal - Mobile Optimized */}
                 {showWhatsappModal && (
-                    <div className="fixed inset-0 bg-black/70 flex items-end sm:items-center justify-center z-50 p-4 sm:p-6">
-                        <div className="bg-gray-900 border border-cyan-500/30 rounded-2xl p-6 w-full max-w-md max-h-[80vh] sm:max-h-[90vh] overflow-y-auto backdrop-blur-lg">
-                            <h3 className="text-xl font-bold text-cyan-400 mb-4">Join WhatsApp Group</h3>
-                            <p className="text-gray-300 mb-2">
+                    <div className="fixed inset-0 bg-arch-card flex items-end sm:items-center justify-center z-50 p-4 sm:p-6">
+                        <div className="bg-arch-card border border-arch-line p-6 w-full max-w-md max-h-[80vh] sm:max-h-[90vh] overflow-y-auto">
+                            <h3 className="text-xl font-bold text-arch-ink mb-4">Join WhatsApp Group</h3>
+                            <p className="text-arch-ink-3 mb-2">
                                 Join the WhatsApp group for:
                             </p>
-                            <p className="text-white font-bold mb-4 text-lg">{events[activeTab]?.name}</p>
+                            <p className="text-arch-ink font-bold mb-4 text-lg">{events[activeTab]?.name}</p>
                             
-                            <p className="text-gray-300 mb-6 text-sm">
+                            <p className="text-arch-ink-3 mb-6 text-sm">
                                 Click below to join the WhatsApp group for updates and discussions:
                             </p>
                             
                             <div className="flex flex-col gap-3">
                                 <button
                                     onClick={openWhatsappLink}
-                                    className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 active:scale-95"
+                                    className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-semibold py-3 px-4 transition-all flex items-center justify-center gap-2 active:scale-95 hover:text-arch-bg"
                                 >
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.18-1.24-6.17-3.495-8.418"/>
@@ -917,7 +917,7 @@ const EventsRegistration = () => {
                                 
                                 <button
                                     onClick={copyWhatsappLink}
-                                    className="bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 active:scale-95"
+                                    className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-semibold py-3 px-4 transition-all flex items-center justify-center gap-2 active:scale-95 hover:text-arch-bg"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -927,7 +927,7 @@ const EventsRegistration = () => {
                                 
                                 <button
                                     onClick={() => setShowWhatsappModal(false)}
-                                    className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-all active:scale-95"
+                                    className="bg-arch-bg-alt hover:bg-arch-bg-alt text-arch-ink font-semibold py-3 px-4 transition-all active:scale-95"
                                 >
                                     Close
                                 </button>

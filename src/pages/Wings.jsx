@@ -457,7 +457,7 @@ const Wings = () => {
                 />
 
                 <h3
-                  className={`hidden md:block md:pl-20 arch-title text-[clamp(1.5rem,3vw,2.75rem)] ${wingFonts[index]}`}
+                  className={`hidden md:block md:pl-20 arch-title text-[clamp(1.5rem,3vw,2.75rem)]   ${wingFonts[index]}`}
                 >
                   {item.title}
                 </h3>
@@ -466,7 +466,7 @@ const Wings = () => {
               {/* Content column */}
               <div className="flex w-full justify-center px-0 md:justify-start md:pl-4 md:pr-4">
                 <div className="w-full max-w-2xl md:max-w-none">
-                  <h3 className={`arch-title mb-6 block text-2xl md:hidden ${wingFonts[index]}`}>
+                  <h3 className={`arch-title mb-6 block text-2xl md:hidden   ${wingFonts[index]}`}>
                     {item.title}
                   </h3>
                   {item.content}

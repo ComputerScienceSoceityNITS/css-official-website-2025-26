@@ -40,18 +40,18 @@ const DiyaIcon = () => {
       {/* Outer Glow */}
       <div
         ref={glowRef}
-        className="absolute -inset-3 bg-yellow-400 rounded-full opacity-40 blur-lg"
+        className="absolute -inset-3 bg-arch-ink rounded-full opacity-40"
       ></div>
 
       {/* Diya Base */}
       <div className="relative z-10">
-        <div className="w-9 h-4 bg-gradient-to-b from-amber-800 to-amber-900 rounded-b-full border-2 border-amber-600">
+        <div className="w-9 h-4 bg-arch-card border border-arch-line">
           {/* Oil */}
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-7 h-2 bg-gradient-to-b from-yellow-500 to-orange-500 rounded-t-full"></div>
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-7 h-2 bg-arch-card"></div>
         </div>
         
         {/* Wick */}
-        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-2 bg-gray-700 rounded-t"></div>
+        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-1 h-2 bg-arch-bg-alt"></div>
       </div>
 
       {/* Flame */}
@@ -67,7 +67,7 @@ const DiyaIcon = () => {
       ></div>
 
       {/* Spark */}
-      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-yellow-300 rounded-full animate-ping"></div>
+      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-arch-ink rounded-full"></div>
     </div>
   );
 };

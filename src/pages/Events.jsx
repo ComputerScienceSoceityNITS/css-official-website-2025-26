@@ -69,7 +69,7 @@ function EventCard({
   return (
     <div className="w-full min-w-0" data-arch="fade">
       <article
-        className={`group relative flex h-full min-h-[420px] flex-col border bg-arch-card transition-colors duration-500 ${
+        className={`group relative flex h-full min-h-[420px] flex-col border bg-arch-card transition-colors duration-500   ${
           isCompleted ? 'border-arch-line opacity-80' : 'border-arch-line hover:border-arch-ink/30'
         }`}
         onMouseEnter={() => setHovered(true)}
@@ -273,36 +273,64 @@ function ProgrammeCycler() {
 function Header({ title, description }) {
   return (
     <header className="relative overflow-hidden pt-28 md:pt-36">
-      <div className="pb-14 md:pb-20">
-        <p className="arch-label mb-8" data-arch="fade">
-          Participate, enjoy &amp; learn
-        </p>
+      <div className="grid grid-cols-1 items-end gap-12 pb-14 md:grid-cols-12 md:gap-8 md:pb-20">
+        <div className="md:col-span-7">
+          <p className="arch-label mb-8" data-arch="fade">
+            Participate, enjoy &amp; learn
+          </p>
 
-        <div data-arch="scrub-x" data-arch-x="-3">
-          <h1 data-arch="chars" className="arch-display text-[clamp(3rem,10vw,9rem)]">
-            <ArchChars text={title} />
-          </h1>
+          <div data-arch="scrub-x" data-arch-x="-3">
+            <h1 data-arch="chars" className="arch-display text-[clamp(3rem,9vw,8rem)]">
+              <ArchChars text={title} />
+            </h1>
+          </div>
+
+          {/* what the programme actually contains */}
+          <div
+            className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-1"
+            data-arch="fade"
+            data-arch-delay="0.25"
+          >
+            <span className="arch-label">This year</span>
+            <div className="arch-title text-[clamp(1.35rem,3.4vw,2.5rem)] text-arch-ink">
+              <ProgrammeCycler />
+            </div>
+          </div>
+
+          <p
+            className="arch-body mt-10 max-w-2xl"
+            data-arch="fade"
+            data-arch-delay="0.35"
+          >
+            {description}
+          </p>
         </div>
 
-        {/* what the programme actually contains */}
-        <div
-          className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-1"
-          data-arch="fade"
-          data-arch-delay="0.25"
-        >
-          <span className="arch-label">This year</span>
-          <div className="arch-title text-[clamp(1.35rem,3.4vw,2.5rem)] text-arch-ink">
-            <ProgrammeCycler />
+        {/* A fanned stack of programme posters — the actual artwork the
+            society publishes, rather than a decorative stock photo. */}
+        <div className="md:col-span-5" data-arch="scrub-x" data-arch-x="3">
+          <div className="relative mx-auto aspect-[4/5] w-full max-w-[420px]">
+            {[
+              { src: '/images/demo3.jpeg', cls: 'left-0 top-6 w-[62%] -rotate-[5deg]', d: '0.1' },
+              { src: '/images/demo5.jpeg', cls: 'right-0 top-0 w-[62%] rotate-[4deg]', d: '0.2' },
+              { src: '/images/demo1.jpeg', cls: 'bottom-0 left-1/2 w-[66%] -translate-x-1/2', d: '0.3' },
+            ].map((poster) => (
+              <figure
+                key={poster.src}
+                data-arch="fade"
+                data-arch-delay={poster.d}
+                className={`absolute overflow-hidden border border-arch-line bg-arch-card   ${poster.cls}`}
+              >
+                <img
+                  src={poster.src}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+              </figure>
+            ))}
           </div>
         </div>
-
-        <p
-          className="arch-body mt-12 max-w-3xl"
-          data-arch="fade"
-          data-arch-delay="0.35"
-        >
-          {description}
-        </p>
       </div>
 
       <div data-arch="fade" data-arch-delay="0.45" className="h-px w-full bg-arch-line" />

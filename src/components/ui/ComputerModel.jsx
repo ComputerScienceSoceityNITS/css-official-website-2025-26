@@ -173,7 +173,7 @@ const ComputerModel = ({ className = '' }) => {
   }, [])
 
   return (
-    <div ref={wrapRef} className={`h-full w-full ${className}`}>
+    <div ref={wrapRef} className={`h-full w-full   ${className}`}>
       <Canvas
         dpr={[1, 1.6]}
         frameloop={active ? 'always' : 'never'}
