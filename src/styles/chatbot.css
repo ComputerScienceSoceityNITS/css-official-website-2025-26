@@ -589,3 +589,59 @@
     font-size: 1rem;
   }
 }
+/* ============================================================
+   ARCH THEME overrides — appended last, wins the cascade.
+   ============================================================ */
+
+:root {
+  --chat-primary-bg: #FFFFFF;
+  --chat-border-color: #E0DED8;
+  --chat-user-msg-bg: #1C1C1C;
+  --chat-bot-msg-bg: #F4F3EF;
+  --chat-text-color: #1C1C1C;
+  --chat-text-muted: #6E6B64;
+}
+
+.chat-launcher {
+  background: #1C1C1C;
+  border-radius: 0;
+  border: 1px solid #1C1C1C;
+  box-shadow: none;
+  width: 56px;
+  height: 56px;
+  transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chat-launcher:hover {
+  transform: none;
+  background: #F4F3EF;
+}
+
+.chat-launcher svg {
+  color: #F4F3EF;
+  width: 24px;
+  height: 24px;
+  transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chat-launcher:hover svg {
+  color: #1C1C1C;
+}
+
+.chat-widget {
+  border-radius: 0;
+  border: 1px solid #E0DED8;
+  background: #FFFFFF;
+  box-shadow: none;
+}
+
+.neon-border,
+.neon-border.neon-glow,
+.neon-border:hover,
+.neon-border-subtle,
+.neon-border-purple,
+.neon-border-purple:hover {
+  border: 1px solid #E0DED8;
+  box-shadow: none;
+}

@@ -1,7 +1,6 @@
 'use client'
 import { useScroll, useTransform, motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
-import { SparklesCore } from '../components/ui/sparkles'
 
 const Wings = () => {
   const ref = useRef(null)
@@ -53,17 +52,6 @@ const Wings = () => {
     "font-bold font-['Goldman']", // Literature Wing
   ]
 
-  // Emojis for each wing
-  const wingImages = [
-    '', // Executive Wing
-    '', // Dev Wing
-    '', // CP Wing
-    '', // ML Wing
-    '', // PR Wing
-    '', // Design Wing
-    '', // Literature Wing
-  ]
-
   // Animation variants for timeline markers
   const markerVariants = {
     hidden: { scale: 0, opacity: 0 },
@@ -78,12 +66,11 @@ const Wings = () => {
       },
     },
     active: {
-      scale: 1.3,
-      boxShadow: '0 0 20px rgba(34, 211, 238, 0.8)',
+      scale: 1.08,
       transition: {
-        duration: 0.3,
-        repeat: Infinity,
-        repeatType: 'reverse',
+        type: 'spring',
+        stiffness: 260,
+        damping: 30,
       },
     },
   }
@@ -92,17 +79,15 @@ const Wings = () => {
   const terminalVariants = {
     hidden: {
       opacity: 0,
-      y: scrollDirection === 'down' ? 50 : -50,
-      rotateX: -15,
+      y: scrollDirection === 'down' ? 40 : -40,
     },
     visible: {
       opacity: 1,
       y: 0,
-      rotateX: 0,
       transition: {
-        duration: 0.8,
-        ease: 'easeOut',
-        staggerChildren: 0.1,
+        duration: 1,
+        ease: [0.16, 1, 0.3, 1],
+        staggerChildren: 0.09,
       },
     },
   }
@@ -124,9 +109,9 @@ const Wings = () => {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.8,
-        ease: 'easeOut',
-        delay: 0.2,
+        duration: 1,
+        ease: [0.16, 1, 0.3, 1],
+        delay: 0.15,
       },
     },
   }
@@ -137,11 +122,8 @@ const Wings = () => {
       title: 'Executive Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 0 ? null : 0)}
           animate={{
@@ -154,29 +136,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute top-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">EXECUTIVE_TERMINAL</span>
+            <span className="arch-label">EXECUTIVE</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ executive --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Focuses on leadership, management, and organizational strategies.
+            Focuses on leadership, management, and organizational strategies.
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The Executive Wing of CSS is considered to be the backbone of the
             entire Computer Science Society. With the goal of making each and
             every event, module, and session organized under the banner of CSS a
@@ -185,21 +157,6 @@ const Wings = () => {
             wings. The wing thus forms the binding force between the various
             sub-wings, thereby making every inch of hard work a grand success.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -207,11 +164,8 @@ const Wings = () => {
       title: 'Dev Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 1 ? null : 1)}
           animate={{
@@ -224,29 +178,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute bottom-2 left-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-1000"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">DEV_TERMINAL</span>
+            <span className="arch-label">DEV</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ dev --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Building practical solutions
+            Building practical solutions
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The Developers-Wing of CSS is one of the most significant parts of
             the society and is responsible for maintaining and upgrading the
             official Website and App of the Society. The wing is targeted to
@@ -257,21 +201,6 @@ const Wings = () => {
             real-world projects and contributing to the proper functioning of
             our society.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -279,11 +208,8 @@ const Wings = () => {
       title: 'CP Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 2 ? null : 2)}
           animate={{
@@ -296,29 +222,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute top-2 left-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-1500"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">CP_TERMINAL</span>
+            <span className="arch-label">CP</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ cp --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Enhancing problem-solving skills
+            Enhancing problem-solving skills
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The CP-Wing is a crucial part of CSS which is responsible for the
             improvement of problem-solving skills, along with the strengthening
             of the core DSA concepts which also serves as a torchbearer for
@@ -327,21 +243,6 @@ const Wings = () => {
             the world to even greater heights, exclusively for the benefit of
             our students.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -349,11 +250,8 @@ const Wings = () => {
       title: 'ML Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 3 ? null : 3)}
           animate={{
@@ -366,29 +264,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute bottom-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">ML_TERMINAL</span>
+            <span className="arch-label">ML</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ ml --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Advancing machine learning techniques
+            Advancing machine learning techniques
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The ML Wing of CSS is mainly responsible for developing a culture of
             machine learning and other aspects of artificial intelligence in our
             college. In order to help budding ML and AI enthusiasts, the wing
@@ -397,21 +285,6 @@ const Wings = () => {
             motivated and enthusiastic to work towards the greater good of the
             CSS society.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -419,11 +292,8 @@ const Wings = () => {
       title: 'PR Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 4 ? null : 4)}
           animate={{
@@ -436,29 +306,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute bottom-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">PR_TERMINAL</span>
+            <span className="arch-label">PR</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ pr --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Advancing public relations strategies
+            Advancing public relations strategies
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The Public Relations Wing of the Computer Science Society, NIT
             Silchar Society is the division responsible for maintaining
             Relations of the Society with External Entities, Organizations, and
@@ -467,21 +327,6 @@ const Wings = () => {
             activities are effectively carried out and hereby make an impression
             on the image of the Society holistically.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -489,11 +334,8 @@ const Wings = () => {
       title: 'Design Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 5 ? null : 5)}
           animate={{
@@ -506,29 +348,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2500 transform -translate-x-1/2 -translate-y-1/2"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">DESIGN_TERMINAL</span>
+            <span className="arch-label">DESIGN</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ design --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Crafting user experiences
+            Crafting user experiences
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The Design Wing of CSS is a community of designers whose goal is to
             provide a good environment for designers to grow their existing
             talent and sharpen it by working on real-world projects for our
@@ -538,21 +370,6 @@ const Wings = () => {
             Effects, Figma, etc. The wing believes in the fact that everyone can
             be a designer with just a little bit of practice and dedication.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -560,11 +377,8 @@ const Wings = () => {
       title: 'Literature Wing',
       content: (
         <motion.div
-          className="terminal-theme p-6 rounded-lg border border-cyan-500/30 bg-black/80 text-cyan-300 font-mono backdrop-blur-sm relative overflow-hidden cursor-pointer"
-          whileHover={{
-            scale: 1.02,
-            boxShadow: '0 0 20px rgba(34, 211, 238, 0.5)',
-          }}
+          className="relative cursor-pointer overflow-hidden border border-arch-line bg-arch-card p-8 transition-colors duration-500 hover:border-arch-ink/25 md:p-12"
+          whileHover={{ y: -4 }}
           whileTap={{ scale: 0.99 }}
           onClick={() => setActiveTerminal(activeTerminal === 6 ? null : 6)}
           animate={{
@@ -577,29 +391,19 @@ const Wings = () => {
           viewport={{ once: true, margin: '-100px' }}
           custom={scrollDirection}
         >
-          <div className="absolute inset-0 bg-circuit-pattern opacity-10"></div>
-          <div className="absolute bottom-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-2000"></div>
           <motion.div
-            className="flex mb-4 items-center"
+            className="mb-8 flex items-center justify-between border-b border-arch-line pb-4"
             variants={contentVariants}
           >
-            <div className="flex mr-3">
-              <div className="w-3 h-3 bg-red-500 rounded-full mr-2 shadow-lg shadow-red-500/40"></div>
-              <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2 shadow-lg shadow-yellow-500/40"></div>
-              <div className="w-3 h-3 bg-green-500 rounded-full shadow-lg shadow-green-500/40"></div>
-            </div>
-            <span className="text-cyan-400 text-xs">LITERATURE_TERMINAL</span>
+            <span className="arch-label">LITERATURE</span>
           </motion.div>
-          <motion.p className="mb-2 text-green-400" variants={contentVariants}>
-            $ literature --about
-          </motion.p>
           <motion.p
-            className="text-cyan-200/80 mb-2"
+            className="mb-6 text-lg leading-relaxed tracking-[-0.015em] text-arch-ink md:text-xl"
             variants={contentVariants}
           >
-            // Exploring the world of literature
+            Exploring the world of literature
           </motion.p>
-          <motion.p className="text-white" variants={contentVariants}>
+          <motion.p className="arch-body" variants={contentVariants}>
             The Literary wing of CSS takes care of all the literary work
             published and managed by the Computer Science Society of NIT
             Silchar. From social media posts, technical and website content for
@@ -608,21 +412,6 @@ const Wings = () => {
             BITSCRIBE, the annual magazine of the Computer Science Society, is
             also compiled and published by the literary wing.
           </motion.p>
-          <motion.div
-            className="flex items-center mt-4"
-            variants={contentVariants}
-          >
-            <span className="text-green-400 mr-2">$~</span>
-            <motion.div
-              className="w-2 h-4 bg-green-400"
-              animate={{ opacity: [1, 0, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            ></motion.div>
-          </motion.div>
-          <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-cyan-400"></div>
-          <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-cyan-400"></div>
-          <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-cyan-400"></div>
-          <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-cyan-400"></div>
         </motion.div>
       ),
     },
@@ -630,131 +419,77 @@ const Wings = () => {
 
   return (
     <div
-      className="w-full min-h-screen bg-[linear-gradient(to_right,#000000_55%,#021547_100%)] text-white font-sans md:px-10 relative overflow-hidden"
+      className="relative w-full min-h-screen bg-arch-bg font-sans text-arch-ink"
       ref={containerRef}
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-
-        <div className="absolute inset-0 bg-grid-pattern bg-[length:50px_50px] opacity-10"></div>
-        <div className="absolute w-72 h-72 bg-cyan-600/10 rounded-full blur-xl animate-[pulse_4s_ease-in-out_infinite] top-10 left-10"></div>
-        <div className="absolute w-96 h-96 bg-purple-600/10 rounded-full blur-xl animate-[pulse_5s_ease-in-out_infinite_1s] bottom-20 right-10"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto py-12 px-4 md:px-8 lg:px-10 z-10 mt-15">
-        {/* Enhanced Header Section */}
-        <motion.div
-          className="text-center mb-8 relative"
+      <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10">
+        {/* Masthead */}
+        <motion.header
+          className="border-b border-arch-line py-20 md:py-32"
           initial="hidden"
           animate="visible"
           variants={headerVariants}
         >
-          <div className="relative inline-block">
-            <h1
-              className="text-6xl md:text-8xl font-extrabold mb-3 text-white tracking-tight drop-shadow-[0_0_20px_rgba(34,211,238,0.5)]"
-              style={{ fontFamily: 'Goldman, sans-serif' }}
-            >
-              WINGS
-            </h1>
-            <div className="absolute -inset-12 -z-10">
-              <SparklesCore
-                background="transparent"
-                minSize={0.5}
-                maxSize={1.2}
-                particleDensity={120}
-                className="w-full h-full"
-                particleColor="#38BDF8"
-              />
-            </div>
-          </div>
-          <p className="text-cyan-300/90 text-base md:text-lg max-w-md mx-auto font-mono leading-relaxed">
-            Discover the specialized divisions powering our Computer Science
-            Society
+          <p className="arch-label mb-10">Divisions — Index</p>
+          <h1 className="arch-display text-[clamp(3rem,12vw,11rem)]">Wings</h1>
+          <p className="arch-body mt-10 max-w-xl">
+            The specialised divisions powering the Computer Science Society —
+            each with its own remit, cadence and people.
           </p>
-          <div className="relative flex justify-center items-center mt-6">
-            <div className="absolute inset-x-10 bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-[3px] w-5/6 blur-sm" />
-            <div className="absolute inset-x-10 bg-gradient-to-r from-transparent via-cyan-500 to-transparent h-px w-5/6" />
-            <div className="absolute inset-x-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent h-[6px] w-2/5 blur-sm" />
-            <div className="absolute inset-x-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px w-2/5" />
-          </div>
-        </motion.div>
-      </div>
+        </motion.header>
 
-      <div ref={ref} className="relative max-w-7xl mx-auto pb-20 z-10">
-        {wingsData.map((item, index) => (
-          <div
-            key={index}
-            className="flex justify-start pt-10 md:pt-40 md:gap-10"
-          >
-            <div className="hidden md:flex sticky flex-col md:flex-row z-40 items-center top-40 self-start max-w-xs lg:max-w-sm md:w-full">
-              <motion.div
-                className="h-10 absolute left-3 md:left-3 w-10 rounded-full bg-black flex items-center justify-center border border-cyan-500/50"
-                variants={markerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-100px' }}
-                animate={activeTerminal === index ? 'active' : ''}
-              >
+        {/* Timeline */}
+        <div ref={ref} className="relative pb-24">
+          {wingsData.map((item, index) => (
+            <div
+              key={index}
+              className="flex justify-start border-b border-arch-line py-16 md:gap-10 md:py-28"
+            >
+              {/* Sticky index column */}
+              <div className="sticky top-32 z-40 hidden max-w-xs flex-col self-start md:flex md:w-full md:max-w-sm md:flex-row">
                 <motion.div
-                  className="h-8 w-8 rounded-full bg-cyan-900/30 border border-cyan-500/30 flex items-center justify-center shadow-lg shadow-cyan-400/20"
-                  whileHover={{ scale: 1.2 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                >
-                  <span className="text-lg">{wingImages[index]}</span>
-                </motion.div>
-              </motion.div>
-              <h3
-                className={`hidden md:block text-xl md:pl-20 md:text-5xl text-cyan-300/90 relative ${wingFonts[index]}`}
-              >
-                <div className="absolute -inset-6 -z-10">
-                  <SparklesCore
-                    background="transparent"
-                    minSize={0.2}
-                    maxSize={0.6}
-                    particleDensity={50}
-                    className="w-full h-full"
-                    particleColor="#38BDF8"
-                  />
-                </div>
-                {item.title}
-              </h3>
-            </div>
+                  className="absolute left-3 top-3 h-2 w-2 bg-arch-ink"
+                  variants={markerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-100px' }}
+                  animate={activeTerminal === index ? 'active' : ''}
+                />
 
-            <div className="flex justify-center md:justify-start px-4 md:pl-4 md:pr-4 w-full">
-              <div className="w-full max-w-md md:max-w-none">
                 <h3
-                  className={`md:hidden block text-2xl mb-4 text-center md:text-left text-cyan-300/90 relative ${wingFonts[index]}`}
+                  className={`hidden md:block md:pl-20 arch-title text-[clamp(1.5rem,3vw,2.75rem)] ${wingFonts[index]}`}
                 >
-                  <div className="absolute -inset-4 -z-10">
-                    <SparklesCore
-                      background="transparent"
-                      minSize={0.2}
-                      maxSize={0.6}
-                      particleDensity={30}
-                      className="w-full h-full"
-                      particleColor="#38BDF8"
-                    />
-                  </div>
-                  {item.title} {wingImages[index]}
+                  {item.title}
                 </h3>
-                {item.content}
+              </div>
+
+              {/* Content column */}
+              <div className="flex w-full justify-center px-0 md:justify-start md:pl-4 md:pr-4">
+                <div className="w-full max-w-2xl md:max-w-none">
+                  <h3 className={`arch-title mb-6 block text-2xl md:hidden ${wingFonts[index]}`}>
+                    {item.title}
+                  </h3>
+                  {item.content}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        <div
-          className="hidden md:block absolute md:left-8 left-8 top-0 overflow-hidden w-[2px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-cyan-700 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
-          style={{
-            height: height + 'px',
-          }}
-        >
-          <motion.div
+          ))}
+
+          {/* Progress rail */}
+          <div
+            className="absolute left-6 top-0 hidden w-px overflow-hidden bg-arch-line md:block"
             style={{
-              height: heightTransform,
-              opacity: opacityTransform,
+              height: height + 'px',
             }}
-            className="absolute inset-x-0 top-0 w-[2px] bg-gradient-to-t from-cyan-500 via-blue-500 to-transparent from-[0%] via-[10%] rounded-full"
-          />
+          >
+            <motion.div
+              style={{
+                height: heightTransform,
+                opacity: opacityTransform,
+              }}
+              className="absolute inset-x-0 top-0 w-px bg-arch-ink"
+            />
+          </div>
         </div>
       </div>
     </div>

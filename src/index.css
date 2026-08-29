@@ -490,3 +490,491 @@
 .keycap.h-10:active::before {
   bottom: 6px !important;
 }
+/* ============================================================
+   ARCH THEME — Minimalist Architecture Studio
+   Appended last so these tokens win the cascade.
+   ============================================================ */
+
+@theme {
+  --color-arch-bg: #F4F3EF;
+  --color-arch-bg-alt: #EDEBE5;
+  --color-arch-ink: #1C1C1C;
+  --color-arch-ink-soft: #3A3A38;
+  --color-arch-card: #FFFFFF;
+  --color-arch-line: #E0DED8;
+  --color-arch-muted: #6E6B64;
+  --color-arch-faint: #9A968D;
+}
+
+:root {
+  --arch-bg: #F4F3EF;
+  --arch-bg-alt: #EDEBE5;
+  --arch-ink: #1C1C1C;
+  --arch-card: #FFFFFF;
+  --arch-line: #E0DED8;
+  --arch-muted: #6E6B64;
+  --arch-faint: #9A968D;
+
+  /* remap shadcn tokens onto ARCH */
+  --background: #F4F3EF;
+  --foreground: #1C1C1C;
+  --card: #FFFFFF;
+  --card-foreground: #1C1C1C;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1C1C;
+  --primary: #1C1C1C;
+  --primary-foreground: #F4F3EF;
+  --secondary: #EDEBE5;
+  --secondary-foreground: #1C1C1C;
+  --muted: #EDEBE5;
+  --muted-foreground: #6E6B64;
+  --accent: #EDEBE5;
+  --accent-foreground: #1C1C1C;
+  --destructive: #8C2F1F;
+  --border: #E0DED8;
+  --input: #E0DED8;
+  --ring: #1C1C1C;
+  --radius: 0rem;
+}
+
+html {
+  background: var(--arch-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--arch-bg);
+  color: var(--arch-ink);
+  font-family: 'Geist Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv01";
+}
+
+::selection {
+  background: var(--arch-ink);
+  color: var(--arch-bg);
+}
+
+/* --- Typography ------------------------------------------- */
+
+.arch-display {
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.arch-title {
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.arch-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--arch-muted);
+}
+
+.arch-body {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: var(--arch-muted);
+}
+
+.arch-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* --- Blueprint grid --------------------------------------- */
+
+.arch-hair {
+  border-color: var(--arch-line);
+}
+
+.arch-rule {
+  height: 1px;
+  width: 100%;
+  background: var(--arch-line);
+}
+
+/* A rigid grid whose children are separated by hairlines,
+   with no doubled-up outer border. */
+.arch-grid {
+  border-top: 1px solid var(--arch-line);
+  border-left: 1px solid var(--arch-line);
+}
+
+.arch-grid > * {
+  border-right: 1px solid var(--arch-line);
+  border-bottom: 1px solid var(--arch-line);
+}
+
+.arch-frame {
+  border: 1px solid var(--arch-line);
+  background: var(--arch-card);
+}
+
+/* Faint blueprint graph paper, used sparingly behind hero areas */
+.arch-blueprint {
+  background-image:
+    linear-gradient(to right, var(--arch-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--arch-line) 1px, transparent 1px);
+  background-size: 96px 96px;
+  opacity: 0.55;
+}
+
+/* --- Buttons ---------------------------------------------- */
+
+.arch-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.75rem;
+  border: 1px solid var(--arch-ink);
+  background: transparent;
+  color: var(--arch-ink);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.arch-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--arch-ink);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.arch-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.arch-btn:hover:not(:disabled) {
+  color: var(--arch-bg);
+}
+
+.arch-btn:hover:not(:disabled)::after {
+  transform: scaleY(1);
+}
+
+.arch-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.arch-btn-ghost {
+  border-color: var(--arch-line);
+}
+
+.arch-btn-solid {
+  background: var(--arch-ink);
+  color: var(--arch-bg);
+}
+
+.arch-btn-solid::after {
+  background: var(--arch-bg);
+}
+
+.arch-btn-solid:hover:not(:disabled) {
+  color: var(--arch-ink);
+}
+
+/* Underline link that draws left-to-right */
+.arch-link {
+  position: relative;
+  display: inline-block;
+  color: var(--arch-ink);
+}
+
+.arch-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.arch-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* --- Reveal primitives (GSAP drives these) ----------------- */
+
+.arch-mask {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  will-change: clip-path;
+}
+
+.arch-fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: transform, opacity;
+}
+
+.arch-line-inner {
+  display: block;
+  will-change: transform;
+}
+
+.arch-split-line {
+  display: block;
+  overflow: hidden;
+}
+
+/* Inputs */
+.arch-input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--arch-line);
+  border-radius: 0;
+  padding: 0.875rem 0;
+  color: var(--arch-ink);
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.arch-input::placeholder {
+  color: var(--arch-faint);
+}
+
+.arch-input:focus {
+  border-bottom-color: var(--arch-ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--arch-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--arch-line);
+  border: 3px solid var(--arch-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--arch-faint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-mask { clip-path: none !important; }
+  .arch-fade-up { opacity: 1 !important; transform: none !important; }
+}
+
+/* ============================================================
+   ARCH — readability pass
+   Larger, darker body copy; labels with real contrast.
+   ============================================================ */
+
+:root {
+  --arch-ink-2: #33312C;   /* body copy — 11.5:1 on beige */
+  --arch-ink-3: #55524A;   /* secondary — 7.1:1 on beige */
+}
+
+.arch-body {
+  font-size: 1rem;
+  line-height: 1.72;
+  letter-spacing: -0.005em;
+  color: var(--arch-ink-2);
+}
+
+.arch-lead {
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  line-height: 1.5;
+  letter-spacing: -0.018em;
+  color: var(--arch-ink);
+  text-wrap: pretty;
+}
+
+.arch-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--arch-ink-3);
+}
+
+.arch-nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--arch-ink-3);
+  transition: color 0.3s ease;
+}
+
+.arch-nav-link:hover,
+.arch-nav-link[data-active='true'] {
+  color: var(--arch-ink);
+}
+
+/* Legible over the liquid background */
+.arch-on-liquid {
+  text-shadow: 0 1px 24px rgba(244, 243, 239, 0.9);
+}
+
+.arch-scrim {
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 243, 239, 0.92) 0%,
+    rgba(244, 243, 239, 0.55) 45%,
+    rgba(244, 243, 239, 0.88) 100%
+  );
+}
+
+/* Scroll progress rail */
+.arch-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--arch-ink);
+  z-index: 210;
+  pointer-events: none;
+}
+
+/* Register the readability inks as Tailwind color tokens */
+@theme {
+  --color-arch-ink-2: #33312C;
+  --color-arch-ink-3: #55524A;
+}
+
+/* ============================================================
+   ARCH — 3D infinite carousel (partners)
+   ============================================================ */
+
+.arch-carousel {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 14%,
+    #000 86%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 14%,
+    #000 86%,
+    transparent 100%
+  );
+}
+
+.arch-carousel-track {
+  transform-style: preserve-3d;
+}
+
+.arch-carousel [data-sponsor-card] {
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-carousel {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow-x: auto;
+  }
+}
+
+/* ============================================================
+   ARCH — per-character masked type
+   ============================================================ */
+
+.arch-chars {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.arch-char {
+  display: inline-block;
+  overflow: hidden;
+  /* room for descenders and tight line-heights */
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+.arch-char-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+.arch-char-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* Vertical word cycler (Events hero) */
+.arch-cycle {
+  display: block;
+  overflow: hidden;
+  height: 1.16em;
+}
+
+.arch-cycle-track {
+  display: block;
+  will-change: transform;
+}
+
+.arch-cycle-item {
+  display: block;
+  height: 1.16em;
+  line-height: 1.16em;
+  white-space: nowrap;
+}
+
+/* Loader cell grid */
+.arch-cells {
+  display: grid;
+  position: absolute;
+  inset: 0;
+}
+
+.arch-cell {
+  background: var(--arch-bg);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-char-inner,
+  .arch-cycle-track {
+    transform: none !important;
+  }
+}

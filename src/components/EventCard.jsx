@@ -17,29 +17,41 @@ const EventCard = ({ event, onRegister, isRegistered, isPast = false }) => {
   });
 
   return (
-    <div className={`bg-gray-900/50 rounded-lg overflow-hidden border border-cyan-500/20 shadow-lg ${isPast ? 'opacity-60' : 'hover:shadow-cyan-400/20 transition-shadow duration-300'}`}>
-      <img src={event.image} alt={event.name} className="w-full h-48 object-cover" />
-      <div className="p-6">
-        <h3 className="text-2xl font-bold mb-2 text-white">{event.name}</h3>
-        <p className="text-sm text-cyan-400 mb-3 font-mono">{formattedDate}</p>
-        <p className="text-gray-400 mb-4">{event.description}</p>
-        
+    <div
+      data-arch="fade"
+      className={`group flex h-full flex-col border border-arch-line bg-arch-card transition-colors duration-500 ${isPast ? 'opacity-55' : 'hover:bg-arch-bg-alt'}`}
+    >
+      <div className="overflow-hidden border-b border-arch-line" data-arch="mask">
+        <img
+          src={event.image}
+          alt={event.name}
+          className="h-52 w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col p-8">
+        <p className="arch-label">{formattedDate}</p>
+        <h3 className="arch-title mt-4 text-2xl">{event.name}</h3>
+        <p className="arch-body mt-4 grow">{event.description}</p>
+
         {showWhatsapp || (isRegistered && !isPast) ? (
-            <a href={event.whatsappLink} target="_blank" rel="noopener noreferrer" className="mt-4 w-full flex items-center justify-center gap-2 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300">
-              <FaWhatsapp /> Join WhatsApp
-            </a>
+          <a
+            href={event.whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="arch-btn mt-8 w-full"
+          >
+            <FaWhatsapp />
+            <span>Join WhatsApp</span>
+          </a>
         ) : (
-            <button 
-              className={`mt-4 w-full py-2 px-4 rounded-lg font-bold transition-colors duration-300 ${
-                isPast || isRegistered 
-                  ? 'bg-gray-600 cursor-not-allowed' 
-                  : 'bg-cyan-600 hover:bg-cyan-700'
-              }`}
-              onClick={handleRegistrationClick}
-              disabled={isPast || isRegistered}
-            >
-              {isPast ? 'Event Over' : isRegistered ? 'Registered' : 'Register'}
-            </button>
+          <button
+            className="arch-btn mt-8 w-full"
+            onClick={handleRegistrationClick}
+            disabled={isPast || isRegistered}
+          >
+            <span>{isPast ? 'Event Over' : isRegistered ? 'Registered' : 'Register'}</span>
+          </button>
         )}
       </div>
     </div>
