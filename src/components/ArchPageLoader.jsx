@@ -34,6 +34,11 @@ const ArchPageLoader = ({
   const stepRef = useRef(null)
   const progressRef = useRef({ v: 0 })
   const doneRef = useRef(false)
+  // Same reasoning as ArchIntro: keep the inline-arrow callback out of the
+  // exit effect's deps, or a parent re-render kills the timeline mid-flight
+  // and the doneRef guard stops it ever restarting.
+  const onDoneRef = useRef(onDone)
+  onDoneRef.current = onDone
 
   const [stepIndex, setStepIndex] = useState(0)
 
@@ -104,11 +109,11 @@ const ArchPageLoader = ({
     doneRef.current = true
 
     if (reduced) {
-      onDone?.()
-      return
+      onDoneRef.current?.()
+      return undefined
     }
 
-    const tl = gsap.timeline({ onComplete: () => onDone?.() })
+    const tl = gsap.timeline({ onComplete: () => onDoneRef.current?.() })
 
     tl.to(progressRef.current, {
       v: 100,
@@ -134,8 +139,18 @@ const ArchPageLoader = ({
         '-=0.1'
       )
 
-    return () => tl.kill()
-  }, [ready, reduced, onDone])
+    const failsafe = setTimeout(() => onDoneRef.current?.(), 3500)
+
+    return () => {
+      clearTimeout(failsafe)
+      tl.kill()
+    }
+    // onDone is intentionally NOT a dependency — it is read through
+    // onDoneRef. Adding it back reintroduces the freeze: the parent
+    // passes an inline arrow, so every re-render would re-run this
+    // effect, its cleanup would kill the exit timeline, and the
+    // doneRef guard would stop a replacement ever starting.
+  }, [ready, reduced])
 
   return (
     <div ref={rootRef} className="fixed inset-0 z-[150] overflow-hidden">

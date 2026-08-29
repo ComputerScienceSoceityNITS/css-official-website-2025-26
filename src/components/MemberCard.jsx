@@ -8,10 +8,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { archSpring } from '../hooks/useArchAnim'
 import '../styles/memberAnimations.css' // Make sure you have this file
 
+const initialsOf = (name = '') =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+
 const MemberCard = ({ member, flipped, onFlip, index }) => {
   // Contacts follow the pointer on desktop; the click handler stays for touch.
   const [hovered, setHovered] = useState(false)
+  // Some roster entries ship without a photo, and a URL can 404 — either way
+  // fall back to initials rather than a broken-image icon.
+  const [imgFailed, setImgFailed] = useState(false)
   const showContacts = hovered || flipped
+  const showPhoto = Boolean(member.photo) && !imgFailed
 
   const socials = [
     { href: member.social?.instagram, Icon: FaInstagram, label: 'Instagram' },
@@ -30,14 +43,26 @@ const MemberCard = ({ member, flipped, onFlip, index }) => {
     >
       {/* Portrait */}
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-arch-bg-alt">
-        <motion.img
-          src={member.photo}
-          alt={member.name}
-          loading="lazy"
-          className="h-full w-full object-cover object-center"
-          animate={{ scale: showContacts ? 1.04 : 1 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        />
+        {showPhoto ? (
+          <motion.img
+            src={member.photo}
+            alt={member.name}
+            loading="lazy"
+            onError={() => setImgFailed(true)}
+            className="h-full w-full object-cover object-center"
+            animate={{ scale: showContacts ? 1.04 : 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="flex h-full w-full items-center justify-center bg-arch-bg-alt"
+          >
+            <span className="arch-title text-[clamp(2rem,5vw,3rem)] text-arch-faint">
+              {initialsOf(member.name)}
+            </span>
+          </div>
+        )}
 
         {/* Contacts rise on hover */}
         <AnimatePresence>

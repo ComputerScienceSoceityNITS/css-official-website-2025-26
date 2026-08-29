@@ -27,18 +27,27 @@ const ArchIntro = ({ progress = 0, ready = false, onDone }) => {
   const barRef = useRef(null)
   const doneRef = useRef(false)
 
+  // The parent passes an inline arrow, so `onDone` has a new identity every
+  // render. Holding it in a ref keeps it out of the effect deps below — with
+  // it in there, any parent re-render during the curtain animation re-ran the
+  // effect, whose cleanup killed the timeline, while the doneRef guard made
+  // the re-run bail out. The curtains froze and onDone never fired, leaving
+  // the overlay up and body scroll locked. That was the intermittent freeze.
+  const onDoneRef = useRef(onDone)
+  onDoneRef.current = onDone
+
   const [typed, setTyped] = useState(false)
+
+  const reduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   /* ---- draw + type ------------------------------------------------ */
   useLayoutEffect(() => {
-    const reduce =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    if (reduce) {
+    if (reduced) {
       if (typeRef.current) typeRef.current.textContent = TYPED_TEXT
       setTyped(true)
-      return
+      return undefined
     }
 
     const ctx = gsap.context(() => {
@@ -100,8 +109,15 @@ const ArchIntro = ({ progress = 0, ready = false, onDone }) => {
       })
     }, rootRef)
 
-    return () => ctx.revert()
-  }, [])
+    // If rAF is throttled (background tab) the timeline can stall and its
+    // onComplete never fires, so the sequence would wait forever. Move on.
+    const typedFailsafe = setTimeout(() => setTyped(true), 6000)
+
+    return () => {
+      clearTimeout(typedFailsafe)
+      ctx.revert()
+    }
+  }, [reduced])
 
   /* ---- progress rail --------------------------------------------- */
   useEffect(() => {
@@ -150,8 +166,20 @@ const ArchIntro = ({ progress = 0, ready = false, onDone }) => {
       )
       .to(seamRef.current, { opacity: 0, duration: 0.3 }, '-=1.1')
 
-    return () => tl.kill()
-  }, [typed, ready, onDone])
+    // Last resort: the page must never stay locked behind a stalled tween.
+    const failsafe = setTimeout(() => onDoneRef.current?.(), 4000)
+
+    return () => {
+      clearTimeout(failsafe)
+      tl.kill()
+    }
+    // onDone is intentionally NOT a dependency — it is read through
+    // onDoneRef. Adding it back reintroduces the freeze: the parent
+    // passes an inline arrow, so every re-render would re-run this
+    // effect, its cleanup would kill the exit timeline, and the
+    // doneRef guard would stop a replacement ever starting.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typed, ready, reduced])
 
   return (
     <div ref={rootRef} className="fixed inset-0 z-[9999] overflow-hidden">

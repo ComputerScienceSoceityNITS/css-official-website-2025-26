@@ -978,3 +978,59 @@ body {
     transform: none !important;
   }
 }
+
+/* ============================================================
+   ARCH — gallery grid performance
+   ============================================================ */
+
+/* Skip layout/paint for tiles that are off screen. The explicit
+   contain-intrinsic-size keeps the scrollbar stable while they are skipped. */
+.arch-tile {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+/* ============================================================
+   ARCH — footer wordmark
+   ============================================================ */
+
+/* A large "CSS" closing the page, extruded by stacking offset copies of the
+   glyphs behind the face. Pure CSS: no fourth WebGL context, and nothing to
+   pay for while it sits on screen.
+
+   The container must size to the type — an earlier fixed-height window
+   clipped the glyphs at every breakpoint. */
+.arch-ridge {
+  position: relative;
+  display: block;
+  line-height: 0.84;
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  user-select: none;
+  /* room for the extrusion, which falls down and to the right */
+  padding-bottom: 0.06em;
+  padding-right: 0.012em;
+}
+
+.arch-ridge__layer {
+  position: absolute;
+  inset: 0;
+  color: var(--arch-line);
+}
+
+.arch-ridge__face {
+  position: relative;
+  display: block;
+  color: var(--arch-ink);
+}
+
+.arch-ridge-window {
+  /* clip only sideways bleed; never the glyph height */
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-ridge {
+    transform: none !important;
+  }
+}

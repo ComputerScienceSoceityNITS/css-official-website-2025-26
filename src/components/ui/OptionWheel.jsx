@@ -35,6 +35,11 @@ const OptionWheel = ({
   inset = 80,
   loop = false,
   draggable = true,
+  // LOCAL ADDITION (not vendor): the wheel listener calls preventDefault, so
+  // with the pointer over it the page cannot scroll — it changes selection
+  // instead. Set false to leave page scrolling alone; click, drag and arrow
+  // keys still select.
+  scrollToSelect = true,
   soundUrl = '',
   soundVolume = 0.5,
   className = ''
@@ -72,6 +77,7 @@ const OptionWheel = ({
     loop,
     smoothing,
     draggable,
+    scrollToSelect,
     soundUrl,
     soundVolume
   };
@@ -174,6 +180,7 @@ const OptionWheel = ({
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
+    if (!scrollToSelect) return;
     const onWheel = e => {
       e.preventDefault();
       const cfg = cfgRef.current;
@@ -190,7 +197,7 @@ const OptionWheel = ({
       el.removeEventListener('wheel', onWheel);
       if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
     };
-  }, [applyTarget]);
+  }, [applyTarget, scrollToSelect]);
 
   const handlePointerDown = useCallback(e => {
     if (!cfgRef.current.draggable) return;
