@@ -1,123 +1,91 @@
+import galleryData from '../jsonData/gallery.json'
+import { cdnImage, IMG } from '../utils/cdnImage'
+
 /**
- * Event-wise photo gallery.
+ * Event photo gallery, sourced from src/jsonData/gallery.json.
  *
- * PLACEHOLDER IMAGERY — these are the society's existing event posters and
- * demo files, not photographs from the events. The repository does not ship
- * any event photography. Replace each `photos` array with real shots (ten per
- * event reads best in the grid); nothing else needs to change.
+ * The file's `images` array is heterogeneous:
+ *   - most events:  [ "https://…", … ]
+ *   - CSS Olympics: [ { game: "futsal", images: [ "https://…", … ] }, … ]
+ *
+ * Both are normalised into `groups` — a list of { label, photos } — so a page
+ * can render sub-headings where they exist and a single grid where they don't.
+ * `photos` is the flattened list for that event.
  */
 
-export const GALLERY_EVENTS = [
-  {
-    slug: 'abacus',
-    name: 'Abacus',
-    blurb: 'The flagship annual technical festival.',
-    photos: [
-      '/images/demo1.jpeg',
-      '/images/demo2.jpeg',
-      '/images/demo3.jpeg',
-      '/images/demo4.jpeg',
-      '/images/demo5.jpeg',
-      'https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757500866/Screenshot_2025-09-10_161234_vx2ood.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757500751/Screenshot_2025-09-10_161038_eh5yh5.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499020/Screenshot_2025-09-10_154152_ypt8b8.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png',
-    ],
-  },
-  {
-    slug: 'esperanza',
-    name: 'Esperanza',
-    blurb: 'The cultural celebration of the society.',
-    photos: [
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501445/Screenshot_2025-09-10_162215_w81bsa.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/v1757501771/Screenshot_2025-09-10_162735_jjocgt.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498092/Screenshot_2025-09-10_152620_zjn6hp.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497432/Screenshot_2025-09-10_151518_wda6tn.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757496948/Esperanza_kagipt.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497660/Screenshot_2025-09-10_151911_suipld.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497873/Screenshot_2025-09-10_152231_ytkhgh.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757513693/Screenshot_2025-09-10_194534_ggzxbl.png',
-      'https://res.cloudinary.com/dp4sknsba/image/upload/v1760263115/farewell_dlwgfr.png',
-    ],
-  },
-  {
-    slug: 'olympics',
-    name: 'CSS Olympics',
-    blurb: 'Inter-year sporting fixtures and team events.',
-    photos: [
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498715/Screenshot_2025-09-10_153618_jjkdfa.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497531/Screenshot_2025-09-10_151702_wk1qpm.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498808/Screenshot_2025-09-10_153820_mfzwpl.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499143/Screenshot_2025-09-10_154354_r3r1nq.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499342/Screenshot_2025-09-10_154712_wqerzn.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499598/istockphoto-615714450-612x612_jp54vq.jpg',
-      '/images/demo1.jpeg',
-      '/images/demo2.jpeg',
-      '/images/demo3.jpeg',
-      '/images/demo4.jpeg',
-    ],
-  },
-  {
-    slug: 'css-go',
-    name: 'CSS GO',
-    blurb: 'The campus-wide treasure hunt.',
-    photos: [
-      '/images/demo5.jpeg',
-      'https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757500866/Screenshot_2025-09-10_161234_vx2ood.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757500751/Screenshot_2025-09-10_161038_eh5yh5.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499020/Screenshot_2025-09-10_154152_ypt8b8.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501229/Screenshot_2025-09-10_161836_ma94ly.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501445/Screenshot_2025-09-10_162215_w81bsa.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757501619/Screenshot_2025-09-10_162429_wexhhb.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/v1757501771/Screenshot_2025-09-10_162735_jjocgt.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498092/Screenshot_2025-09-10_152620_zjn6hp.png',
-    ],
-  },
-  {
-    slug: 'orientation',
-    name: 'Orientation',
-    blurb: 'Welcoming the incoming batch.',
-    photos: [
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497432/Screenshot_2025-09-10_151518_wda6tn.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757496948/Esperanza_kagipt.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497660/Screenshot_2025-09-10_151911_suipld.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497873/Screenshot_2025-09-10_152231_ytkhgh.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757513693/Screenshot_2025-09-10_194534_ggzxbl.png',
-      'https://res.cloudinary.com/dp4sknsba/image/upload/v1760263115/farewell_dlwgfr.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498715/Screenshot_2025-09-10_153618_jjkdfa.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757497531/Screenshot_2025-09-10_151702_wk1qpm.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757498808/Screenshot_2025-09-10_153820_mfzwpl.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499143/Screenshot_2025-09-10_154354_r3r1nq.png',
-    ],
-  },
-  {
-    slug: 'farewell',
-    name: 'Farewell',
-    blurb: 'Sending off the graduating year.',
-    photos: [
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499342/Screenshot_2025-09-10_154712_wqerzn.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757499598/istockphoto-615714450-612x612_jp54vq.jpg',
-      '/images/demo1.jpeg',
-      '/images/demo2.jpeg',
-      '/images/demo3.jpeg',
-      '/images/demo4.jpeg',
-      '/images/demo5.jpeg',
-      'https://res.cloudinary.com/dp4sknsba/image/upload/v1765813731/Screenshot_2025-12-15_211821_di46p1.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757500866/Screenshot_2025-09-10_161234_vx2ood.png',
-      'https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757500751/Screenshot_2025-09-10_161038_eh5yh5.png',
-    ],
-  },
-]
+const slugify = (s = '') =>
+  String(s)
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'event'
 
-/** Every image in one flat list — used by the drifting hero wall. */
-export const ALL_PHOTOS = GALLERY_EVENTS.flatMap((event) =>
-  event.photos.map((image, i) => ({
-    image,
-    title: `${event.name} — ${i + 1}`,
-  }))
-)
+const isUrl = (v) => typeof v === 'string' && /^https?:\/\//.test(v)
+
+const toGroups = (images) => {
+  if (!Array.isArray(images)) return []
+
+  const groups = []
+  let loose = null
+
+  for (const entry of images) {
+    if (isUrl(entry)) {
+      // ungrouped photos collect into one unlabelled group
+      if (!loose) {
+        loose = { label: null, photos: [] }
+        groups.push(loose)
+      }
+      loose.photos.push(entry)
+    } else if (entry && typeof entry === 'object' && Array.isArray(entry.images)) {
+      const photos = entry.images.filter(isUrl)
+      if (photos.length) {
+        groups.push({ label: entry.game || entry.label || null, photos })
+      }
+    }
+  }
+
+  return groups.filter((g) => g.photos.length > 0)
+}
+
+export const GALLERY_EVENTS = (galleryData?.events ?? [])
+  .map((event) => {
+    const groups = toGroups(event?.images)
+    const photos = groups.flatMap((g) => g.photos)
+    return {
+      slug: slugify(event?.name),
+      name: event?.name ?? 'Untitled event',
+      year: event?.year ?? '',
+      groups,
+      photos,
+    }
+  })
+  .filter((event) => event.photos.length > 0)
+
+/**
+ * A spread sample for the drifting hero wall.
+ *
+ * The wall clones its columns to fill the viewport, so feeding it all 270
+ * photos would put many hundreds of tiles in the DOM. Taking an even stride
+ * through each event keeps every event represented while capping the cost.
+ * Sized to give a wide screen (up to 12 columns) a few distinct images per
+ * column rather than obvious repeats.
+ */
+const HERO_MAX = 44
+
+export const ALL_PHOTOS = (() => {
+  const perEvent = Math.max(1, Math.ceil(HERO_MAX / Math.max(1, GALLERY_EVENTS.length)))
+  const picked = []
+
+  for (const event of GALLERY_EVENTS) {
+    const stride = Math.max(1, Math.floor(event.photos.length / perEvent))
+    for (let i = 0, taken = 0; i < event.photos.length && taken < perEvent; i += stride, taken += 1) {
+      // Request a wall-sized derivative — the wall clones tiles, so full-res
+      // originals here were the single heaviest thing on the page.
+      picked.push({ image: cdnImage(event.photos[i], IMG.wall), title: event.name })
+    }
+  }
+
+  return picked.slice(0, HERO_MAX)
+})()
 
 export default GALLERY_EVENTS

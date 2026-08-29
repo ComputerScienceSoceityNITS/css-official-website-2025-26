@@ -41,6 +41,10 @@ const DriftWall = ({
   dim = 0.55,
   grayscale = false,
   overlayColor = '#060010',
+  // LOCAL ADDITION (not vendor): the rAF loop transforms every column each
+  // frame and never stops, so the wall keeps costing frames long after it has
+  // scrolled away. Pass true to idle it.
+  paused = false,
   className = '',
   style
 }) => {
@@ -118,6 +122,12 @@ const DriftWall = ({
   );
 
   useEffect(() => {
+    if (paused) {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      lastTsRef.current = null;
+      return undefined;
+    }
     const animate = ts => {
       if (lastTsRef.current === null) lastTsRef.current = ts;
       const dt = Math.min(0.05, Math.max(0, ts - lastTsRef.current) / 1000);
@@ -133,8 +143,8 @@ const DriftWall = ({
         for (let c = 0; c < trackRefs.current.length; c++) {
           const meta = columnMeta[c];
           if (!meta) continue;
-          const paused = wallHoveredRef.current && pauseOnHover;
-          const factor = paused || hoveredColRef.current === c ? 0 : 1;
+          const hoverPaused = wallHoveredRef.current && pauseOnHover;
+          const factor = hoverPaused || hoveredColRef.current === c ? 0 : 1;
           const target = baseVelocities[c] * factor;
           const ease = 1 - Math.exp(-dt / (target === 0 ? 0.16 : 0.28));
           velocitiesRef.current[c] += (target - velocitiesRef.current[c]) * ease;
@@ -159,7 +169,7 @@ const DriftWall = ({
       rafRef.current = null;
       lastTsRef.current = null;
     };
-  }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform]);
+  }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform, paused]);
 
   const activate = useCallback((id, index) => {
     activeIdRef.current = id;

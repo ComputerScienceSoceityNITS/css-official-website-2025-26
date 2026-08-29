@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { RoundedBox, ContactShadows } from '@react-three/drei'
+import * as THREE from 'three'
 
 /**
  * ComputerModel — a flat-shaded workstation that turns toward the cursor.
@@ -26,9 +27,88 @@ const PAPER = '#F4F3EF'
 const CARD = '#FFFFFF'
 const LINE = '#D8D5CE'
 
+/** What the workstation is showing. */
+const CODE = [
+  ['#include', ' <bits/stdc++.h>'],
+  ['using', ' namespace std;'],
+  ['', ''],
+  ['struct', ' Society {'],
+  ['  string', ' name = "Computer Science Society";'],
+  ['  string', ' institute = "NIT Silchar";'],
+  ['  vector', '<string> wings;'],
+  ['};', ''],
+  ['', ''],
+  ['int', ' main() {'],
+  ['  Society', ' css;'],
+  ['', '  css.wings = {"Dev", "CP","EXEC", "ML",'],
+  ['', '               "Design", "PR", "Literary"};'],
+  ['', ''],
+  ['  for', ' (auto &w : css.wings)'],
+  ['', '    cout << w << " Wing" << endl;'],
+  ['  return', ' 0;'],
+  ['}', ''],
+]
+
+/**
+ * The screen is a canvas texture rather than 3D text.
+ *
+ * drei's <Text> uses troika, which fetches its default font over the network —
+ * a dependency the CSP would block and an extra request for one small panel.
+ * Painting the code into a 2D canvas keeps it offline, crisp, and lets the
+ * keyword colour differ from the body without extra draw calls.
+ */
+function makeScreenTexture() {
+  const W = 1024
+  const H = 640
+  const canvas = document.createElement('canvas')
+  canvas.width = W
+  canvas.height = H
+  const ctx = canvas.getContext('2d')
+
+  ctx.fillStyle = PAPER
+  ctx.fillRect(0, 0, W, H)
+
+  // title bar
+  ctx.fillStyle = '#E6E3DC'
+  ctx.fillRect(0, 0, W, 54)
+  ctx.fillStyle = '#9A968D'
+  ctx.font = '500 22px ui-monospace, SFMono-Regular, Menlo, monospace'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('society.cpp', 28, 28)
+
+  const size = 23
+  const lead = 31
+  const top = 88
+  ctx.font = `${size}px ui-monospace, SFMono-Regular, Menlo, monospace`
+
+  CODE.forEach(([keyword, rest], i) => {
+    const y = top + i * lead
+    if (y > H - 24) return
+    let x = 34
+    if (keyword) {
+      ctx.fillStyle = INK
+      ctx.fillText(keyword, x, y)
+      x += ctx.measureText(keyword).width
+    }
+    if (rest) {
+      ctx.fillStyle = '#6E6B64'
+      ctx.fillText(rest, x, y)
+    }
+  })
+
+  const tex = new THREE.CanvasTexture(canvas)
+  tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 4
+  tex.needsUpdate = true
+  return tex
+}
+
 function Workstation({ pointer, reduced }) {
   const group = useRef(null)
   const caret = useRef(null)
+
+  const screenTex = useMemo(() => makeScreenTexture(), [])
+  useEffect(() => () => screenTex.dispose(), [screenTex])
 
   useFrame((state, delta) => {
     const g = group.current
@@ -62,45 +142,17 @@ function Workstation({ pointer, reduced }) {
         <meshStandardMaterial color={INK} roughness={0.62} metalness={0} />
       </RoundedBox>
 
-      {/* screen */}
+      {/* screen — the society, in C++ */}
       <mesh position={[0, 1.0, 0.1]}>
         <planeGeometry args={[3.0, 1.86]} />
-        <meshBasicMaterial color={PAPER} />
+        <meshBasicMaterial map={screenTex} toneMapped={false} />
       </mesh>
 
-      {/* screen content */}
-      <group position={[0, 1.0, 0.105]}>
-        <mesh position={[-0.72, 0.6, 0]}>
-          <planeGeometry args={[1.32, 0.075]} />
-          <meshBasicMaterial color={INK} />
-        </mesh>
-        <mesh position={[-0.95, 0.4, 0]}>
-          <planeGeometry args={[0.86, 0.06]} />
-          <meshBasicMaterial color={LINE} />
-        </mesh>
-        <mesh position={[-0.62, 0.2, 0]}>
-          <planeGeometry args={[1.52, 0.06]} />
-          <meshBasicMaterial color={LINE} />
-        </mesh>
-        <mesh position={[-1.02, 0, 0]}>
-          <planeGeometry args={[0.72, 0.06]} />
-          <meshBasicMaterial color={LINE} />
-        </mesh>
-        <mesh position={[-0.8, -0.2, 0]}>
-          <planeGeometry args={[1.16, 0.06]} />
-          <meshBasicMaterial color={LINE} />
-        </mesh>
-        {/* caret */}
-        <mesh ref={caret} position={[-1.24, -0.45, 0]}>
-          <planeGeometry args={[0.1, 0.16]} />
-          <meshBasicMaterial color={INK} />
-        </mesh>
-        {/* header hairline */}
-        <mesh position={[0, 0.82, 0]}>
-          <planeGeometry args={[3.0, 0.012]} />
-          <meshBasicMaterial color={LINE} />
-        </mesh>
-      </group>
+      {/* caret, blinking over the code */}
+      <mesh ref={caret} position={[-0.62, 0.36, 0.105]}>
+        <planeGeometry args={[0.055, 0.1]} />
+        <meshBasicMaterial color={INK} />
+      </mesh>
 
       {/* ---- stand ---- */}
       <mesh position={[0, 0.05, -0.02]}>
