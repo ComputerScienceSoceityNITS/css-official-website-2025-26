@@ -50,8 +50,13 @@ const CompleteProfile = () => {
 
             await refreshProfile();
 
-
-            navigate('/dashboard');
+            const emailLower = (user?.email || '').toLowerCase();
+            const isNewBatch = emailLower.includes('ug') && emailLower.includes('26') && emailLower.includes('cse');
+            if (isNewBatch) {
+                navigate('/welcome-story');
+            } else {
+                navigate('/dashboard');
+            }
         } catch (error) {
             console.error('Profile completion error:', error);
             setError(error.message || 'Failed to complete profile');

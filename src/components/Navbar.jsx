@@ -61,11 +61,10 @@ export const NavbarDemo = () => {
     return (
         <>
             <motion.nav
-                className={`fixed top-0 left-0 z-[200] w-full font-sans transition-[background-color,border-color,backdrop-filter] duration-500   ${
-                    solid
+                className={`fixed top-0 left-0 z-[200] w-full font-sans transition-[background-color,border-color,backdrop-filter] duration-500   ${solid
                         ? 'border-b border-arch-line bg-arch-bg/94 backdrop-blur-xl'
                         : 'border-b border-transparent bg-transparent'
-                }`}
+                    }`}
                 initial={{ y: -24, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={archTween}
@@ -100,9 +99,8 @@ export const NavbarDemo = () => {
                                     className="group relative px-4 py-2.5"
                                 >
                                     <span
-                                        className={`relative z-10 text-[15px] font-medium tracking-[-0.01em] transition-colors duration-300   ${
-                                            active ? 'text-arch-ink' : 'text-arch-ink-3 group-hover:text-arch-ink'
-                                        }`}
+                                        className={`relative z-10 text-[15px] font-medium tracking-[-0.01em] transition-colors duration-300   ${active ? 'text-arch-ink' : 'text-arch-ink-3 group-hover:text-arch-ink'
+                                            }`}
                                     >
                                         {item.label}
                                     </span>
@@ -195,9 +193,8 @@ export const NavbarDemo = () => {
                                         <Link
                                             to={item.path}
                                             onClick={() => setIsOpen(false)}
-                                            className={`block py-5   ${
-                                                location.pathname === item.path ? 'text-arch-ink' : 'text-arch-ink-3'
-                                            }`}
+                                            className={`block py-5   ${location.pathname === item.path ? 'text-arch-ink' : 'text-arch-ink-3'
+                                                }`}
                                         >
                                             <span className="arch-title text-[2rem]">{item.label}</span>
                                         </Link>
