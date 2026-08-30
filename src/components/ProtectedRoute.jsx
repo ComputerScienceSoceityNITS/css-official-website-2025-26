@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, requireProfileCompletion = false }) => {
-    const { user, loading, requiresProfileCompletion } = useAuth();
+    const { user, loading, requiresProfileCompletion, requiresOnboarding } = useAuth();
 
     if (loading) {
         return (
@@ -21,8 +21,8 @@ const ProtectedRoute = ({ children, requireProfileCompletion = false }) => {
         return <Navigate to="/auth" replace />;
     }
 
-    if (requireProfileCompletion && requiresProfileCompletion) {
-        return <Navigate to="/complete-profile" replace />;
+    if (requiresOnboarding || (requireProfileCompletion && requiresProfileCompletion)) {
+        return <Navigate to="/onboarding" replace />;
     }
 
     return children;

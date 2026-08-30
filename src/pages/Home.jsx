@@ -27,6 +27,11 @@ if (typeof window !== 'undefined') {
 // ARCH palette for the liquid field — module scope so the array identity is
 // stable across renders (LiquidEther keys its WebGL setup on `colors`).
 const LIQUID_COLORS = ['#E0DED8', '#A8A399', '#3A3A38']
+// On a phone the field fills the whole viewport rather than sitting behind a
+// wide two-column layout, so the darkest ink in the desktop ramp reads as a
+// black smear under the headline. The small-screen ramp tops out at the muted
+// grey instead — same motion, none of the heaviness.
+const LIQUID_COLORS_SM = ['#EDEBE5', '#D8D5CD', '#A8A399']
 const LIQUID_STYLE = { width: '100%', height: '100%' }
 
 // Memoize testimonials data to prevent re-renders
@@ -43,48 +48,48 @@ const PILLARS_TESTIMONIALS = [
       'Empowering research-driven projects, academic mentorship, departmental coordination, and organizing technical symposiums.',
   },
   {
-    src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760007735/Swapneel_Bhaiya_ltkb53.jpg',
-    name: 'Swapnil Dansana',
+    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757531748/profilephoto_-_SHASHANK_KUKRETI_wpn8qw.webp',
+    name: 'Shashank Kukreti',
     designation: 'President',
     tag: '// EXECUTIVE_PRESIDENT',
     quote:
       "Encouraging innovative thinking and research-oriented approach. We support projects in AI, ML, web development, and emerging technologies to push boundaries of what's possible.",
-    bio: 'Swapnil Dansana leads the society as the President. Under his guidance, the society has scaled its tech stack and organized institute-level hackathons. He focuses on creating collaborative pipelines for projects in Artificial Intelligence, Machine Learning, and Web development.',
+    bio: 'Shashank Kukreti leads the society as President for 2025–26, setting the direction for every wing and representing CSS to the department and the institute. He focuses on keeping the society’s events, partnerships, and projects moving in the same direction.',
     focus:
-      'Executive governance, industrial collaboration, project pipelines, and tech-symposium oversight.',
+      'Executive governance, cross-wing coordination, institutional partnerships, and long-term direction.',
   },
   {
-    src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760007829/Amborish_xqum5s.jpg',
-    name: 'Amborish Sarmah',
+    src: 'https://res.cloudinary.com/dfdiplnix/image/upload/v1757073352/IMG-20250510-WA0179_-_SOUMYA_RANJAN_DASH_cn8yvz.webp',
+    name: 'Soumya Ranjan Dash',
     designation: 'General Secretary',
     tag: '// GENERAL_SECRETARY',
     quote:
       'Creating a supportive network where students can learn, grow, and collaborate. We organize tech talks, networking events, and mentorship programs to foster meaningful connections.',
-    bio: 'Amborish Sarmah is the General Secretary, overseeing operations, event schedules, and cross-society coordination. He acts as the main facilitator between the executive wing, alumni networks, and the general student body to drive massive engagement in technical bootcamps.',
+    bio: 'Soumya Ranjan Dash is the General Secretary, running the society’s day-to-day operations, event calendar, and cross-wing coordination. He is the main point of contact between the executive body, the wings, and the wider student community.',
     focus:
-      'Operations management, workshop schedules, alumni liaison, and campus-wide community building.',
+      'Operations management, event scheduling, wing coordination, and campus-wide community building.',
   },
   {
-    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757535079/WhatsApp_Image_2025-08-31_at_11.28.29_AM_-_002_RAJ_KUMAR_ROY_uopc4j.webp',
-    name: 'Raj Kumar Roy',
-    designation: 'Vice President',
-    tag: '// VICE_PRESIDENT',
+    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757529897/IMG-20250831-WA0028_-_NILABH_SARMAH_smy1sf.webp',
+    name: 'Nilabh Sarmah',
+    designation: 'Technical Head',
+    tag: '// TECHNICAL_HEAD',
     quote:
-      'Collaborating to solve challenges, share knowledge, and build things that matter. We provide platforms for students to showcase skills, build projects, and prepare for careers.',
-    bio: 'Raj Kumar Roy serves as the Vice President, supporting strategic initiatives and hackathon architectures. He is passionate about setting up software development environments, hosting coding contests, and guiding junior members in foundational data structures and algorithms.',
+      'Fostering a culture of continuous learning and curiosity. We encourage students to explore new technologies, participate in hackathons, and stay updated with industry trends.',
+    bio: 'Nilabh Sarmah heads the technical direction of the society as Technical Head, guiding the Development, Competitive Programming, and Machine Learning wings and setting the standard for the projects and workshops CSS puts out.',
     focus:
-      'Hackathon architecture, competitive programming bootcamps, and technical mentoring.',
+      'Technical strategy, workshop curricula, project review, and mentoring across the technical wings.',
   },
   {
-    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757535268/IMG-20250510-WA0014_-_CSE_100_TARUN_CHANDAK_w0cny9.webp',
-    name: 'Tarun Chandak',
+    src: 'https://res.cloudinary.com/dfdiplnix/image/upload/v1757075422/IMG-20250519-WA0033_-_Computer_Science_Society_lyx9p6.webp',
+    name: 'Kartika Jauhari',
     designation: 'Finance and Ops Co-ordinator',
     tag: '// FINANCE_OPS_LEAD',
     quote:
-      'Fostering a culture of continuous learning and curiosity. We encourage students to explore new technologies, participate in hackathons, and stay updated with industry trends.',
-    bio: 'Tarun Chandak manages the finance portfolios and operational logistics of the society. He coordinates budget allocations, sponsor distributions, and ensures smooth material operations during major hackathons and technical exhibitions.',
+      'Collaborating to solve challenges, share knowledge, and build things that matter. We provide platforms for students to showcase skills, build projects, and prepare for careers.',
+    bio: 'Kartika Jauhari manages the finance portfolios and operational logistics of the society, coordinating budget allocations, sponsor distributions, and the on-ground operations behind every major event and exhibition.',
     focus:
-      'Financial modeling, sponsorship logistics, procurement operations, and venue management.',
+      'Financial planning, sponsorship logistics, procurement, and event operations.',
   },
 ]
 
@@ -223,6 +228,7 @@ function Home() {
   const [showSecondSponsorPopup, setShowSecondSponsorPopup] = useState(false)
   const [sponsorPopupShown, setSponsorPopupShown] = useState(false)
   const [expandedIndex, setExpandedIndex] = useState(null)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
 
   // Set mounted state
   useEffect(() => {
@@ -322,6 +328,16 @@ function Home() {
   const sponsorViewRef = useRef(null)
   const sponsorTrackRef = useRef(null)
   const sponsorTweenRef = useRef(null)
+
+  // Breakpoint watcher for the liquid field. Kept as state (not a CSS class)
+  // because the palette and simulation cost are props on a WebGL canvas.
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const sync = () => setIsSmallScreen(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
 
   useArchReveal(archScope, [isMounted, introDone])
   useArchProgress(progressRef, [isMounted, introDone])
@@ -473,7 +489,7 @@ function Home() {
             carry a beige scrim so copy stays legible over it. */}
         <div ref={liquidRef} className="fixed inset-0 z-0">
           <LiquidEther
-            colors={LIQUID_COLORS}
+            colors={isSmallScreen ? LIQUID_COLORS_SM : LIQUID_COLORS}
             backgroundColor="#F4F3EF"
             mouseForce={18}
             cursorSize={110}
@@ -481,11 +497,11 @@ function Home() {
             viscous={30}
             iterationsViscous={24}
             iterationsPoisson={24}
-            resolution={0.42}
+            resolution={isSmallScreen ? 0.32 : 0.42}
             isBounce={false}
             autoDemo={true}
             autoSpeed={0.4}
-            autoIntensity={1.9}
+            autoIntensity={isSmallScreen ? 1.1 : 1.9}
             takeoverDuration={0.3}
             autoResumeDelay={2600}
             autoRampDuration={0.8}
@@ -494,11 +510,18 @@ function Home() {
         </div>
 
         <div className="relative z-10">
-          <Chatbot />
 
           {/* ── HERO ──────────────────────────────────────────── */}
           <section className="relative flex min-h-screen w-full flex-col justify-between px-6 pb-8 pt-[76px] md:px-10">
-            <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 items-center gap-10 py-12 md:grid-cols-12 md:gap-8">
+            {/* Phone-only scrim. The field runs edge to edge on a narrow
+                viewport, so a thin wash of the page beige keeps the display
+                type off the darkest parts of it. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 bg-arch-bg/45 md:hidden"
+            />
+
+            <div className="relative z-10 mx-auto grid w-full max-w-[1600px] grid-cols-1 items-center gap-10 py-12 md:grid-cols-12 md:gap-8">
               {/* Statement */}
               <div className="md:col-span-7">
                 <h1
@@ -543,7 +566,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="mx-auto flex w-full max-w-[1600px] items-center justify-center border-t border-arch-line/70 py-5">
+            <div className="relative z-10 mx-auto flex w-full max-w-[1600px] items-center justify-center border-t border-arch-line/70 py-5">
               <span className="arch-label text-center arch-on-liquid">
                 Scroll ↓
               </span>

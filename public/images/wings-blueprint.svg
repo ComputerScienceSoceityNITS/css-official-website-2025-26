@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 880" fill="none" role="img" aria-label="Exploded axonometric diagram of the seven wings of the Computer Science Society">
+<defs><pattern id="wh" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><line x1="0" y1="0" x2="0" y2="13" stroke="#E0DED8" stroke-width="1"/></pattern></defs>
+<line x1="300.0" y1="14.0" x2="300.0" y2="819.0" stroke="#1C1C1C" stroke-width="1" stroke-dasharray="2 7" opacity="0.4"/>
+<g>
+<polygon points="40.2,190.0 300.0,340.0 300.0,349.0 40.2,199.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,340.0 559.8,190.0 559.8,199.0 300.0,349.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,40.0 559.8,190.0 300.0,340.0 40.2,190.0" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,66.0 514.8,190.0 300.0,314.0 85.2,190.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="187.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="190.0" x2="800" y2="190.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="181.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">01</text>
+<text x="576.8" y="209.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Executive</text>
+</g>
+<g>
+<polygon points="40.2,264.0 300.0,414.0 300.0,423.0 40.2,273.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,414.0 559.8,264.0 559.8,273.0 300.0,423.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,114.0 559.8,264.0 300.0,414.0 40.2,264.0" fill="#F7F6F2" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,114.0 559.8,264.0 300.0,414.0 40.2,264.0" fill="url(#wh)" opacity="0.7"/>
+<polygon points="300.0,140.0 514.8,264.0 300.0,388.0 85.2,264.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="261.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="264.0" x2="800" y2="264.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="255.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">02</text>
+<text x="576.8" y="283.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Development</text>
+</g>
+<g>
+<polygon points="40.2,338.0 300.0,488.0 300.0,497.0 40.2,347.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,488.0 559.8,338.0 559.8,347.0 300.0,497.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,188.0 559.8,338.0 300.0,488.0 40.2,338.0" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,214.0 514.8,338.0 300.0,462.0 85.2,338.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="335.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="338.0" x2="800" y2="338.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="329.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">03</text>
+<text x="576.8" y="357.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Competitive</text>
+</g>
+<g>
+<polygon points="40.2,412.0 300.0,562.0 300.0,571.0 40.2,421.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,562.0 559.8,412.0 559.8,421.0 300.0,571.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,262.0 559.8,412.0 300.0,562.0 40.2,412.0" fill="#F7F6F2" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,262.0 559.8,412.0 300.0,562.0 40.2,412.0" fill="url(#wh)" opacity="0.7"/>
+<polygon points="300.0,288.0 514.8,412.0 300.0,536.0 85.2,412.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="409.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="412.0" x2="800" y2="412.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="403.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">04</text>
+<text x="576.8" y="431.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Machine Learning</text>
+</g>
+<g>
+<polygon points="40.2,486.0 300.0,636.0 300.0,645.0 40.2,495.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,636.0 559.8,486.0 559.8,495.0 300.0,645.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,336.0 559.8,486.0 300.0,636.0 40.2,486.0" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,362.0 514.8,486.0 300.0,610.0 85.2,486.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="483.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="486.0" x2="800" y2="486.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="477.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">05</text>
+<text x="576.8" y="505.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Public Relations</text>
+</g>
+<g>
+<polygon points="40.2,560.0 300.0,710.0 300.0,719.0 40.2,569.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,710.0 559.8,560.0 559.8,569.0 300.0,719.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,410.0 559.8,560.0 300.0,710.0 40.2,560.0" fill="#F7F6F2" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,410.0 559.8,560.0 300.0,710.0 40.2,560.0" fill="url(#wh)" opacity="0.7"/>
+<polygon points="300.0,436.0 514.8,560.0 300.0,684.0 85.2,560.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="557.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="560.0" x2="800" y2="560.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="551.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">06</text>
+<text x="576.8" y="579.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Design</text>
+</g>
+<g>
+<polygon points="40.2,634.0 300.0,784.0 300.0,793.0 40.2,643.0" fill="#E5E3DC" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,784.0 559.8,634.0 559.8,643.0 300.0,793.0" fill="#EDEBE5" stroke="#1C1C1C" stroke-width="1"/>
+<polygon points="300.0,484.0 559.8,634.0 300.0,784.0 40.2,634.0" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="1.1"/>
+<polygon points="300.0,510.0 514.8,634.0 300.0,758.0 85.2,634.0" fill="none" stroke="#C9C6BE" stroke-width="1"/>
+<rect x="556.8" y="631.0" width="6" height="6" fill="#1C1C1C"/>
+<line x1="568.8" y1="634.0" x2="800" y2="634.0" stroke="#1C1C1C" stroke-width="1" opacity="0.25"/>
+<text x="576.8" y="625.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.6" fill="#9A968D">07</text>
+<text x="576.8" y="653.0" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="-0.2" fill="#1C1C1C">Literature</text>
+</g>
+</svg>

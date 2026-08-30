@@ -2,6 +2,11 @@
 import React from 'react';
 import { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { supabase } from '../supabaseClient';
+import {
+    isInstituteEmail,
+    parseInstituteEmail,
+    qualifiesForWelcomeStory,
+} from '../utils/instituteEmail';
 const AuthContext = createContext({});
 
 export const useAuth = () => useContext(AuthContext);
@@ -11,16 +16,29 @@ const AuthProvider = ({ children }) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [requiresProfileCompletion, setRequiresProfileCompletion] = useState(false);
-    const [requiresCollegeVerification, setRequiresCollegeVerification] = useState(false);
+        const [requiresCollegeVerification, setRequiresCollegeVerification] = useState(false);
+    const [requiresOnboarding, setRequiresOnboarding] = useState(false);
+    const [authRejection, setAuthRejection] = useState(null);
     
     const initializedRef = useRef(false);
     const processingAuthChangeRef = useRef(false);
 
-    const isCollegeEmail = (email) => {
-        if (!email) return false;
-        const emailLower = email.toLowerCase();
-        return emailLower.endsWith('.nits.ac.in') || emailLower.endsWith('@nits.ac.in');
-    };
+        /* Accounts are institute-only. A small env-driven allowlist exists so
+       that a handful of standing accounts (the society's own admin
+       addresses) are not locked out by the pattern — set
+       VITE_AUTH_EMAIL_ALLOWLIST to a comma-separated list. It is empty by
+       default, so the policy is closed unless someone opts an address in. */
+    const ALLOWLIST = (import.meta.env.VITE_AUTH_EMAIL_ALLOWLIST || '')
+        .split(',')
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean);
+
+    const isAllowlisted = (email) =>
+        !!email && ALLOWLIST.includes(email.trim().toLowerCase());
+
+    /* Kept under its original name: App.jsx, AuthCallback and
+       MigrationCallBack all read it off the context. */
+    const isCollegeEmail = (email) => isInstituteEmail(email) || isAllowlisted(email);
 
     const fetchProfile = async (userId) => {
         try {
@@ -45,8 +63,21 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    const checkProfileCompletion = (profileData) => {
-        return profileData && profileData.full_name && profileData.scholar_id && profileData.branch;
+        const checkProfileCompletion = (profileData) => {
+        return profileData && profileData.full_name && profileData.scholar_id;
+    };
+
+    /* Onboarding is a one-time introduction, separate from "is the profile
+       filled in". Members carried over from the previous website already
+       have a row here, but they have never been through this site's
+       intake, so they are onboarded only once the explicit flag is set.
+       When the column has not been added yet the flag reads as undefined,
+       and we fall back to profile completeness so nobody is trapped in a
+       loop they cannot finish. */
+    const checkOnboarded = (profileData) => {
+        if (!profileData) return false;
+        if (typeof profileData.onboarded === 'boolean') return profileData.onboarded;
+        return checkProfileCompletion(profileData);
     };
 
     const checkCollegeVerification = (profileData) => {
@@ -69,40 +100,36 @@ const AuthProvider = ({ children }) => {
         
         try {
             if (session?.user) {
-                setUser(session.user);
-                
-                let userProfile = await fetchProfile(session.user.id);
-                
-                // If profile doesn't exist, create a stub row (especially for new Google signups)
-                if (!userProfile) {
-                    const { data: newProfile, error: insertError } = await supabase
-                        .from('profiles')
-                        .insert([
-                            {
-                                user_id: session.user.id,
-                                email: session.user.email,
-                                full_name: session.user.user_metadata?.full_name || '',
-                                college_email_verified: isCollegeEmail(session.user.email),
-                                updated_at: new Date().toISOString()
-                            }
-                        ])
-                        .select()
-                        .single();
-
-                    if (insertError) {
-                        console.error('Error auto-creating profile:', insertError);
-                    } else {
-                        userProfile = newProfile;
-                    }
+                /* Hard gate. The check lives here rather than only in the
+                   OAuth callback so that a restored session, a token
+                   refresh or a second tab is held to the same rule. */
+                if (!isCollegeEmail(session.user.email)) {
+                    setAuthRejection({
+                        email: session.user.email,
+                        reason: 'not-institute',
+                    });
+                    setUser(null);
+                    setProfile(null);
+                    setRequiresProfileCompletion(false);
+                    setRequiresCollegeVerification(false);
+                    setRequiresOnboarding(false);
+                    await supabase.auth.signOut();
+                    return;
                 }
-                
+
+                setAuthRejection(null);
+                setUser(session.user);
+
+                const userProfile = await fetchProfile(session.user.id);
                 setProfile(userProfile);
-                
+
                 const profileComplete = checkProfileCompletion(userProfile);
                 setRequiresProfileCompletion(!profileComplete);
 
                 const collegeVerified = checkCollegeVerification(userProfile);
                 setRequiresCollegeVerification(!collegeVerified);
+
+                setRequiresOnboarding(!checkOnboarded(userProfile));
 
                 
                 if (window.location.pathname === '/chat' && !collegeVerified) {
@@ -116,6 +143,7 @@ const AuthProvider = ({ children }) => {
                 setProfile(null);
                 setRequiresProfileCompletion(false);
                 setRequiresCollegeVerification(false);
+                setRequiresOnboarding(false);
             }
         } catch (error) {
             console.error('❌ Error processing auth session:', error);
@@ -185,39 +213,21 @@ const AuthProvider = ({ children }) => {
     }, []);
 
     
-    const signIn = async (credentials) => {
-        const { data, error } = await supabase.auth.signInWithPassword(credentials);
-        if (error) throw error;
-        return { data, error: null };
+        /* Password sign-in and sign-up were removed: Google is the only way in,
+       and the institute mail is the only identity we accept. The stubs stay
+       so that any screen still importing them fails loudly and locally
+       rather than crashing on an undefined call. */
+    const PASSWORD_AUTH_RETIRED =
+        'Password sign-in has been retired. Continue with your institute Google account.';
+
+    const signIn = async () => {
+        throw new Error(PASSWORD_AUTH_RETIRED);
     };
 
-    const signUp = async (email, password, fullName, scholarId) => {
-        
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: { 
-                data: { full_name: fullName, scholar_id: scholarId },
-                emailRedirectTo: `${window.location.origin}/auth/callback`
-            }
-        });
-
-        if (error) throw error;
-
-        
-        if (data.user) {
-            await supabase.from('profiles').upsert({
-                user_id: data.user.id,
-                full_name: fullName,
-                scholar_id: scholarId,
-                email: email,
-                college_email_verified: isCollegeEmail(email), 
-                updated_at: new Date().toISOString(),
-            });
-        }
-
-        return data;
+    const signUp = async () => {
+        throw new Error(PASSWORD_AUTH_RETIRED);
     };
+
 
     const verifyOtp = async (params) => {
         const { data, error } = await supabase.auth.verifyOtp(params);
@@ -268,12 +278,95 @@ const migrateToCollegeEmail = async (collegeEmail) => {
         return user && !isCollegeEmail(userEmail);
     };
 
+        /* Writes the intake answers and flips the onboarding flag. If the
+       `onboarded` columns have not been added to `profiles` yet Postgres
+       rejects the payload (42703 / PGRST204); rather than stranding the
+       user we retry with the columns that certainly exist, and the
+       completeness fallback in checkOnboarded carries the flow. */
+    const completeOnboarding = async (fields) => {
+        if (!user) throw new Error('Not signed in.');
+
+        const parsed = parseInstituteEmail(user.email);
+        const base = {
+            user_id: user.id,
+            email: user.email,
+            full_name: fields.fullName,
+            scholar_id: fields.scholarId,
+            contact_number: fields.contactNumber || null,
+            college_email_verified: true,
+            updated_at: new Date().toISOString(),
+        };
+        const extended = {
+            ...base,
+            branch: parsed.branch || null,
+            admission_year: parsed.admissionYear || null,
+            onboarded: true,
+            onboarded_at: new Date().toISOString(),
+        };
+
+        const isMissingColumn = (err) =>
+            err && (err.code === '42703' || err.code === 'PGRST204');
+
+        let { error } = await supabase
+            .from('profiles')
+            .upsert(extended, { onConflict: 'user_id' });
+
+        if (isMissingColumn(error)) {
+            console.warn(
+                'profiles is missing the onboarding columns — see SECURITY.md for the migration.'
+            );
+            ({ error } = await supabase
+                .from('profiles')
+                .upsert(base, { onConflict: 'user_id' }));
+        }
+
+        if (error) throw error;
+
+        const updated = await refreshProfile();
+        return updated;
+    };
+
+    /* Whether this account should be shown the incoming-batch story, and
+       whether it already has been. The seen-flag is mirrored into
+       localStorage so a missing column never replays the story forever. */
+    const storyKey = (id) => `welcomeStorySeen:${id}`;
+
+    const shouldSeeWelcomeStory = () => {
+        if (!user) return false;
+        if (!qualifiesForWelcomeStory(user.email)) return false;
+        if (profile?.welcome_story_seen === true) return false;
+        try {
+            if (localStorage.getItem(storyKey(user.id)) === '1') return false;
+        } catch {
+            /* private mode — fall through and show it */
+        }
+        return true;
+    };
+
+    const markWelcomeStorySeen = async () => {
+        if (!user) return;
+        try {
+            localStorage.setItem(storyKey(user.id), '1');
+        } catch {
+            /* nothing to do — the column below is the durable record */
+        }
+        const { error } = await supabase
+            .from('profiles')
+            .update({ welcome_story_seen: true, updated_at: new Date().toISOString() })
+            .eq('user_id', user.id);
+        if (error && error.code !== '42703' && error.code !== 'PGRST204') {
+            console.error('Could not record welcome story state:', error);
+        }
+        await refreshProfile();
+    };
+
     const refreshProfile = async () => {
         if (user) {
             const userProfile = await fetchProfile(user.id);
             setProfile(userProfile);
             setRequiresProfileCompletion(!checkProfileCompletion(userProfile));
             setRequiresCollegeVerification(!checkCollegeVerification(userProfile));
+            setRequiresOnboarding(!checkOnboarded(userProfile));
             return userProfile;
         }
     };
@@ -293,11 +386,17 @@ const migrateToCollegeEmail = async (collegeEmail) => {
     };
 
     
-    const signInWithGoogle = () => {
+        const signInWithGoogle = () => {
         return supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}/auth/callback`
+                redirectTo: `${window.location.origin}/auth/callback`,
+                queryParams: {
+                    /* Students often have a personal account signed in
+                       already; force the chooser so they can pick the
+                       institute one. */
+                    prompt: 'select_account',
+                },
             }
         });
     };
@@ -312,9 +411,17 @@ const migrateToCollegeEmail = async (collegeEmail) => {
         user,
         profile,
         loading,
-        requiresProfileCompletion,
+                requiresProfileCompletion,
         requiresCollegeVerification,
+        requiresOnboarding,
+        authRejection,
+        clearAuthRejection: () => setAuthRejection(null),
+        completeOnboarding,
+        shouldSeeWelcomeStory,
+        markWelcomeStorySeen,
         isCollegeEmail,
+        isInstituteEmail,
+        parseInstituteEmail,
         refreshProfile,
         migrateToCollegeEmail,
         checkIfNeedsMigration
