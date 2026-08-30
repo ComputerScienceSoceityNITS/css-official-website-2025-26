@@ -29,6 +29,11 @@ const Gallery = () => {
   // rotated. At a fixed 5 columns it stopped ~560px short of a 1920px
   // viewport, so the count is derived from the width instead.
   const [columns, setColumns] = useState(6)
+  const [tileConfig, setTileConfig] = useState({
+    width: 220,
+    height: 146,
+    gap: 16,
+  })
 
   const event = GALLERY_EVENTS[selected] ?? GALLERY_EVENTS[0]
   const wheelItems = useMemo(() => GALLERY_EVENTS.map((e) => e.name), [])
@@ -57,11 +62,15 @@ const Gallery = () => {
   useArchReveal(scope, [loaderDone])
 
   useEffect(() => {
-    const TILE = 220
-    const GAP = 16
-    const SCALE = 1.12 // plane is scaled 1.18; leave a little margin
     const calc = () => {
-      const need = Math.ceil(window.innerWidth / SCALE / (TILE + GAP)) + 1
+      const isMobile = window.innerWidth < 768
+      const width = isMobile ? 130 : 220
+      const height = isMobile ? 86 : 146
+      const gap = isMobile ? 10 : 16
+      const SCALE = 1.12 // plane is scaled 1.18; leave a little margin
+      
+      setTileConfig({ width, height, gap })
+      const need = Math.ceil(window.innerWidth / SCALE / (width + gap)) + 1
       setColumns(Math.min(12, Math.max(4, need)))
     }
     calc()
@@ -180,16 +189,16 @@ const Gallery = () => {
         {/* ── HERO ───────────────────────────────────────────── */}
         <section
           ref={heroRef}
-          className="relative h-[70vh] min-h-[460px] w-full overflow-hidden border-b border-arch-line"
+          className="relative h-[55vh] min-h-[340px] md:h-[70vh] md:min-h-[460px] w-full overflow-hidden border-b border-arch-line"
         >
           <div className="absolute inset-0">
             <DriftWall
               items={ALL_PHOTOS}
               paused={!heroLive}
               columns={columns}
-              tileWidth={220}
-              tileHeight={146}
-              gap={16}
+              tileWidth={tileConfig.width}
+              tileHeight={tileConfig.height}
+              gap={tileConfig.gap}
               radius={0}
               tilt={14}
               turn={-12}
