@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 const SLIDE_DURATION = 6500; // 6.5 seconds per slide to give enough time to read the fun content
 
 const WelcomeStoryPage = () => {
-    const { user } = useAuth();
+    const { user, markWelcomeStorySeen } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const isPreview = searchParams.get('preview') === 'true';
@@ -181,9 +181,14 @@ const WelcomeStoryPage = () => {
     ];
 
     // Finish / Skip story
-    function handleFinishStory() {
+    async function handleFinishStory() {
         if (!isPreview) {
             localStorage.setItem('viewedWelcomeStory', 'true');
+            try {
+                await markWelcomeStorySeen?.();
+            } catch (err) {
+                console.error("Error marking welcome story as seen:", err);
+            }
             navigate('/dashboard');
         } else {
             navigate('/admin-dashboard');

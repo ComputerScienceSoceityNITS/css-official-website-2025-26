@@ -4,6 +4,12 @@ import { useArchReveal } from '../hooks/useArchAnim'
 
 const PORTALS = [
     {
+        name: 'Previous Year Study Material',
+        href: 'https://drive.google.com/drive/folders/1Wf6EZEi0NtcN1K286OgoIuO9Ebs0om5J',
+        description:
+            'Latest collection of previous year study materials, questions, and course resources.',
+    },
+    {
         name: 'Prep',
         href: 'https://raj8664.github.io/Prep/',
         description:

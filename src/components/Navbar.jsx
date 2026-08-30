@@ -12,7 +12,8 @@ const menuItems = [
     { path: '/events', label: 'Events' },
     { path: '/wings', label: 'Wings' },
     { path: '/gallery', label: 'Gallery' },
-    { path: '/materials', label: 'Materials' }
+    { path: '/materials', label: 'Materials' },
+    { path: '/app-download', label: 'App' }
 ]
 
 const LOGO = 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg'

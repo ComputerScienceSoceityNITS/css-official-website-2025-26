@@ -44,6 +44,7 @@ import AppDownload from './pages/CSS-APP'
 import Abacus from './pages/Abacus'
 import Onboarding from './pages/Onboarding'
 import WelcomeStory from './pages/WelcomeStory'
+import WelcomeStoryPage from './pages/WelcomeStoryPage'
 import Chatbot from './components/ui/Chatbot'
 const ProtectedRoute = ({
   children,
@@ -133,7 +134,7 @@ const GuestRoute = ({ children }) => {
   }
 
   if (user) {
-    return <Navigate to="/Abacus" replace />
+    return <Navigate to="/dashboard" replace />
   }
 
   return children
@@ -428,7 +429,14 @@ const App = () => {
                     </PageWrapper>
                   }
                 />
-                <Route path='/app-download' element={<AppDownload />} />
+                <Route
+                  path="/app-download"
+                  element={
+                    <PageWrapper>
+                      <AppDownload />
+                    </PageWrapper>
+                  }
+                />
                 <Route
                   path="/welcome-story"
                   element={
