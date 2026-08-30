@@ -647,12 +647,6 @@
 }
 
 df-messenger {
-  position: fixed !important;
-  top: -9999px !important;
-  left: -9999px !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
   --df-messenger-font-family: 'Geist Variable', 'Inter', sans-serif;
   --df-messenger-primary-color: #1C1C1C;
   --df-messenger-chat-background-color: #F4F3EF;
