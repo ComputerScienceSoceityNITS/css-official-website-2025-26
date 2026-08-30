@@ -268,7 +268,6 @@ const Onboarding = () => {
                     value={scholarId}
                     onChange={(e) => setScholarId(e.target.value)}
                     required
-                    inputMode="numeric"
                     placeholder="Your institute scholar ID"
                   />
                 </Field>
