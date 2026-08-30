@@ -660,8 +660,11 @@ df-messenger {
   --df-messenger-send-icon: #1C1C1C;
   --df-messenger-button-titlebar-color: #1C1C1C;
   --df-messenger-button-titlebar-font-color: #F4F3EF;
-  --df-messenger-min-height: 480px;
-  --df-messenger-max-height: 580px;
+  --df-messenger-chat-window-width: 370px;
+  --df-messenger-chat-window-height: 580px;
+  --df-messenger-chat-border-radius: 0px;
+  --df-messenger-chat-border: 1px solid #E0DED8;
+  --df-messenger-chat-window-box-shadow: none;
 }
 
 

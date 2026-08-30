@@ -43,9 +43,9 @@ const PILLARS_TESTIMONIALS = [
     tag: '// FACULTY_ADVISOR',
     quote:
       'Promoting a culture of innovation and creativity. We encourage students to think outside the box, experiment with new ideas, and develop solutions that make a difference.',
-    bio: 'Dr. Umakanta Majhi serves as the Faculty Advisor for the Computer Science Society. With over a decade of research and teaching experience in the Department of Computer Science & Engineering at NIT Silchar, he provides academic and technical direction to the society. He works closely with student leaders to align society activities with modern engineering standards and research domains.',
+    bio: 'Umakanta Majhi received his bachelor’s degree in Computer Science & Engineering from National Institute of Science & Technology, Berhampur, Odisha in 2008. He received his Master of Technology Degree in Computer Science (Information Security) from National Institute of Technology, Rourkela in 2012. His research interest is Information Security & Computer Networking. Since May 2013, he is working as Assistant Professor in NIT Silchar.',
     focus:
-      'Empowering research-driven projects, academic mentorship, departmental coordination, and organizing technical symposiums.',
+      'Information Security, Computer Networks, Pattern Recognition',
   },
   {
     src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757531748/profilephoto_-_SHASHANK_KUKRETI_wpn8qw.webp',
@@ -53,10 +53,10 @@ const PILLARS_TESTIMONIALS = [
     designation: 'President',
     tag: '// EXECUTIVE_PRESIDENT',
     quote:
-      "Encouraging innovative thinking and research-oriented approach. We support projects in AI, ML, web development, and emerging technologies to push boundaries of what's possible.",
-    bio: 'Shashank Kukreti leads the society as President for 2026–27, setting the direction for every wing and representing CSS to the department and the institute. He focuses on keeping the society’s events, partnerships, and projects moving in the same direction.',
+      "Leading with ideas, building with people, and creating a community where everyone gets the opportunity to learn, contribute, and grow.",
+    bio: 'As the President of the Computer Science Society, I work towards shaping a community that brings together technology, creativity, collaboration, and student life. The society goes beyond coding and technical activities rather it is a platform where students can explore their interests, build connections, showcase their talents, and create lasting memories. From welcoming freshers and organizing engaging events to driving technical initiatives, competitions, celebrations, projects, and collaborations, my role is to provide direction, strengthen teamwork, and ensure that every wing of the society works together towards a common vision. I aim to build an environment where every student feels included, encouraged to participate, and empowered to contribute.',
     focus:
-      'Executive governance, cross-wing coordination, institutional partnerships, and long-term direction.',
+      'My focus is on building a united and inclusive society where every student gets the opportunity to participate, explore, and contribute. I aim to strengthen teamwork across all wings, encourage new ideas, and create meaningful experiences through technical, cultural, and recreational initiatives.',
   },
   {
     src: 'https://res.cloudinary.com/dfdiplnix/image/upload/v1757073352/IMG-20250510-WA0179_-_SOUMYA_RANJAN_DASH_cn8yvz.webp',
@@ -64,21 +64,21 @@ const PILLARS_TESTIMONIALS = [
     designation: 'General Secretary',
     tag: '// GENERAL_SECRETARY',
     quote:
-      'Creating a supportive network where students can learn, grow, and collaborate. We organize tech talks, networking events, and mentorship programs to foster meaningful connections.',
-    bio: 'Soumya Ranjan Dash is the General Secretary, running the society’s day-to-day operations, event calendar, and cross-wing coordination. He is the main point of contact between the executive body, the wings, and the wider student community.',
+      'Creating a society where technology meets creativity, and learning meets celebration. From freshers and fun-filled events to technical initiatives and meaningful collaborations, we strive to make every experience memorable, inclusive, and impactful.',
+    bio: 'As the General Secretary of the Computer Science Society, I work towards bringing every aspect of student life together under one community. The society is not limited to coding or technology—it is a platform for experiences, connections, creativity, and growth. From welcoming freshers and organizing engaging events to supporting technical activities, celebrations, competitions, and collaborations, my role is to ensure that every wing works together smoothly and every member gets the opportunity to participate and contribute. I aim to help build a society where students can learn, have fun, discover their interests, and create memories together.',
     focus:
-      'Operations management, event scheduling, wing coordination, and campus-wide community building.',
+      'My focus is on strengthening coordination across all wings of the society and ensuring that every initiative, whether technical, cultural, recreational, or social, is executed effectively. I aim to encourage active participation, bring fresh ideas to the table, create memorable experiences for students, and maintain a strong sense of teamwork within the society. From the first-day excitement of freshers to major events, celebrations, projects, and everything in between, the goal is to make the Computer Science Society a community that students genuinely feel connected to and proud to be a part of.',
   },
   {
-    src: 'https://res.cloudinary.com/dcdxyfnfo/image/upload/v1757529897/IMG-20250831-WA0028_-_NILABH_SARMAH_smy1sf.webp',
+    src: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1788081093/cf28f4a4-e411-43f9-8342-ff3ad1c78783_nqya4q.jpg',
     name: 'Nilabh Sarmah',
     designation: 'Technical Head',
     tag: '// TECHNICAL_HEAD',
     quote:
-      'Fostering a culture of continuous learning and curiosity. We encourage students to explore new technologies, participate in hackathons, and stay updated with industry trends.',
+      'A true society is not shaped by rules and foundations alone, but driven by trust, shared willpower, and the courage to build together.',
     bio: 'Nilabh Sarmah heads the technical direction of the society as Technical Head, guiding the Development, Competitive Programming, and Machine Learning wings and setting the standard for the projects and workshops CSS puts out.',
     focus:
-      'Technical strategy, workshop curricula, project review, and mentoring across the technical wings.',
+      'Overseeing technical foundations in society with high focus on innovation and problem solving. Familiarising soceity with new technology and leading it upfront.',
   },
   {
     src: 'https://res.cloudinary.com/dfdiplnix/image/upload/v1757075422/IMG-20250519-WA0033_-_Computer_Science_Society_lyx9p6.webp',
@@ -86,10 +86,10 @@ const PILLARS_TESTIMONIALS = [
     designation: 'Finance and Ops Co-ordinator',
     tag: '// FINANCE_OPS_LEAD',
     quote:
-      'Collaborating to solve challenges, share knowledge, and build things that matter. We provide platforms for students to showcase skills, build projects, and prepare for careers.',
-    bio: 'Kartika Jauhari manages the finance portfolios and operational logistics of the society, coordinating budget allocations, sponsor distributions, and the on-ground operations behind every major event and exhibition.',
+      'Driving thoughtful financial planning and resource management to help CSS turn ideas into impactful initiatives.',
+    bio: 'Kartika Jauhari serves as the FinOps Coordinator for CSS, contributing to the society’s financial planning and resource management. She works towards ensuring that the society’s initiatives are well-supported, organized, and executed effectively.',
     focus:
-      'Financial planning, sponsorship logistics, procurement, and event operations.',
+      'Financial planning, budget management, resource allocation, expense tracking, and supporting the smooth execution of CSS initiatives.',
   },
 ]
 
@@ -894,12 +894,12 @@ function Home() {
                           transition={archSpring}
                         >
                           {/* Portrait */}
-                          <div className="relative h-40 w-full shrink-0 overflow-hidden border-b border-arch-line bg-arch-bg-alt md:h-full md:w-1/3 md:border-b-0 md:border-r">
+                          <div className="relative h-56 w-full shrink-0 overflow-hidden border-b border-arch-line bg-arch-bg-alt md:h-full md:w-1/3 md:border-b-0 md:border-r">
                             <motion.img
                               layoutId={`image-${layoutId}`}
                               src={pillar.src}
                               alt={pillar.name}
-                              className="h-full w-full object-cover object-center"
+                              className="h-full w-full object-cover object-top md:object-center"
                               variants={{ hover: { scale: 1.04 } }}
                               transition={{
                                 duration: 0.7,
@@ -997,12 +997,12 @@ function Home() {
                     </button>
 
                     {/* Portrait */}
-                    <div className="relative h-48 w-full shrink-0 overflow-hidden border-b border-arch-line bg-arch-bg-alt md:h-full md:w-1/2 md:border-b-0 md:border-r">
+                    <div className="relative h-72 w-full shrink-0 overflow-hidden border-b border-arch-line bg-arch-bg-alt md:h-full md:w-1/2 md:border-b-0 md:border-r">
                       <motion.img
                         layoutId={`image-${layoutId}`}
                         src={pillar.src}
                         alt={pillar.name}
-                        className="h-full w-full object-cover object-center"
+                        className="h-full w-full object-cover object-top md:object-center"
                       />
                     </div>
 
