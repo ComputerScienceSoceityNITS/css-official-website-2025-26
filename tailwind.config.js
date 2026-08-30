@@ -5,8 +5,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'poppins': ['Poppins', 'sans-serif'],
-        'inter': ['Inter', 'sans-serif'],
+        'display': ['Space Grotesk Variable', 'sans-serif'],
+        'mono': ['JetBrains Mono Variable', 'monospace'],
+        'code': ['Fira Code Variable', 'monospace'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
