@@ -60,7 +60,7 @@ const Leaderboard = () => {
             const leaderboard = Object.keys(userEventCounts).map(userId => {
                 const eventCount = userEventCounts[userId];
                 const profile = userProfiles[userId];
-                
+
                 const earnedBadges = badges
                     .filter(badge => eventCount >= badge.threshold)
                     .sort((a, b) => b.threshold - a.threshold);
@@ -138,7 +138,7 @@ const Leaderboard = () => {
     };
 
     const filteredAndSortedData = leaderboardData
-        .filter(student => 
+        .filter(student =>
             student.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             student.scholarId?.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -150,7 +150,7 @@ const Leaderboard = () => {
         });
 
     const getRankIcon = (rank) => {
-        switch(rank) {
+        switch (rank) {
             case 0: return '🥇';
             case 1: return '🥈';
             case 2: return '🥉';
@@ -191,10 +191,10 @@ const Leaderboard = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="px-4 py-3 bg-arch-bg-alt border border-arch-line pl-12 focus:outline-none focus:border-arch-line w-full text-arch-ink placeholder-gray-400"
                     />
-                    <svg 
-                        className="w-5 h-5 absolute left-4 top-3.5 text-arch-ink" 
-                        fill="none" 
-                        stroke="currentColor" 
+                    <svg
+                        className="w-5 h-5 absolute left-4 top-3.5 text-arch-ink"
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                     >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -205,21 +205,19 @@ const Leaderboard = () => {
                 <div className="flex gap-2 mb-6">
                     <button
                         onClick={() => setSortBy('events')}
-                        className={`flex-1 px-4 py-3 transition-all border text-sm   ${
-                            sortBy === 'events' 
-                                ? 'bg-arch-ink border-arch-ink text-arch-bg' 
+                        className={`flex-1 px-4 py-3 transition-all border text-sm   ${sortBy === 'events'
+                                ? 'bg-arch-ink border-arch-ink text-arch-bg'
                                 : 'bg-arch-bg-alt border-arch-line text-arch-ink-3 hover:border-arch-line'
-                        }`}
+                            }`}
                     >
                         Sort by Events
                     </button>
                     <button
                         onClick={() => setSortBy('name')}
-                        className={`flex-1 px-4 py-3 transition-all border text-sm   ${
-                            sortBy === 'name' 
-                                ? 'bg-arch-ink border-arch-ink text-arch-bg' 
+                        className={`flex-1 px-4 py-3 transition-all border text-sm   ${sortBy === 'name'
+                                ? 'bg-arch-ink border-arch-ink text-arch-bg'
                                 : 'bg-arch-bg-alt border-arch-line text-arch-ink-3 hover:border-arch-line'
-                        }`}
+                            }`}
                     >
                         Sort by Name
                     </button>
@@ -229,8 +227,8 @@ const Leaderboard = () => {
                 <div className="mb-6">
                     <div className="flex space-x-3 overflow-x-auto pb-4 -mx-3 px-3 scrollbar-hide">
                         {badges.map((badge) => (
-                            <div 
-                                key={badge.name} 
+                            <div
+                                key={badge.name}
                                 className="bg-arch-bg-alt border border-arch-line p-3 text-center min-w-[140px] flex-shrink-0"
                                 onClick={() => setActiveBadge(activeBadge?.name === badge.name ? null : badge)}
                             >
@@ -249,7 +247,7 @@ const Leaderboard = () => {
                             <div className="text-4xl text-center mb-4">{activeBadge.icon}</div>
                             <h3 className="text-xl font-bold text-arch-ink text-center mb-2">{activeBadge.name}</h3>
                             <p className="text-arch-ink-3 text-center mb-4">{activeBadge.description}</p>
-                            <button 
+                            <button
                                 onClick={() => setActiveBadge(null)}
                                 className="w-full bg-arch-ink hover:bg-arch-ink text-arch-bg py-2 transition-colors hover:text-arch-bg"
                             >
@@ -267,30 +265,28 @@ const Leaderboard = () => {
                         </div>
                     ) : (
                         filteredAndSortedData.map((student, index) => (
-                            <div 
+                            <div
                                 key={student.userId}
-                                className={`p-4 border transition-all   ${
-                                    index === 0 
+                                className={`p-4 border transition-all   ${index === 0
                                         ? 'bg-arch-card border-arch-line'
                                         : index === 1
-                                        ? 'bg-arch-card border-arch-line'
-                                        : index === 2
-                                        ? 'bg-arch-card border-arch-line'
-                                        : 'bg-arch-bg-alt border-arch-line'
-                                }`}
+                                            ? 'bg-arch-card border-arch-line'
+                                            : index === 2
+                                                ? 'bg-arch-card border-arch-line'
+                                                : 'bg-arch-bg-alt border-arch-line'
+                                    }`}
                             >
                                 {/* Top Row - Rank, Avatar, and Basic Info */}
                                 <div className="flex items-center gap-3 mb-3">
                                     {/* Rank */}
-                                    <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center border   ${
-                                        index === 0 
+                                    <div className={`flex-shrink-0 w-12 h-12 flex items-center justify-center border   ${index === 0
                                             ? 'bg-arch-ink border-arch-ink text-arch-bg'
                                             : index === 1
-                                            ? 'bg-arch-bg-alt border-arch-line text-arch-ink-3'
-                                            : index === 2
-                                            ? 'bg-arch-ink border-arch-ink text-arch-bg'
-                                            : 'bg-arch-ink border-arch-ink text-arch-bg'
-                                    }`}>
+                                                ? 'bg-arch-bg-alt border-arch-line text-arch-ink-3'
+                                                : index === 2
+                                                    ? 'bg-arch-ink border-arch-ink text-arch-bg'
+                                                    : 'bg-arch-ink border-arch-ink text-arch-bg'
+                                        }`}>
                                         <span className="text-lg font-bold">
                                             {getRankIcon(index)}
                                         </span>
@@ -328,7 +324,7 @@ const Leaderboard = () => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex gap-2 flex-wrap">
                                         {student.earnedBadges.slice(0, 3).map((badge) => (
-                                            <div 
+                                            <div
                                                 key={badge.name}
                                                 className="text-2xl hover:scale-110 transition-transform"
                                                 title={`${badge.name}: ${badge.description}`}
@@ -342,7 +338,7 @@ const Leaderboard = () => {
                                             </div>
                                         )}
                                     </div>
-                                    
+
                                     {/* Highest Badge */}
                                     {student.highestBadge && (
                                         <div className="text-right">

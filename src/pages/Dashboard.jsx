@@ -341,53 +341,42 @@ const Dashboard = () => {
 
                     {/* Right Side - All Buttons in One Line */}
                     <div className="flex flex-wrap gap-3 w-full lg:w-auto justify-center lg:justify-end">
-                        <button 
-                            onClick={navigateToChat}
-                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg"
-                        >
-                            💬 Chat
-                        </button>
+                        {!isAdmin && (
+                            <button 
+                                onClick={navigateToChat}
+                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg cursor-pointer"
+                            >
+                                💬 Chat
+                            </button>
+                        )}
                         
                         {isAdmin && (
                             <button 
                                 onClick={navigateToAdminDashboard}
-                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg"
+                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg cursor-pointer"
                             >
                                 🛡️ Admin
+                            </button>
+                        )}
+
+                        {(isAdmin || (() => {
+                            const emailLower = (user?.email || '').toLowerCase();
+                            return emailLower.includes('ug') && emailLower.includes('26') && emailLower.includes('cse');
+                        })()) && (
+                            <button 
+                                onClick={() => navigate('/welcome-story' + (isAdmin ? '?preview=true' : ''))}
+                                className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all flex items-center gap-2 text-sm flex-shrink-0 hover:text-arch-bg cursor-pointer"
+                            >
+                                ✨ Welcome Story
                             </button>
                         )}
                         
                         <button 
                             onClick={handleLogout} 
-                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all text-sm flex-shrink-0 hover:text-arch-bg"
+                            className="bg-arch-ink hover:bg-arch-ink text-arch-bg font-bold py-2 px-4 transition-all text-sm flex-shrink-0 hover:text-arch-bg cursor-pointer"
                         >
                             Logout
                         </button>
-                    </div>
-                </div>
-
-                <div className="my-6 sm:my-8 border-t border-arch-line"></div>
-
-                {/* --- Badges Section --- */}
-                <div className="mb-8">
-                    <h2 className="text-xl sm:text-2xl font-bold mb-4" >
-                        Badges Earned
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                        {badges.map((badge) => (
-                            <div 
-                                key={badge.name} 
-                                className={`p-3 sm:p-4 text-center transition-all   ${
-                                    earnedBadges.some(b => b.name === badge.name) 
-                                        ? 'bg-arch-ink border border-arch-ink' 
-                                        : 'bg-arch-bg-alt border border-arch-line opacity-40'
-                                }`}
-                            >
-                                <div className="text-3xl sm:text-4xl md:text-5xl">{badge.icon}</div>
-                                <h3 className="font-bold mt-2 text-xs sm:text-sm md:text-base">{badge.name}</h3>
-                                <p className="text-xs text-arch-ink-3 mt-1 hidden xs:block">{badge.description}</p>
-                            </div>
-                        ))}
                     </div>
                 </div>
 

@@ -429,6 +429,16 @@ const App = () => {
                   }
                 />
                 <Route path='/app-download' element={<AppDownload />} />
+                <Route
+                  path="/welcome-story"
+                  element={
+                    <ProtectedRoute>
+                      <PageWrapper>
+                        <WelcomeStoryPage />
+                      </PageWrapper>
+                    </ProtectedRoute>
+                  }
+                />
               </Routes>
             </div>
             {/* <DiwaliWidget /> */}

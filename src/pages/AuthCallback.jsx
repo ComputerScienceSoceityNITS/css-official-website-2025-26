@@ -88,7 +88,7 @@ const AuthCallback = () => {
                     
                     const previousPath = document.referrer;
                     if (previousPath && previousPath.includes('/esperanza')) {
-                        redirectTo = '/Abacus';
+                        redirectTo = '/dashboard';
                     }
 
                     
@@ -96,6 +96,14 @@ const AuthCallback = () => {
                     if (intendedDestination) {
                         redirectTo = intendedDestination;
                         sessionStorage.removeItem('auth_redirect');
+                    }
+
+                    const emailLower = userEmail.toLowerCase();
+                    const isNewBatch = emailLower.includes('ug') && emailLower.includes('26') && emailLower.includes('cse');
+                    const hasViewedWelcomeStory = localStorage.getItem('viewedWelcomeStory') === 'true';
+
+                    if (isNewBatch && !hasViewedWelcomeStory) {
+                        redirectTo = '/welcome-story';
                     }
 
                     navigate(redirectTo, { replace: true });

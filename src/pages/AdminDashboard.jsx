@@ -35,7 +35,11 @@ const AdminDashboard = () => {
     max_participants: 100,
     requires_auth: true,
     is_direct_registration: true,
-    is_cse_only: false
+    is_cse_only: false,
+    venue: '',
+    event_flow: '',
+    certificate_available: false,
+    certificate_template_url: ''
   });
 
   const [subEventFormData, setSubEventFormData] = useState({
@@ -48,7 +52,11 @@ const AdminDashboard = () => {
     is_cse_only: false,
     organizer: '',
     status: 'Upcoming',
-    date: ''
+    date: '',
+    venue: '',
+    event_flow: '',
+    certificate_available: false,
+    certificate_template_url: ''
   });
 
   useEffect(() => {
@@ -58,12 +66,12 @@ const AdminDashboard = () => {
   useEffect(() => {
     const eventsSubscription = supabase
       .channel('events-changes')
-      .on('postgres_changes', 
-        { 
+      .on('postgres_changes',
+        {
           event: '*',
-          schema: 'public', 
-          table: 'events' 
-        }, 
+          schema: 'public',
+          table: 'events'
+        },
         (payload) => {
           fetchEvents();
         }
@@ -72,12 +80,12 @@ const AdminDashboard = () => {
 
     const userEventsSubscription = supabase
       .channel('user-events-changes')
-      .on('postgres_changes', 
-        { 
-          event: '*', 
-          schema: 'public', 
-          table: 'user_events' 
-        }, 
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_events'
+        },
         (payload) => {
           if (user) {
             fetchRegisteredEvents();
@@ -88,12 +96,12 @@ const AdminDashboard = () => {
 
     const subEventsSubscription = supabase
       .channel('sub-events-changes')
-      .on('postgres_changes', 
-        { 
-          event: '*', 
-          schema: 'public', 
-          table: 'sub_events' 
-        }, 
+      .on('postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'sub_events'
+        },
         (payload) => {
           events.forEach(event => {
             if (!event.is_direct_registration) {
@@ -144,7 +152,7 @@ const AdminDashboard = () => {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
-      
+
       setSubEvents(prev => ({
         ...prev,
         [parentSlug]: data || []
@@ -173,7 +181,7 @@ const AdminDashboard = () => {
       }
 
       const userIds = userEvents.map(ue => ue.user_id);
-      
+
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -220,7 +228,7 @@ const AdminDashboard = () => {
       }
 
       const userIds = userEvents.map(ue => ue.user_id);
-      
+
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
@@ -309,7 +317,11 @@ const AdminDashboard = () => {
       max_participants: 100,
       requires_auth: true,
       is_direct_registration: true,
-      is_cse_only: false
+      is_cse_only: false,
+      venue: '',
+      event_flow: '',
+      certificate_available: false,
+      certificate_template_url: ''
     });
   };
 
@@ -324,7 +336,11 @@ const AdminDashboard = () => {
       is_cse_only: false,
       organizer: '',
       status: 'Upcoming',
-      date: ''
+      date: '',
+      venue: '',
+      event_flow: '',
+      certificate_available: false,
+      certificate_template_url: ''
     });
   };
 
@@ -343,7 +359,11 @@ const AdminDashboard = () => {
       max_participants: event.max_participants,
       requires_auth: event.requires_auth,
       is_direct_registration: event.is_direct_registration,
-      is_cse_only: event.is_cse_only
+      is_cse_only: event.is_cse_only,
+      venue: event.venue || '',
+      event_flow: event.event_flow || '',
+      certificate_available: event.certificate_available || false,
+      certificate_template_url: event.certificate_template_url || ''
     });
   };
 
@@ -360,7 +380,11 @@ const AdminDashboard = () => {
       is_cse_only: subEvent.is_cse_only,
       organizer: subEvent.organizer || parentEvent.organizer,
       status: subEvent.status || 'Upcoming',
-      date: subEvent.date ? subEvent.date.split('+')[0] : ''
+      date: subEvent.date ? subEvent.date.split('+')[0] : '',
+      venue: subEvent.venue || '',
+      event_flow: subEvent.event_flow || '',
+      certificate_available: subEvent.certificate_available || false,
+      certificate_template_url: subEvent.certificate_template_url || ''
     });
     setShowSubEventForm(true);
   };
@@ -399,7 +423,7 @@ const AdminDashboard = () => {
       }
 
       const eventSlug = eventToDelete.slug;
-      
+
       if (eventSlug) {
         const { error: subEventError } = await supabase
           .from('sub_events')
@@ -435,7 +459,7 @@ const AdminDashboard = () => {
         const newEvents = prevEvents.filter(event => event.id !== eventId);
         return newEvents;
       });
-      
+
       if (selectedEvent && selectedEvent.id === eventId) {
         setSelectedEvent(null);
         setRegistrations(prev => {
@@ -444,12 +468,12 @@ const AdminDashboard = () => {
           return newRegistrations;
         });
       }
-      
+
       window.dispatchEvent(new CustomEvent('eventDeleted', {
         detail: { eventId, eventSlug }
       }));
       alert('Event and all related data deleted successfully!');
-      
+
     } catch (error) {
       console.error('💥 Error in handleDeleteEvent:', error);
       alert('Failed to delete event: ' + error.message);
@@ -564,10 +588,10 @@ const AdminDashboard = () => {
   };
 
   const exportRegistrations = (eventSlug, isSubEvent = false) => {
-    const registrationsData = isSubEvent 
+    const registrationsData = isSubEvent
       ? subEventRegistrations[eventSlug] || []
       : registrations[eventSlug] || [];
-    
+
     const csvContent = [
       ['Name', 'Scholar ID', 'Email', 'Phone', 'Branch', 'Year', 'Registration Date', 'Status'],
       ...registrationsData.map(reg => [
@@ -654,17 +678,25 @@ const AdminDashboard = () => {
               {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
             </button>
           </div>
-          <button
-            onClick={() => {
-              setEditingEvent(null);
-              setShowCreateForm(true);
-              resetForm();
-            }}
-            className="bg-arch-card text-arch-ink font-semibold py-2 px-4 transition-all flex items-center gap-2 justify-center text-sm"
-          >
-            <FaPlus size={14} />
-            New Event
-          </button>
+          <div className="flex flex-wrap gap-2 justify-center sm:justify-end">
+            <button
+              onClick={() => { window.location.href = '/welcome-story?preview=true'; }}
+              className="bg-arch-card text-arch-ink border border-arch-line font-semibold py-2 px-4 transition-all flex items-center gap-2 justify-center text-sm hover:border-arch-ink cursor-pointer"
+            >
+              ✨ Welcome Story
+            </button>
+            <button
+              onClick={() => {
+                setEditingEvent(null);
+                setShowCreateForm(true);
+                resetForm();
+              }}
+              className="bg-arch-card text-arch-ink font-semibold py-2 px-4 transition-all flex items-center gap-2 justify-center text-sm cursor-pointer"
+            >
+              <FaPlus size={14} />
+              New Event
+            </button>
+          </div>
         </div>
 
         {/* Tab Navigation */}
@@ -676,11 +708,10 @@ const AdminDashboard = () => {
               setSelectedEvent(null);
               setSelectedSubEvent(null);
             }}
-            className={`flex-1 px-3 py-2 font-medium transition-all text-sm   ${
-              activeTab === 'events' 
-                ? 'bg-arch-ink text-arch-bg' 
+            className={`flex-1 px-3 py-2 font-medium transition-all text-sm   ${activeTab === 'events'
+                ? 'bg-arch-ink text-arch-bg'
                 : 'text-arch-ink-3 hover:text-arch-ink hover:bg-arch-bg-alt'
-            }`}
+              }`}
           >
             📅 Manage Events
           </button>
@@ -689,11 +720,10 @@ const AdminDashboard = () => {
               setActiveTab('registrations');
               setMobileMenuOpen(false);
             }}
-            className={`flex-1 px-3 py-2 font-medium transition-all text-sm   ${
-              activeTab === 'registrations' 
-                ? 'bg-arch-ink text-arch-bg' 
+            className={`flex-1 px-3 py-2 font-medium transition-all text-sm   ${activeTab === 'registrations'
+                ? 'bg-arch-ink text-arch-bg'
                 : 'text-arch-ink-3 hover:text-arch-ink hover:bg-arch-bg-alt'
-            }`}
+              }`}
           >
             👥 View Registrations
           </button>
@@ -748,7 +778,7 @@ const AdminDashboard = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-arch-ink mb-2 text-sm sm:text-base">Organizer *</label>
                     <input
@@ -769,6 +799,19 @@ const AdminDashboard = () => {
                       <option value="Upcoming">Upcoming</option>
                       <option value="Ongoing">Ongoing</option>
                       <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Category/Section *</label>
+                    <select
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
+                      value={formData.section}
+                      onChange={(e) => setFormData({ ...formData, section: e.target.value })}
+                    >
+                      <option value="Upcoming">Upcoming Only</option>
+                      <option value="Technical">Technical</option>
+                      <option value="Cultural">Cultural</option>
+                      <option value="Yearly">Yearly (Flagship)</option>
                     </select>
                   </div>
                   <div>
@@ -818,6 +861,30 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Venue *</label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
+                      value={formData.venue}
+                      onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
+                      placeholder="e.g. CSE Dept Seminar Hall"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-arch-ink mb-2 text-sm sm:text-base">Event Flow / Detailed Timeline</label>
+                    <textarea
+                      rows="3"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm sm:text-base"
+                      value={formData.event_flow}
+                      onChange={(e) => setFormData({ ...formData, event_flow: e.target.value })}
+                      placeholder="List event flow or rules... (Supports newlines)"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-3 border-t border-arch-line pt-4">
                   <div className="flex items-center">
                     <input
@@ -845,7 +912,7 @@ const AdminDashboard = () => {
                     </label>
                   </div>
                   <p className="text-xs text-arch-ink-3 ml-6">
-                    ✅ Checked: Users register directly from events page<br/>
+                    ✅ Checked: Users register directly from events page<br />
                     ❌ Unchecked: Users go to event details page for registration
                   </p>
 
@@ -862,9 +929,38 @@ const AdminDashboard = () => {
                     </label>
                   </div>
                   <p className="text-xs text-arch-ink-3 ml-6">
-                    ✅ Checked: Only @cse.nits.ac.in emails can register<br/>
+                    ✅ Checked: Only @cse.nits.ac.in emails can register<br />
                     ❌ Unchecked: All college emails can register
                   </p>
+
+                  <div className="flex items-center pt-2">
+                    <input
+                      type="checkbox"
+                      id="certificate_available"
+                      className="mr-2"
+                      checked={formData.certificate_available}
+                      onChange={(e) => setFormData({ ...formData, certificate_available: e.target.checked })}
+                    />
+                    <label htmlFor="certificate_available" className="text-arch-ink text-sm sm:text-base font-semibold">
+                      Enable Attendance Certificates
+                    </label>
+                  </div>
+                  {formData.certificate_available && (
+                    <div className="ml-6 mt-1">
+                      <label className="block text-arch-ink mb-1 text-xs sm:text-sm">Certificate Template Image URL *</label>
+                      <input
+                        type="url"
+                        required
+                        className="w-full p-2 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-xs sm:text-sm"
+                        value={formData.certificate_template_url}
+                        onChange={(e) => setFormData({ ...formData, certificate_template_url: e.target.value })}
+                        placeholder="https://example.com/certificate-template.png"
+                      />
+                      <p className="text-[10px] text-arch-ink-3 mt-1">
+                        Provide a landscape certificate image template. The system will overlay the student's Name and Scholar ID automatically.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
@@ -1008,6 +1104,30 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-arch-ink mb-2 text-sm">Venue *</label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
+                      value={subEventFormData.venue}
+                      onChange={(e) => setSubEventFormData({ ...subEventFormData, venue: e.target.value })}
+                      placeholder="e.g. CSE Dept Seminar Hall"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-arch-ink mb-2 text-sm">Event Flow / Detailed Timeline</label>
+                    <textarea
+                      rows="3"
+                      className="w-full p-3 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-sm"
+                      value={subEventFormData.event_flow}
+                      onChange={(e) => setSubEventFormData({ ...subEventFormData, event_flow: e.target.value })}
+                      placeholder="List event flow or rules... (Supports newlines)"
+                    />
+                  </div>
+                </div>
+
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -1019,6 +1139,37 @@ const AdminDashboard = () => {
                   <label htmlFor="sub_event_cse_only" className="text-arch-ink text-sm">
                     CSE Students Only
                   </label>
+                </div>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="sub_event_certificate_available"
+                      className="mr-2"
+                      checked={subEventFormData.certificate_available}
+                      onChange={(e) => setSubEventFormData({ ...subEventFormData, certificate_available: e.target.checked })}
+                    />
+                    <label htmlFor="sub_event_certificate_available" className="text-arch-ink text-sm font-semibold">
+                      Enable Attendance Certificates
+                    </label>
+                  </div>
+                  {subEventFormData.certificate_available && (
+                    <div className="ml-6 mt-1">
+                      <label className="block text-arch-ink mb-1 text-xs">Certificate Template Image URL *</label>
+                      <input
+                        type="url"
+                        required
+                        className="w-full p-2 bg-arch-bg-alt border border-arch-line focus:outline-none focus:border-arch-line text-xs"
+                        value={subEventFormData.certificate_template_url}
+                        onChange={(e) => setSubEventFormData({ ...subEventFormData, certificate_template_url: e.target.value })}
+                        placeholder="https://example.com/certificate-template.png"
+                      />
+                      <p className="text-[10px] text-arch-ink-3 mt-1">
+                        Provide a landscape certificate image template. The system will overlay the student's Name and Scholar ID automatically.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-3 pt-4">
@@ -1058,7 +1209,7 @@ const AdminDashboard = () => {
                 {events.length} {events.length === 1 ? 'Event' : 'Events'}
               </span>
             </div>
-            
+
             <div className="space-y-4">
               {events.map((event) => (
                 <div key={event.id} className="bg-arch-bg-alt border border-arch-line p-4 hover:border-arch-line transition-all duration-200">
@@ -1069,18 +1220,17 @@ const AdminDashboard = () => {
                         <h3 className="text-base sm:text-lg font-semibold text-arch-ink truncate">
                           {event.name}
                         </h3>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium   ${
-                          event.is_active 
-                            ? 'bg-arch-ink text-arch-bg border border-arch-ink' 
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium   ${event.is_active
+                            ? 'bg-arch-ink text-arch-bg border border-arch-ink'
                             : 'bg-arch-ink text-arch-bg border border-arch-ink'
-                        }`}>
+                          }`}>
                           {event.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </div>
                       <p className="text-arch-ink-3 text-xs">{event.organizer} • {event.status}</p>
                     </div>
                   </div>
-                  
+
                   {/* Event Badges */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {!event.is_direct_registration && (
@@ -1097,12 +1247,12 @@ const AdminDashboard = () => {
                       {event.organizer}
                     </span>
                   </div>
-                  
+
                   {/* Event Details */}
                   <p className="text-arch-ink-3 text-sm mb-3 line-clamp-2 leading-relaxed">
                     {event.description}
                   </p>
-                  
+
                   <div className="grid grid-cols-2 gap-2 text-xs text-arch-ink-3 mb-3">
                     <div className="flex items-center gap-1">
                       <span className="text-arch-ink">Slug:</span>
@@ -1120,6 +1270,12 @@ const AdminDashboard = () => {
                       <div className="flex items-center gap-1">
                         <FaWhatsapp size={10} className="text-arch-ink" />
                         <span className="text-arch-ink">WhatsApp</span>
+                      </div>
+                    )}
+                    {event.venue && (
+                      <div className="flex items-center gap-1 col-span-2">
+                        <span className="text-arch-ink font-semibold">Venue:</span>
+                        <span className="truncate">{event.venue}</span>
                       </div>
                     )}
                   </div>
@@ -1146,11 +1302,10 @@ const AdminDashboard = () => {
                     </button>
                     <button
                       onClick={() => handleToggleEvent(event.id, event.is_active)}
-                      className={`flex-1 py-1.5 px-2 text-xs transition-all flex items-center justify-center gap-1.5 font-medium   ${
-                        event.is_active 
-                          ? 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg' 
+                      className={`flex-1 py-1.5 px-2 text-xs transition-all flex items-center justify-center gap-1.5 font-medium   ${event.is_active
+                          ? 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg'
                           : 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg'
-                      }   text-arch-ink`}
+                        }   text-arch-ink`}
                     >
                       {event.is_active ? <FaToggleOff size={10} /> : <FaToggleOn size={10} />}
                       {event.is_active ? 'Deactivate' : 'Activate'}
@@ -1197,13 +1352,12 @@ const AdminDashboard = () => {
                                   <h4 className="font-semibold text-arch-ink text-sm truncate">{subEvent.name}</h4>
                                   <p className="text-arch-ink-3 text-xs mt-0.5 line-clamp-1">{subEvent.description}</p>
                                 </div>
-                                <span className={`px-1.5 py-0.5 text-xs   ${
-                                  subEvent.is_active ? 'bg-arch-ink text-arch-bg' : 'bg-arch-ink text-arch-bg'
-                                }`}>
+                                <span className={`px-1.5 py-0.5 text-xs   ${subEvent.is_active ? 'bg-arch-ink text-arch-bg' : 'bg-arch-ink text-arch-bg'
+                                  }`}>
                                   {subEvent.is_active ? 'Active' : 'Inactive'}
                                 </span>
                               </div>
-                              
+
                               <div className="flex items-center justify-between text-xs text-arch-ink-3 mb-2">
                                 <div className="flex items-center gap-2">
                                   <span className="text-arch-ink">{subEvent.slug}</span>
@@ -1216,6 +1370,12 @@ const AdminDashboard = () => {
                                   </span>
                                 )}
                               </div>
+                              {subEvent.venue && (
+                                <div className="text-xs text-arch-ink-3 mb-2 flex items-center gap-1">
+                                  <span className="text-arch-ink font-semibold">Venue:</span>
+                                  <span>{subEvent.venue}</span>
+                                </div>
+                              )}
 
                               <div className="flex gap-1.5">
                                 <button
@@ -1232,11 +1392,10 @@ const AdminDashboard = () => {
                                 </button>
                                 <button
                                   onClick={() => handleToggleSubEvent(subEvent.id, subEvent.is_active, event.slug)}
-                                  className={`flex-1 py-1 px-1.5 text-xs transition-all flex items-center justify-center gap-1 font-medium   ${
-                                    subEvent.is_active 
-                                      ? 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg' 
+                                  className={`flex-1 py-1 px-1.5 text-xs transition-all flex items-center justify-center gap-1 font-medium   ${subEvent.is_active
+                                      ? 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg'
                                       : 'bg-arch-ink hover:bg-arch-ink hover:text-arch-bg'
-                                  }   text-arch-ink`}
+                                    }   text-arch-ink`}
                                 >
                                   {subEvent.is_active ? <FaToggleOff size={9} /> : <FaToggleOn size={9} />}
                                 </button>
@@ -1280,11 +1439,11 @@ const AdminDashboard = () => {
               <div className="flex items-center gap-2">
                 <h2 className="text-lg sm:text-xl font-bold text-arch-ink flex items-center gap-2">
                   <FaUsers className="text-arch-ink" />
-                  {selectedSubEvent 
+                  {selectedSubEvent
                     ? `${selectedParentEvent?.name} - ${selectedSubEvent.name}`
-                    : selectedEvent 
-                    ? selectedEvent.name
-                    : 'Event Registrations'
+                    : selectedEvent
+                      ? selectedEvent.name
+                      : 'Event Registrations'
                   }
                 </h2>
                 {(selectedEvent || selectedSubEvent) && (
@@ -1293,12 +1452,12 @@ const AdminDashboard = () => {
                   </span>
                 )}
               </div>
-              
+
               {(selectedEvent || selectedSubEvent) && (
                 <div className="flex gap-2">
                   <button
                     onClick={() => exportRegistrations(
-                      selectedSubEvent 
+                      selectedSubEvent
                         ? `${selectedParentEvent.slug}-${selectedSubEvent.slug}`
                         : selectedEvent.slug,
                       !!selectedSubEvent
@@ -1336,7 +1495,7 @@ const AdminDashboard = () => {
                   <div className="bg-arch-ink p-3 border border-arch-ink">
                     <div className="text-arch-ink text-xs font-medium mb-1">Total Registrations</div>
                     <div className="text-xl font-bold text-arch-ink">
-                      {selectedSubEvent 
+                      {selectedSubEvent
                         ? (subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []).length
                         : (registrations[selectedEvent.slug] || []).length
                       }
@@ -1351,9 +1510,9 @@ const AdminDashboard = () => {
                   <div className="bg-arch-ink p-3 border border-arch-ink">
                     <div className="text-arch-ink text-xs font-medium mb-1">Remaining Slots</div>
                     <div className="text-xl font-bold text-arch-ink">
-                      {Math.max(0, 
-                        (selectedSubEvent ? selectedSubEvent.max_participants : selectedEvent.max_participants) - 
-                        (selectedSubEvent 
+                      {Math.max(0,
+                        (selectedSubEvent ? selectedSubEvent.max_participants : selectedEvent.max_participants) -
+                        (selectedSubEvent
                           ? (subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []).length
                           : (registrations[selectedEvent.slug] || []).length
                         )
@@ -1385,7 +1544,7 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {(selectedSubEvent 
+                      {(selectedSubEvent
                         ? subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []
                         : registrations[selectedEvent.slug] || []
                       ).map((registration) => (
@@ -1439,7 +1598,7 @@ const AdminDashboard = () => {
                           </td>
                           <td className="px-3 py-2">
                             {(selectedSubEvent?.whatsapp_group_link || selectedEvent?.whatsapp_group_link) && (
-                              <a 
+                              <a
                                 href={selectedSubEvent?.whatsapp_group_link || selectedEvent.whatsapp_group_link}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -1456,16 +1615,16 @@ const AdminDashboard = () => {
                   </table>
                 </div>
 
-                {(selectedSubEvent 
+                {(selectedSubEvent
                   ? (subEventRegistrations[`${selectedParentEvent.slug}-${selectedSubEvent.slug}`] || []).length === 0
                   : (registrations[selectedEvent.slug] || []).length === 0
                 ) && (
-                  <div className="text-center py-8 text-arch-ink-3 bg-arch-bg-alt border border-dashed border-arch-line">
-                    <FaUsers className="text-3xl text-arch-ink mx-auto mb-2 opacity-50" />
-                    <p className="text-arch-ink font-medium">No Registrations Yet</p>
-                    <p className="text-sm text-arch-ink-3 mt-1">Participants will appear here once they register</p>
-                  </div>
-                )}
+                    <div className="text-center py-8 text-arch-ink-3 bg-arch-bg-alt border border-dashed border-arch-line">
+                      <FaUsers className="text-3xl text-arch-ink mx-auto mb-2 opacity-50" />
+                      <p className="text-arch-ink font-medium">No Registrations Yet</p>
+                      <p className="text-sm text-arch-ink-3 mt-1">Participants will appear here once they register</p>
+                    </div>
+                  )}
               </div>
             )}
           </div>
