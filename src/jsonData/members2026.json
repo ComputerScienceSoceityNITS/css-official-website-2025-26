@@ -226,6 +226,17 @@
   "members": {
     "CP Wing": [
       {
+        "name": "ANIKET KESARWANI",
+        "photo": "https://res.cloudinary.com/difnkaes4/image/upload/v1788082773/b6a4ceeb-ad8e-4f44-859c-c4b29f7e7cb8_qwuw9e.jpg",
+        "role": "Junior Member",
+        "wing": "CP Wing",
+        "social": {
+          "instagram": "https://www.instagram.com/aniketkesarwani_26/",
+          "facebook": "https://m.facebook.com/aniket.kesarwani.5220/",
+          "linkedin": "https://www.linkedin.com/in/aniket-kesarwani-193773369"
+        }
+      },
+      {
         "name": "Binit Mani",
         "photo": "https://res.cloudinary.com/dzktizujm/image/upload/v1787942752/photo_-_BINIT_MANI_BHAGAT.png",
         "role": "Junior Member",
@@ -500,8 +511,52 @@
     ],
     "ML Wing": [
       {
+        "name": "Arunangshu Raj Dey",
+        "photo": "https://res.cloudinary.com/difnkaes4/image/upload/v1788082531/60631.jpg_y7nppw.jpg",
+        "role": "Junior Member",
+        "wing": "ML Wing",
+        "social": {
+          "instagram": "https://www.instagram.com/arun_dey4/",
+          "facebook": "https://www.facebook.com/share/1Cg9fDMMFG/",
+          "linkedin": " https://www.linkedin.com/in/arunangshu-raj-dey-016204319?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+        }
+      },
+      {
+        "name": "Binit Mani",
+        "photo": "https://res.cloudinary.com/difnkaes4/image/upload/v1788082531/photo_llpo6r.png",
+        "role": "Junior Member",
+        "wing": "ML Wing",
+        "social": {
+          "instagram": "https://www.instagram.com/binit_mani?igsi=MXJpcGQ5MTVsem15MA==",
+          "facebook": "",
+          "linkedin": "ttps://www.linkedin.com/in/binit-mani-430a3536a"
+        }
+      },
+      {
+        "name": "Bhargob Gohain",
+        "photo": "https://res.cloudinary.com/difnkaes4/image/upload/v1788082535/IMG_20260811_222508812.jpg_v0z73z.jpg",
+        "role": "Junior Member",
+        "wing": "ML Wing",
+        "social": {
+          "instagram": "https://www.instagram.com/bhargob_gg?igsi=Zjc2ODR4bTJydnJi",
+          "facebook": "https://www.facebook.com/share/1EpUPzHHB8/",
+          "linkedin": "https://www.linkedin.com/in/bhargob-gohain-755040389/"
+        }
+      },
+      {
+        "name": "Gayatri Kalita",
+        "photo": "https://res.cloudinary.com/difnkaes4/image/upload/v1788082530/IMG_5946.JPG_kojvbd.jpg",
+        "role": "Junior Member",
+        "wing": "ML Wing",
+        "social": {
+          "instagram": "",
+          "facebook": "https://www.facebook.com/share/19QoGMwPGK/?mibextid=wwXIfr",
+          "linkedin": "https://www.linkedin.com/in/gayatri-kalita-6426833a4?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+        }
+      },
+      {
         "name": "Teebrajit Kalita ",
-        "photo": "https://res.cloudinary.com/mitmhjtk/image/upload/f_auto,q_auto/file_000000008f3c81fab43f5a629913e87e_-_TEEBRAJIT_KALITA_32",
+        "photo": "https://res.cloudinary.com/difnkaes4/image/upload/v1788082530/IMG_20260830_123229.jpg_n0tnhv.jpg",
         "role": "Junior Member",
         "wing": "ML Wing",
         "social": {
