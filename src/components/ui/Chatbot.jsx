@@ -11,17 +11,7 @@ import { ARCH_EASE_CSS } from '../../hooks/useArchAnim';
 // removing it would silently break the pillars flip animation.
 import '../../styles/chatbot.css';
 
-/* ------------------------------------------------------------------
-   CSS Bot — the society's assistant, rebuilt in the site's own
-   language instead of the generic cyan/glass "AI chat widget" look.
-   Flat panels, hairline borders, display type for the header, the
-   same fill-black-on-hover button used everywhere else on the site.
-
-   Every hook, handler and piece of state below is unchanged from the
-   previous implementation — this file only rewrites the return().
------------------------------------------------------------------- */
-
-// Built-in intelligent CSS Knowledge Base for immediate, bulletproof responses
+// Built-in intelligent CSS Knowledge Base for immediate local fallback
 const KNOWLEDGE_BASE = [
   {
     patterns: ['hi', 'hello', 'hey', 'start', 'greetings', 'who are you', 'help'],
@@ -100,11 +90,11 @@ const Chatbot = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [sessionId] = useState(() => `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [hasUnread, setHasUnread] = useState(true);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const dfRef = useRef(null);
   const navigate = useNavigate();
 
   const scrollToBottom = () => {
@@ -119,11 +109,70 @@ const Chatbot = () => {
     }
   }, [isOpen, messages, isTyping]);
 
+  useEffect(() => {
+    const handleResponse = (event) => {
+      event.preventDefault();
+      setIsTyping(false);
+
+      let responseText = '';
+      let suggestions = [];
+
+      // Extract response from event.detail
+      if (event.detail && event.detail.response) {
+        const queryResult = event.detail.response.queryResult;
+        if (queryResult) {
+          responseText = queryResult.fulfillmentText;
+
+          // Parse suggestions if present in quick replies
+          if (queryResult.fulfillmentMessages) {
+            for (const msg of queryResult.fulfillmentMessages) {
+              if (msg.quickReplies) {
+                suggestions = msg.quickReplies.quickReplies || [];
+              }
+            }
+          }
+        }
+      }
+
+      setMessages(prev => {
+        // If the only message is the initial greeting, replace it with the live greeting
+        if (prev.length === 1 && prev[0].id === 'welcome-msg') {
+          return [
+            {
+              id: `welcome-${Date.now()}`,
+              text: responseText || prev[0].text,
+              sender: 'bot',
+              suggestions: suggestions.length > 0 ? suggestions : prev[0].suggestions,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }
+          ];
+        }
+
+        return [
+          ...prev,
+          {
+            id: `bot-${Date.now()}`,
+            text: responseText || 'I did not understand that. Can you rephrase?',
+            sender: 'bot',
+            suggestions: suggestions.length > 0 ? suggestions : undefined,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ];
+      });
+    };
+
+    // Attach listener directly to the df-messenger element
+    const dfMessenger = dfRef.current;
+    dfMessenger?.addEventListener('df-response-received', handleResponse);
+    return () => {
+      dfMessenger?.removeEventListener('df-response-received', handleResponse);
+    };
+  }, []);
+
   const toggleChat = () => {
     setIsOpen(prev => !prev);
   };
 
-  // Client-side fallback matching
   const findFallbackResponse = (query) => {
     const cleanQuery = query.toLowerCase().trim();
     for (const item of KNOWLEDGE_BASE) {
@@ -137,30 +186,7 @@ const Chatbot = () => {
     };
   };
 
-  const sendToBackendDialogflow = async (text) => {
-    try {
-      const response = await fetch('/api/dialogflow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, sessionId, isEvent: false }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Dialogflow HTTP status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (data && data.response) {
-        return { response: data.response };
-      }
-      throw new Error('Empty response payload');
-    } catch (err) {
-      console.warn('Falling back to local CSS knowledge engine:', err.message);
-      return findFallbackResponse(text);
-    }
-  };
-
-  const handleSend = async (customText) => {
+  const handleSend = (customText) => {
     const textToSend = typeof customText === 'string' ? customText : inputValue;
     if (!textToSend || textToSend.trim() === '' || isTyping) return;
 
@@ -176,37 +202,27 @@ const Chatbot = () => {
     setInputValue('');
     setIsTyping(true);
 
-    try {
-      const result = await sendToBackendDialogflow(trimmed);
+    // Call Dialogflow Messenger programmatically
+    const dfMessenger = dfRef.current;
+    if (dfMessenger && typeof dfMessenger.sendQuery === 'function') {
+      dfMessenger.sendQuery(trimmed);
+    } else {
+      // Local fallback in case the external script hasn't loaded
       setTimeout(() => {
         setIsTyping(false);
+        const fallback = findFallbackResponse(trimmed);
         setMessages(prev => [
           ...prev,
           {
             id: `bot-${Date.now()}`,
-            text: result.response,
-            link: result.link,
-            suggestions: result.suggestions || ['Upcoming Events', 'Wings of CSS', 'Study Materials'],
+            text: fallback.response,
+            link: fallback.link,
+            suggestions: fallback.suggestions || ['Upcoming Events', 'Wings of CSS', 'Study Materials'],
             sender: 'bot',
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }
         ]);
       }, 500);
-    } catch (error) {
-      console.error('Error handling message:', error);
-      setIsTyping(false);
-      const fallback = findFallbackResponse(trimmed);
-      setMessages(prev => [
-        ...prev,
-        {
-          id: `bot-${Date.now()}`,
-          text: fallback.response,
-          link: fallback.link,
-          suggestions: fallback.suggestions,
-          sender: 'bot',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
     }
   };
 
@@ -224,7 +240,6 @@ const Chatbot = () => {
     setIsTyping(false);
   };
 
-  // Simple Markdown text renderer for bold, bullets, links
   const renderFormattedText = (text) => {
     if (!text) return null;
     const lines = text.split('\n');
@@ -252,6 +267,15 @@ const Chatbot = () => {
 
   return (
     <>
+      {/* ── Hidden Dialogflow Messenger Element ──────────────────────── */}
+      <df-messenger
+        ref={dfRef}
+        intent="WELCOME"
+        chat-title="CSS Bot"
+        agent-id="b6e84f81-9c3d-42b4-9d60-0f0fc35cf06a"
+        language-code="en"
+      ></df-messenger>
+
       {/* ── Floating Launcher ─────────────────────────────────────── */}
       <div className="fixed bottom-6 right-6 z-[190] select-none">
         <motion.button

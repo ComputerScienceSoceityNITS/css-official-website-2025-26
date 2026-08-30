@@ -97,16 +97,16 @@ const SPONSORS_LIST = [
   {
     name: 'Unstop',
     href: 'https://unstop.com',
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1788066698/Unstop-Logo-Blue-Large_pmhc44.jpg',
     type: 'Official Platform Partner',
-    isSvg: true,
-    logoKey: 'unstop',
+    isSvg: false,
   },
   {
     name: 'Matiks',
     href: 'https://matiks.in',
-    type: 'Official Tech Partner',
-    isSvg: true,
-    logoKey: 'matiks',
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1788066758/playonmatiks_logo_glrfxu.jpg',
+    type: 'Official Platform Partner',
+    isSvg: false,
   },
   {
     name: 'Campa Cola',
@@ -125,9 +125,9 @@ const SPONSORS_LIST = [
   {
     name: 'Pizza Hut',
     href: 'https://www.pizzahut.co.in/',
+    logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1788066449/f125054c3c2ebac00325c23bdc864dd7_1762154440_lnogi3.avif',
     type: 'Official Food Partner',
-    isSvg: true,
-    logoKey: 'pizzahut',
+    isSvg: false,
   },
 ]
 
@@ -798,9 +798,12 @@ function Home() {
                   Interested in partnering with the society for the coming
                   season?
                 </p>
-                <button className="arch-btn shrink-0">
+                <a
+                  href="mailto:computersciencesociety@cse.nits.ac.in"
+                  className="arch-btn shrink-0"
+                >
                   <span>Join as Sponsor</span>
-                </button>
+                </a>
               </div>
             </div>
           </section>

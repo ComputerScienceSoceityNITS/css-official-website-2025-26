@@ -646,4 +646,28 @@
   box-shadow: none;
 }
 
+df-messenger {
+  position: fixed !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  --df-messenger-font-family: 'Geist Variable', 'Inter', sans-serif;
+  --df-messenger-primary-color: #1C1C1C;
+  --df-messenger-chat-background-color: #F4F3EF;
+  --df-messenger-user-message-background-color: #1C1C1C;
+  --df-messenger-user-message-font-color: #F4F3EF;
+  --df-messenger-bot-message-background-color: #FFFFFF;
+  --df-messenger-bot-message-font-color: #1C1C1C;
+  --df-messenger-chat-border-color: #E0DED8;
+  --df-messenger-titlebar-title-font-color: #F4F3EF;
+  --df-messenger-input-placeholder-font-color: #9A968D;
+  --df-messenger-send-icon: #1C1C1C;
+  --df-messenger-button-titlebar-color: #1C1C1C;
+  --df-messenger-button-titlebar-font-color: #F4F3EF;
+  --df-messenger-min-height: 480px;
+  --df-messenger-max-height: 580px;
+}
+
 

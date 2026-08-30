@@ -68,7 +68,7 @@ const AuthCallback = () => {
                         return;
                     }
 
-                    let redirectTo = '/Abacus'; 
+                    let redirectTo = '/dashboard'; 
                     
                     
                     const storedRedirect = localStorage.getItem('postVerificationRedirect');

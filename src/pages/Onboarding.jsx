@@ -107,7 +107,7 @@ const Onboarding = () => {
 
   const finish = () => {
     if (shouldSeeWelcomeStory?.()) {
-      navigate('/welcome', { replace: true })
+      navigate('/welcome-story', { replace: true })
       return
     }
     let destination = '/dashboard'
