@@ -54,7 +54,7 @@ const PILLARS_TESTIMONIALS = [
     tag: '// EXECUTIVE_PRESIDENT',
     quote:
       "Encouraging innovative thinking and research-oriented approach. We support projects in AI, ML, web development, and emerging technologies to push boundaries of what's possible.",
-    bio: 'Shashank Kukreti leads the society as President for 2025–26, setting the direction for every wing and representing CSS to the department and the institute. He focuses on keeping the society’s events, partnerships, and projects moving in the same direction.',
+    bio: 'Shashank Kukreti leads the society as President for 2026–27, setting the direction for every wing and representing CSS to the department and the institute. He focuses on keeping the society’s events, partnerships, and projects moving in the same direction.',
     focus:
       'Executive governance, cross-wing coordination, institutional partnerships, and long-term direction.',
   },
@@ -510,7 +510,6 @@ function Home() {
         </div>
 
         <div className="relative z-10">
-
           {/* ── HERO ──────────────────────────────────────────── */}
           <section className="relative flex min-h-screen w-full flex-col justify-between px-6 pb-8 pt-[76px] md:px-10">
             {/* Phone-only scrim. The field runs edge to edge on a narrow
