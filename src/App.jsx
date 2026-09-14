@@ -60,6 +60,7 @@ const ProtectedRoute = ({
     requiresOnboarding,
     isCollegeEmail,
   } = useAuth()
+  const location = useLocation()
 
   if (loading) {
     return (
@@ -73,7 +74,12 @@ const ProtectedRoute = ({
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />
+    try {
+      sessionStorage.setItem('auth_redirect', location.pathname + location.search)
+    } catch {
+      /* private mode */
+    }
+    return <Navigate to="/auth" state={{ from: location.pathname + location.search }} replace />
   }
 
   /* Onboarding comes before everything else a signed-in account can
@@ -134,7 +140,17 @@ const GuestRoute = ({ children }) => {
   }
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    let intendedDestination = '/dashboard'
+    try {
+      const stored = sessionStorage.getItem('auth_redirect')
+      if (stored) {
+        intendedDestination = stored
+        sessionStorage.removeItem('auth_redirect')
+      }
+    } catch {
+      /* private mode */
+    }
+    return <Navigate to={intendedDestination} replace />
   }
 
   return children
@@ -390,13 +406,10 @@ const App = () => {
                 />
 
                 <Route
-                  path="*"
-                  element={
-                    <PageWrapper>
-                      <Navigate to="/" replace />
-                    </PageWrapper>
-                  }
+                  path="/Esperanza"
+                  element={<Navigate to="/esperanza" replace />}
                 />
+
                 <Route
                   path="/chat"
                   element={
@@ -445,6 +458,15 @@ const App = () => {
                         <WelcomeStoryPage />
                       </PageWrapper>
                     </ProtectedRoute>
+                  }
+                />
+
+                <Route
+                  path="*"
+                  element={
+                    <PageWrapper>
+                      <Navigate to="/" replace />
+                    </PageWrapper>
                   }
                 />
               </Routes>

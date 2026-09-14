@@ -1,6 +1,35 @@
 {
   "events": [
     {
+      "name": "CSS Orientation 26",
+      "year": "2026-27",
+      "images": [
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377857/IMG_8116.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377856/IMG_8384.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377856/IMG_8555.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377853/IMG_8222.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377851/IMG_8374.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377849/IMG_8078.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377844/IMG_8074-2.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377844/IMG_8539.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377844/IMG_8058.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377840/IMG_8209.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377839/IMG_8053.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377838/IMG_8532-2.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377836/IMG_8055.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377476/IMG_8472.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377466/IMG_8133.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377464/IMG_8240.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377463/IMG_8130.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377451/IMG_8123.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377450/IMG_8118.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377444/IMG_8060.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377442/IMG_8076.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377432/IMG_8070.jpg",
+        "https://res.cloudinary.com/goznga4i/image/upload/v1789377427/IMG_8088.jpg"
+      ]
+    },
+    {
       "name": "CSS Orientation",
       "year": "2025-26",
       "images": [
@@ -160,7 +189,9 @@
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976250/IMG_9652.jpg",
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976249/IMG_9634.jpg",
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976248/IMG_9580.jpg",
+            "https://res.cloudinary.com/goznga4i/image/upload/v1787976244/IMG_9578.jpg",
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976232/IMG_9573.jpg",
+            "https://res.cloudinary.com/goznga4i/image/upload/v1787976231/IMG_9573-2.jpg",
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976230/IMG_9557.jpg",
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976229/IMG_9542.jpg",
             "https://res.cloudinary.com/goznga4i/image/upload/v1787976228/IMG_9539.jpg",
@@ -323,5 +354,6 @@
         "https://res.cloudinary.com/mitmhjtk/image/upload/v1/CSS_Closing_Ceremony-20.jpg"
       ]
     }
+    
   ]
 }

@@ -39,11 +39,21 @@ const Auth = () => {
 
     useEffect(() => {
         if (user) {
-            navigate(requiresOnboarding ? '/onboarding' : '/dashboard', {
+            let intendedDestination = '/dashboard';
+            try {
+                const stored = sessionStorage.getItem('auth_redirect') || location.state?.from;
+                if (stored) {
+                    intendedDestination = stored;
+                    sessionStorage.removeItem('auth_redirect');
+                }
+            } catch {
+                /* private mode */
+            }
+            navigate(requiresOnboarding ? '/onboarding' : intendedDestination, {
                 replace: true,
             });
         }
-    }, [user, requiresOnboarding, navigate]);
+    }, [user, requiresOnboarding, navigate, location.state]);
 
     /* A rejected address is not an error the visitor caused by mistyping —
        it is a policy answer, so it gets its own copy. */
