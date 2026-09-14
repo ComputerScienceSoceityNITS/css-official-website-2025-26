@@ -139,13 +139,23 @@ const WelcomeStory = () => {
   /* Leaving the story is the only place the seen-flag is written, so it
      is written exactly once however the visitor gets out. */
   const close = useCallback(
-    async (destination = '/dashboard') => {
+    async (target) => {
       if (closingRef.current) return
       closingRef.current = true
       try {
         await markWelcomeStorySeen?.()
       } catch {
         /* the local mirror already recorded it */
+      }
+      let destination = typeof target === 'string' ? target : '/dashboard'
+      try {
+        const stored = sessionStorage.getItem('auth_redirect')
+        if (stored && typeof target !== 'string') {
+          destination = stored
+          sessionStorage.removeItem('auth_redirect')
+        }
+      } catch {
+        /* private mode — the dashboard is a fine landing */
       }
       navigate(destination, { replace: true })
     },

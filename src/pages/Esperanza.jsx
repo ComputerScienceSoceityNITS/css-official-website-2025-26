@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '/src/context/AuthContext.jsx';
 import { supabase } from '/src/supabaseClient.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useArchReveal } from '../hooks/useArchAnim.js';
 
 // Toast Component - ARCH Theme
@@ -565,8 +565,9 @@ const CulturalForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
 
 // Main EventsRegistration Component
 const EventsRegistration = () => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const [activeTab, setActiveTab] = useState('rampwalk');
     const [isAdmin, setIsAdmin] = useState(false);
     const [showWhatsappModal, setShowWhatsappModal] = useState(false);
@@ -611,13 +612,17 @@ const EventsRegistration = () => {
     };
 
     useEffect(() => {
+        if (loading) return;
         if (!user) {
-            navigate('/auth');
+            try {
+                sessionStorage.setItem('auth_redirect', location.pathname + location.search);
+            } catch (e) {}
+            navigate('/auth', { state: { from: location.pathname + location.search } });
             return;
         }
         checkAdminStatus();
         checkRegistrationStatus();
-    }, [user, navigate]);
+    }, [user, loading, navigate, location]);
 
     const checkAdminStatus = async () => {
         if (!user) return;
@@ -808,7 +813,7 @@ const EventsRegistration = () => {
         }
     };
 
-    if (!user || loadingStatus) {
+    if (loading || !user || loadingStatus) {
         return (
             <div className="min-h-screen bg-arch-bg text-arch-ink flex items-center justify-center px-4">
                 <div className="text-center">
