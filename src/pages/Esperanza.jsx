@@ -46,6 +46,13 @@ const Toast = ({ message, type = 'success', onClose }) => {
     );
 };
 
+// Helper to check if email belongs to CSE student
+const isCseEmail = (email) => {
+    if (!email) return false;
+    const lower = email.toLowerCase().trim();
+    return lower.includes('cse') || lower.endsWith('@cse.nits.ac.in');
+};
+
 // Form Components - ARCH Theme
 const FormInput = ({ id, label, type = 'text', value, onChange, placeholder, required = false, disabled = false }) => (
     <div className="mb-5">
@@ -120,6 +127,11 @@ const RampwalkForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isAlreadyRegistered) return;
+
+        if (!isCseEmail(user?.email)) {
+            showToast('Registration is restricted to CSE students (@cse.nits.ac.in).', 'error');
+            return;
+        }
         
         setLoading(true);
         
@@ -285,6 +297,11 @@ const RizzShowForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isAlreadyRegistered) return;
+
+        if (!isCseEmail(user?.email)) {
+            showToast('Registration is restricted to CSE students (@cse.nits.ac.in).', 'error');
+            return;
+        }
         
         setLoading(true);
         
@@ -409,6 +426,11 @@ const CulturalForm = ({ onRegistrationSuccess, isAlreadyRegistered, showToast })
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isAlreadyRegistered) return;
+
+        if (!isCseEmail(user?.email)) {
+            showToast('Registration is restricted to CSE students (@cse.nits.ac.in).', 'error');
+            return;
+        }
         
         // Validate other performance type if selected
         if (performanceType === 'other' && !otherPerformanceType.trim()) {
@@ -826,6 +848,7 @@ const EventsRegistration = () => {
 
     const currentEventSlug = events[activeTab].slug;
     const isRegisteredForCurrentEvent = registrationStatus[currentEventSlug];
+    const isCseUser = isCseEmail(user?.email) || isAdmin;
 
     return (
         <div ref={archScope} className="min-h-screen bg-arch-bg text-arch-ink py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
@@ -842,7 +865,7 @@ const EventsRegistration = () => {
             <header className="mb-10 pt-4">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-arch-line">
                     <div>
-                        <p className="arch-label mb-3" data-arch="fade">// ANNUAL CULTURAL FESTIVAL</p>
+                        <p className="arch-label mb-3" data-arch="fade">// ANNUAL FRESHERS EVENT</p>
                         <h1 className="arch-display text-3xl sm:text-5xl font-bold text-arch-ink tracking-tight" data-arch="lines">
                             <span className="arch-split-line"><span className="arch-line-inner">Event Registration for ESPERANZA</span></span>
                         </h1>
@@ -862,47 +885,81 @@ const EventsRegistration = () => {
                 </div>
             </header>
 
-            {/* Tab Navigation */}
-            <div className="flex overflow-x-auto mb-8 border-b border-arch-line hide-scrollbar gap-2" data-arch="fade">
-                {tabs.map((tab) => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`arch-btn text-xs py-3 px-6 whitespace-nowrap transition-all duration-300 ${
-                            activeTab === tab.id
-                                ? 'arch-btn-solid font-semibold'
-                                : 'arch-btn-ghost text-arch-muted hover:text-arch-ink'
-                        }`}
-                    >
-                        <span>{tab.name}</span>
-                    </button>
-                ))}
-            </div>
+            {!isCseUser ? (
+                <div className="bg-arch-card p-8 sm:p-12 border border-arch-line text-left max-w-2xl mx-auto my-8 shadow-md">
+                    <div className="flex items-center gap-3 mb-4 text-amber-600">
+                        <svg className="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p className="arch-label text-xs tracking-widest uppercase text-amber-600 font-semibold">// CSE EXCLUSIVE EVENT</p>
+                    </div>
+                    <h2 className="arch-title text-2xl sm:text-3xl text-arch-ink mb-4">Registration Restricted</h2>
+                    <p className="arch-body text-arch-muted text-sm sm:text-base leading-relaxed mb-6">
+                        Esperanza event registrations are strictly reserved for Computer Science & Engineering students with valid <code className="bg-arch-bg-alt border border-arch-line px-2 py-0.5 text-arch-ink font-mono text-xs">@cse.nits.ac.in</code> email addresses.
+                    </p>
+                    <div className="p-4 bg-arch-bg-alt border-l-2 border-arch-ink text-xs text-arch-ink mb-8">
+                        <span className="font-semibold">Your Current Email:</span> {user?.email}
+                    </div>
+                    <div className="flex flex-wrap gap-4">
+                        <button
+                            onClick={() => navigate('/email-migration')}
+                            className="arch-btn arch-btn-solid text-xs py-3 px-6"
+                        >
+                            <span>Verify / Migrate Email</span>
+                        </button>
+                        <button
+                            onClick={() => navigate('/events')}
+                            className="arch-btn arch-btn-ghost text-xs py-3 px-6"
+                        >
+                            <span>Back to All Events</span>
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <>
+                    {/* Tab Navigation */}
+                    <div className="flex overflow-x-auto mb-8 border-b border-arch-line hide-scrollbar gap-2" data-arch="fade">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`arch-btn text-xs py-3 px-6 whitespace-nowrap transition-all duration-300 ${
+                                    activeTab === tab.id
+                                        ? 'arch-btn-solid font-semibold'
+                                        : 'arch-btn-ghost text-arch-muted hover:text-arch-ink'
+                                }`}
+                            >
+                                <span>{tab.name}</span>
+                            </button>
+                        ))}
+                    </div>
 
-            {/* Form Container */}
-            <div className="bg-arch-card p-6 sm:p-10 border border-arch-line mb-8 shadow-sm" data-arch="fade">
-                {activeTab === 'rampwalk' && (
-                    <RampwalkForm 
-                        onRegistrationSuccess={handleRegistrationSuccess}
-                        isAlreadyRegistered={isRegisteredForCurrentEvent}
-                        showToast={showToast}
-                    />
-                )}
-                {activeTab === 'rizzShow' && (
-                    <RizzShowForm 
-                        onRegistrationSuccess={handleRegistrationSuccess}
-                        isAlreadyRegistered={isRegisteredForCurrentEvent}
-                        showToast={showToast}
-                    />
-                )}
-                {activeTab === 'cultural' && (
-                    <CulturalForm 
-                        onRegistrationSuccess={handleRegistrationSuccess}
-                        isAlreadyRegistered={isRegisteredForCurrentEvent}
-                        showToast={showToast}
-                    />
-                )}
-            </div>
+                    {/* Form Container */}
+                    <div className="bg-arch-card p-6 sm:p-10 border border-arch-line mb-8 shadow-sm" data-arch="fade">
+                        {activeTab === 'rampwalk' && (
+                            <RampwalkForm 
+                                onRegistrationSuccess={handleRegistrationSuccess}
+                                isAlreadyRegistered={isRegisteredForCurrentEvent}
+                                showToast={showToast}
+                            />
+                        )}
+                        {activeTab === 'rizzShow' && (
+                            <RizzShowForm 
+                                onRegistrationSuccess={handleRegistrationSuccess}
+                                isAlreadyRegistered={isRegisteredForCurrentEvent}
+                                showToast={showToast}
+                            />
+                        )}
+                        {activeTab === 'cultural' && (
+                            <CulturalForm 
+                                onRegistrationSuccess={handleRegistrationSuccess}
+                                isAlreadyRegistered={isRegisteredForCurrentEvent}
+                                showToast={showToast}
+                            />
+                        )}
+                    </div>
+                </>
+            )}
 
             {/* WhatsApp Join Button - Only show if registered */}
             {isRegisteredForCurrentEvent && (
@@ -979,4 +1036,4 @@ const EventsRegistration = () => {
     );
 };
 
-export default EventsRegistration;
+export default EventsRegistration;
