@@ -148,6 +148,7 @@ const eventsContent = {
         venue: "Main Auditorium / Open Air Theatre",
         event_flow: "1. Lamp Lighting & Inaugural Dance\n2. Intro Round of Nominated Freshers\n3. Talent Show & Cultural Performances\n4. Rizz Show & Ramp Walk Final Round\n5. Crowning of Mr. & Ms. Freshers",
         organizer: "Computer Science Society",
+        registrationLink: "/esperanza",
         "poster-url": "https://res.cloudinary.com/dx8jytou0/image/upload/f_webp/v1757496948/Esperanza_kagipt.png",
       },
       {

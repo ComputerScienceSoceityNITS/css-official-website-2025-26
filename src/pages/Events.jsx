@@ -157,16 +157,27 @@ function EventCard({
           {/* Actions */}
           <div className="mt-6 flex flex-col gap-2">
             {!isCompleted && registrationLink ? (
-              <a
-                href={registrationLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="arch-btn w-full py-2.5 text-xs font-semibold"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <span>Register Now</span>
-                <FaExternalLinkAlt className="text-[10px]" />
-              </a>
+              registrationLink.startsWith('/') ? (
+                <Link
+                  to={registrationLink}
+                  className="arch-btn w-full py-2.5 text-xs font-semibold"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span>Register Now</span>
+                  <FaArrowRight className="text-[10px]" />
+                </Link>
+              ) : (
+                <a
+                  href={registrationLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="arch-btn w-full py-2.5 text-xs font-semibold"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span>Register Now</span>
+                  <FaExternalLinkAlt className="text-[10px]" />
+                </a>
+              )
             ) : !isCompleted && onRegister && isDirectRegistration ? (
               <button
                 onClick={handleRegisterClick}
@@ -358,16 +369,27 @@ function EventDetailModal({
               {/* Actions Footer */}
               <div className="border-t border-arch-line pt-4 mt-6">
                 {!isCompleted && event.registrationLink ? (
-                  <a
-                    href={event.registrationLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="arch-btn w-full"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <span>Register on External Platform</span>
-                    <FaExternalLinkAlt className="text-[10px]" />
-                  </a>
+                  event.registrationLink.startsWith('/') ? (
+                    <Link
+                      to={event.registrationLink}
+                      className="arch-btn w-full"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span>Register Now</span>
+                      <FaArrowRight className="text-[10px]" />
+                    </Link>
+                  ) : (
+                    <a
+                      href={event.registrationLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="arch-btn w-full"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span>Register on External Platform</span>
+                      <FaExternalLinkAlt className="text-[10px]" />
+                    </a>
+                  )
                 ) : !isCompleted && onRegister && event.is_direct_registration ? (
                   <div className="space-y-3">
                     <button

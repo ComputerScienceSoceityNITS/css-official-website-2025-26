@@ -88,7 +88,7 @@ const AuthCallback = () => {
                     
                     const previousPath = document.referrer;
                     if (previousPath && previousPath.includes('/esperanza')) {
-                        redirectTo = '/dashboard';
+                        redirectTo = '/esperanza';
                     }
 
                     
