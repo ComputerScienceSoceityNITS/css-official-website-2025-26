@@ -609,17 +609,17 @@ const EventsRegistration = () => {
         rampwalk: {
             name: 'Rampwalk',
             slug: 'rampwalk',
-            whatsapp_group_link: 'https://chat.whatsapp.com/F3YCuEjZb0oHnJirIPc3S3?mode=wwt'
+            whatsapp_group_link: 'https://chat.whatsapp.com/JkxEHJWMmVrGg2Qk2PmEGh?s=sw&p=a&mlu=4&ilr=4'
         },
         rizzShow: {
             name: 'Rizz Show',
             slug: 'rizz-show', 
-            whatsapp_group_link: 'https://chat.whatsapp.com/BUTPCVs5pg5IKDr35bz7Ll?mode=wwt'
+            whatsapp_group_link: 'https://chat.whatsapp.com/DMz0zbcWtxC6vGktI4ADPL?s=sw&p=a&mlu=4&ilr=4'
         },
         cultural: {
             name: 'Cultural Event',
             slug: 'cultural',
-            whatsapp_group_link: 'https://chat.whatsapp.com/HYjp4oJt66FKEjcbs0j6sV?mode=wwt'
+            whatsapp_group_link: 'https://chat.whatsapp.com/I4zIoHsbP5U3xtymc4X0bT?s=sw&p=a&mlu=4&ilr=4'
         }
     };
 
