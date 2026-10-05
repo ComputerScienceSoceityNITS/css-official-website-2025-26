@@ -36,7 +36,6 @@ import ChatSystem from './pages/ChatSystem'
 import EmailMigration from './pages/EmailMigration'
 import MigrationCallback from './pages/MigrationCallBack'
 import FreshersEvents from './pages/FreshersEvents'
-import EventsRegistration from './pages/Esperanza'
 import Certificates from "./pages/Certificates";
 import SystemVerification from "./components/SystemVerification";
 import ErrorBoundary from './components/ErrorBoundary';
@@ -46,7 +45,6 @@ import Onboarding from './pages/Onboarding'
 import WelcomeStory from './pages/WelcomeStory'
 import WelcomeStoryPage from './pages/WelcomeStoryPage'
 import Chatbot from './components/ui/Chatbot'
-import EsperanzaPopup from './components/EsperanzaPopup'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -273,14 +271,6 @@ const App = () => {
                   }
                 />
 
-                <Route
-                  path="/esperanza"
-                  element={
-                    <PageWrapper>
-                      <EventsRegistration />
-                    </PageWrapper>
-                  }
-                />
 
                 <Route
                   path="/gallery"
@@ -406,10 +396,6 @@ const App = () => {
                   }
                 />
 
-                <Route
-                  path="/Esperanza"
-                  element={<Navigate to="/esperanza" replace />}
-                />
 
                 <Route
                   path="/chat"
@@ -473,7 +459,6 @@ const App = () => {
               </Routes>
             </div>
             {/* <DiwaliWidget /> */}
-            <EsperanzaPopup />
             <Chatbot />
             <Footer />
           </div>

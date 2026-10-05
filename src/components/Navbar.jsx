@@ -10,7 +10,6 @@ const menuItems = [
     // { path: '/developers', label: 'Developers' },
     { path: '/members', label: 'Members' },
     { path: '/events', label: 'Events' },
-    { path: '/esperanza', label: 'Esperanza' },
     { path: '/wings', label: 'Wings' },
     { path: '/gallery', label: 'Gallery' },
     { path: '/materials', label: 'Materials' },
