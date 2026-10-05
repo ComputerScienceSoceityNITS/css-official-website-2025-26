@@ -22,7 +22,7 @@ const Chatbot = () => {
             launcherStyle.textContent = `
               button#widgetIcon {
                 border-radius: 0px !important;
-                background: #1C1C1C !important;
+                background: #FFFFFF !important;
                 box-shadow: none !important;
                 border: 1px solid #1C1C1C !important;
                 width: 56px !important;
@@ -37,11 +37,11 @@ const Chatbot = () => {
                             border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
               }
               button#widgetIcon:hover {
-                background: #F4F3EF !important;
+                background: #FFFFFF !important;
                 border-color: #1C1C1C !important;
               }
               button#widgetIcon svg {
-                fill: #F4F3EF !important;
+                fill: #1C1C1C !important;
                 width: 24px !important;
                 height: 24px !important;
                 transition: fill 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;

@@ -116,6 +116,20 @@ const SPONSORS_LIST = [
     isSvg: false,
   },
   {
+    name: 'The Belgian Waffle Co',
+    logo: '/images/belgianWaffle.png',
+    href: '#',
+    type: 'Gift Partner for Esperanza 26',
+    isSvg: false,
+  },
+  {
+    name: 'Barbeque Nation',
+    logo: '/images/barbequeNation.png',
+    href: '#',
+    type: 'Official Food Partner for Esperanza 26',
+    isSvg: false,
+  },
+  {
     name: 'Momo Magic Cafe',
     logo: 'https://res.cloudinary.com/dp4sknsba/image/upload/v1761978633/download_iwxpso.png',
     href: 'https://momomagiccafe.in/',

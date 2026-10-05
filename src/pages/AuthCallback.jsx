@@ -85,11 +85,6 @@ const AuthCallback = () => {
                         redirectTo = '/chat'; 
                     }
 
-                    
-                    const previousPath = document.referrer;
-                    if (previousPath && previousPath.includes('/esperanza')) {
-                        redirectTo = '/esperanza';
-                    }
 
                     
                     const intendedDestination = sessionStorage.getItem('auth_redirect');

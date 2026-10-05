@@ -603,7 +603,7 @@
 }
 
 .chat-launcher {
-  background: #1C1C1C;
+  background: #FFFFFF;
   border-radius: 0;
   border: 1px solid #1C1C1C;
   box-shadow: none;
@@ -615,11 +615,11 @@
 
 .chat-launcher:hover {
   transform: none;
-  background: #F4F3EF;
+  background: #FFFFFF;
 }
 
 .chat-launcher svg {
-  color: #F4F3EF;
+  color: #1C1C1C;
   width: 24px;
   height: 24px;
   transition: color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -658,8 +658,8 @@ df-messenger {
   --df-messenger-titlebar-title-font-color: #F4F3EF;
   --df-messenger-input-placeholder-font-color: #9A968D;
   --df-messenger-send-icon: #1C1C1C;
-  --df-messenger-button-titlebar-color: #1C1C1C;
-  --df-messenger-button-titlebar-font-color: #F4F3EF;
+  --df-messenger-button-titlebar-color: #FFFFFF;
+  --df-messenger-button-titlebar-font-color: #1C1C1C;
   --df-messenger-chat-window-width: 370px;
   --df-messenger-chat-window-height: 580px;
   --df-messenger-chat-border-radius: 0px;
