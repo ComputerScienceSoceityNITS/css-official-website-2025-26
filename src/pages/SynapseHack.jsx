@@ -256,6 +256,7 @@ export default function SynapseHack() {
         if (error.code === '23505') {
           setToast({ message: 'Your account has already registered a team for SynapseHack.', type: 'error' });
           setIsRegistered(true);
+          setIsRegisterModalOpen(false);
         } else {
           throw error;
         }
@@ -1202,7 +1203,7 @@ export default function SynapseHack() {
 
       {/* REGISTRATION MODAL FORM */}
       <AnimatePresence>
-        {isRegisterModalOpen && (
+        {isRegisterModalOpen && !isRegistered && (
           <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 overflow-y-auto">
             <motion.div
               initial={{ opacity: 0 }}
@@ -1231,7 +1232,7 @@ export default function SynapseHack() {
                   Register Team for SynapseHack
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">
-                  TECNOESIS 2026 | Cross-Year (1st - 3rd Year) & Cross-Branch Teams Allowed
+                  TECNOESIS 2026 | Cross-Year (1st - 4th Year) & Cross-Branch Teams Allowed
                 </p>
               </div>
 
@@ -1439,18 +1440,30 @@ export default function SynapseHack() {
             <Trophy size={13} /> ₹4,000
           </span>
         </div>
-        <button
-          onClick={() => {
-            if (!user) {
-              setToast({ message: 'Please sign in to register your team.', type: 'error' });
-            } else {
-              setIsRegisterModalOpen(true);
-            }
-          }}
-          className="py-2.5 px-6 bg-slate-900 text-white text-xs font-bold rounded-full shadow-xs"
-        >
-          <span>{isRegistered ? 'VIEW REGISTRATION' : 'REGISTER NOW'}</span>
-        </button>
+        {isRegistered ? (
+          <a
+            href={WHATSAPP_GROUP_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-full shadow-xs flex items-center gap-2"
+          >
+            <FaWhatsapp size={16} />
+            <span>JOIN WHATSAPP GROUP</span>
+          </a>
+        ) : (
+          <button
+            onClick={() => {
+              if (!user) {
+                setToast({ message: 'Please sign in to register your team.', type: 'error' });
+              } else {
+                setIsRegisterModalOpen(true);
+              }
+            }}
+            className="py-2.5 px-6 bg-slate-900 text-white text-xs font-bold rounded-full shadow-xs"
+          >
+            <span>{user ? 'REGISTER NOW' : 'SIGN IN TO REGISTER'}</span>
+          </button>
+        )}
       </div>
     </div>
   );
