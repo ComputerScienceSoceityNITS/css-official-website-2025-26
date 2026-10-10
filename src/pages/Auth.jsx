@@ -39,7 +39,7 @@ const Auth = () => {
 
     useEffect(() => {
         if (user) {
-            let intendedDestination = '/dashboard';
+            let intendedDestination = '/synapsehack';
             try {
                 const stored = sessionStorage.getItem('auth_redirect') || location.state?.from;
                 if (stored) {

@@ -7,6 +7,22 @@ const eventsContent = {
   body: {
     events: [
       {
+        id: 0,
+        section: "Technical",
+        name: "SynapseHack",
+        slug: "synapse-hack",
+        description:
+          "SynapseHack is a 36-hour open-ended Software + Hardware hackathon organized by Computer Science Society, NIT Silchar for Tecnoesis 2026. Teams build innovative solutions using provided hardware + 1 additional sensor.",
+        status: "upcoming",
+        date: "10 October – 27 October, EOD",
+        venue: "NIT Silchar Campus | Tecnoesis 2026",
+        event_flow: "1. Registration & PPT Submission\n2. Round 0: PPT Shortlisting\n3. Round 1: Idea Presentation & Free Hardware Allocation\n4. Round 2: 36-Hour Hackathon Build\n5. Final Prototype Demonstration & Winner Announcement",
+        organizer: "Computer Science Society",
+        registrationLink: "/synapse-hack",
+        "poster-url": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
+        moreEvents: null,
+      },
+      {
         id: 1,
         section: "Yearly",
         name: "Abacus",

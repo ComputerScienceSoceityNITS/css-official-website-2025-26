@@ -45,6 +45,8 @@ import Onboarding from './pages/Onboarding'
 import WelcomeStory from './pages/WelcomeStory'
 import WelcomeStoryPage from './pages/WelcomeStoryPage'
 import Chatbot from './components/ui/Chatbot'
+import SynapseHack from './pages/SynapseHack'
+import SynapseHackPopup from './components/SynapseHackPopup'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -139,7 +141,7 @@ const GuestRoute = ({ children }) => {
   }
 
   if (user) {
-    let intendedDestination = '/dashboard'
+    let intendedDestination = '/synapsehack'
     try {
       const stored = sessionStorage.getItem('auth_redirect')
       if (stored) {
@@ -184,6 +186,11 @@ const PageWrapper = ({ children }) => {
   )
 }
 
+const ConditionalChatbot = () => {
+  // Chatbot hidden from the website for now
+  return null
+}
+
 const App = () => {
   useEffect(() => {
     initGA()
@@ -198,6 +205,7 @@ const App = () => {
 
           <div className="min-h-screen bg-arch-bg">
             <NavbarWrapper />
+            <SynapseHackPopup />
 
             <div className="relative">
               <Routes>
@@ -250,6 +258,22 @@ const App = () => {
                   element={
                     <PageWrapper>
                       <Abacus />
+                    </PageWrapper>
+                  }
+                />
+                <Route
+                  path="/synapse-hack"
+                  element={
+                    <PageWrapper>
+                      <SynapseHack />
+                    </PageWrapper>
+                  }
+                />
+                <Route
+                  path="/synapsehack"
+                  element={
+                    <PageWrapper>
+                      <SynapseHack />
                     </PageWrapper>
                   }
                 />
@@ -459,7 +483,7 @@ const App = () => {
               </Routes>
             </div>
             {/* <DiwaliWidget /> */}
-            <Chatbot />
+            {/* <ConditionalChatbot /> */}
             <Footer />
           </div>
         </BrowserRouter>
