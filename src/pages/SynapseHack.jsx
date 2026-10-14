@@ -23,7 +23,9 @@ import {
   ExternalLink,
   Trophy,
   Table,
-  Cpu
+  Cpu,
+  Megaphone,
+  ChevronDown
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -77,6 +79,7 @@ export default function SynapseHack() {
   const [registrationData, setRegistrationData] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [savedBookmark, setSavedBookmark] = useState(false);
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(true);
 
   const isManualScrollRef = useRef(false);
 
@@ -422,6 +425,98 @@ export default function SynapseHack() {
       </div>
 
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+        {/* DROPDOWN ANNOUNCEMENT BANNER FROM THE TOP */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="w-full bg-gradient-to-r from-amber-50 via-orange-50/50 to-amber-50 border border-amber-300/80 rounded-2xl sm:rounded-3xl shadow-xs overflow-hidden"
+        >
+          {/* Dropdown Header Bar */}
+          <button
+            type="button"
+            onClick={() => setIsAnnouncementOpen(!isAnnouncementOpen)}
+            className="w-full px-4 py-3.5 sm:px-6 sm:py-4 flex items-center justify-between gap-3 text-left hover:bg-amber-100/40 transition-colors cursor-pointer select-none"
+            aria-expanded={isAnnouncementOpen}
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="relative flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500 text-slate-950 font-bold shrink-0 shadow-2xs">
+                <Megaphone size={16} className="text-slate-950" />
+                <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-600"></span>
+                </span>
+              </div>
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2 py-0.5 bg-amber-200/90 text-amber-950 text-[10px] font-bold font-mono tracking-wider uppercase rounded-md border border-amber-300">
+                    ANNOUNCEMENT
+                  </span>
+                  <span className="font-bold text-slate-900 text-sm sm:text-base">
+                    Important Update & Guidelines
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 truncate mt-0.5 hidden sm:block">
+                  Sensor hardware limits & PPT submission evaluation criteria
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs font-semibold text-amber-950 hidden sm:inline">
+                {isAnnouncementOpen ? 'Hide' : 'View Announcement'}
+              </span>
+              <div
+                className={`p-1.5 rounded-full bg-amber-200/70 text-amber-950 transition-transform duration-300 ${
+                  isAnnouncementOpen ? 'rotate-180' : ''
+                }`}
+              >
+                <ChevronDown size={18} />
+              </div>
+            </div>
+          </button>
+
+          {/* Dropdown Content */}
+          <AnimatePresence initial={false}>
+            {isAnnouncementOpen && (
+              <motion.div
+                key="announcement-content"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-5 sm:px-6 sm:pb-6 pt-2 border-t border-amber-200/70 space-y-3 bg-white/60">
+                  <div className="flex items-center gap-2 text-slate-900 font-bold text-sm sm:text-base pt-1">
+                    <span>Announcement:</span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3.5 sm:p-4 bg-white/95 rounded-xl sm:rounded-2xl border border-amber-200/80 shadow-2xs">
+                      <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                        1
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">
+                        You are not required to use every sensor mentioned in the hardware list. It only sets the maximum limit. Choose the sensors relevant to your idea, ensuring your project integrates hardware with software.
+                      </p>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3.5 sm:p-4 bg-white/95 rounded-xl sm:rounded-2xl border border-amber-200/80 shadow-2xs">
+                      <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                        2
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">
+                        Also, your solution must address the chosen problem clearly and meaningfully, not just superficially. Your PPT should explain the problem, proposed solution, and tech stack you plan to use.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
         {/* HERO BANNER IMAGE (MOBILE & DESKTOP RESPONSIVE) */}
         <div className="w-full relative rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200 shadow-md bg-slate-950">
           {/* Mobile Banner */}
