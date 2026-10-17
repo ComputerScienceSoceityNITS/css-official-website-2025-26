@@ -30,8 +30,8 @@ export const BRANCH_NAMES = {
   ece: 'Electronics & Communication Engineering',
   ei: 'Electronics & Instrumentation Engineering',
   ee: 'Electrical Engineering',
-  me: 'Mechanical Engineering',
-  ce: 'Civil Engineering',
+  mech: 'Mechanical Engineering',
+  civil: 'Civil Engineering',
 }
 
 const PATTERN = new RegExp(
