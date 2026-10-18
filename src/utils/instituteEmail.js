@@ -19,7 +19,7 @@
 ------------------------------------------------------------------ */
 
 /** Branch codes that appear in the mail subdomain. */
-export const BRANCH_CODES = ['cse', 'ece', 'ei', 'ee', 'me', 'ce']
+export const BRANCH_CODES = ['cse', 'ece', 'ei', 'ee', 'mech', 'civil']
 
 /** Programme segments accepted in the middle of the local part.
  *  Widen this list if postgraduate accounts are ever admitted. */
