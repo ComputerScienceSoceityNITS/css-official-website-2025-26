@@ -27,7 +27,8 @@ import {
   Megaphone,
   ChevronDown
 } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { generateClientBadge, downloadBadge, getSavedBadge, saveBadge, shareToWhatsApp, shareToInstagram } from '../utils/badgeClient';
 
 const LOGO = 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg';
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/GQ5YjNGImPiDJojFu93nfi?s=cl&p=a&mlu=4&ilr=4&iam=0';
@@ -80,6 +81,10 @@ export default function SynapseHack() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [savedBookmark, setSavedBookmark] = useState(false);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(true);
+  const [badgeDataUrl, setBadgeDataUrl] = useState(null);
+  const [badgeLoading, setBadgeLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
+  const [shareFeedback, setShareFeedback] = useState(null);
 
   const isManualScrollRef = useRef(false);
 
@@ -138,6 +143,23 @@ export default function SynapseHack() {
       if (data) {
         setIsRegistered(true);
         setRegistrationData(data.form_data);
+        const leaderEmail = data.form_data?.leaderEmail || user.email;
+        const teamName = data.form_data?.teamName;
+
+        if (teamName) {
+          // Check if badge is already stored locally or in payload
+          const cached = data.form_data?.badgeDataUrl || getSavedBadge(leaderEmail, teamName);
+          if (cached) {
+            setBadgeDataUrl(cached);
+          } else {
+            generateClientBadge(teamName)
+              .then(url => {
+                setBadgeDataUrl(url);
+                saveBadge(leaderEmail, teamName, url);
+              })
+              .catch(err => console.error('Badge generation error:', err));
+          }
+        }
       }
     } catch (_err) {
       // User not registered
@@ -238,8 +260,23 @@ export default function SynapseHack() {
     }
 
     setLoading(true);
+    setLoadingMessage('Initializing team registration...');
 
     try {
+      // Generate badge first and store it
+      setLoadingMessage('Generating custom SynapseHack badge...');
+      let generatedBadgeUrl = null;
+      try {
+        generatedBadgeUrl = await generateClientBadge(formData.teamName);
+        saveBadge(user.email, formData.teamName, generatedBadgeUrl);
+      } catch (genErr) {
+        console.warn('Initial badge generation warning:', genErr);
+      }
+
+      setLoadingMessage('Securing team spot in Tecnoesis 2026 database...');
+      // Subtle pause for smooth UX and ensuring canvas finalize
+      await new Promise(r => setTimeout(r, 1200));
+
       const payload = {
         user_id: user.id,
         event_slug: 'synapse-hack',
@@ -247,6 +284,7 @@ export default function SynapseHack() {
         form_data: {
           ...formData,
           leaderEmail: user.email,
+          badgeDataUrl: generatedBadgeUrl,
           registeredAt: new Date().toISOString()
         }
       };
@@ -267,13 +305,26 @@ export default function SynapseHack() {
         setIsRegistered(true);
         setRegistrationData(payload.form_data);
         setIsRegisterModalOpen(false);
-        setToast({ message: 'Registration submitted! Please join the WhatsApp group below.', type: 'success' });
+        setToast({ message: 'Registration submitted! You can now download your official team badge below.', type: 'success' });
+
+        // Asynchronous/smooth client generation with progress feedback
+        try {
+          setBadgeLoading(true);
+          const badgeUrl = await generateClientBadge(formData.teamName);
+          setBadgeDataUrl(badgeUrl);
+          saveBadge(user.email, formData.teamName, badgeUrl);
+        } catch (badgeErr) {
+          console.error('Failed to generate badge in browser:', badgeErr);
+        } finally {
+          setBadgeLoading(false);
+        }
       }
     } catch (err) {
       console.error('Registration failed:', err);
       setToast({ message: 'Registration failed. Please try again.', type: 'error' });
     } finally {
       setLoading(false);
+      setLoadingMessage('');
     }
   };
 
@@ -533,34 +584,198 @@ export default function SynapseHack() {
           />
         </div>
 
-        {/* POST REGISTRATION SUCCESS WHATSAPP BANNER */}
+        {/* POST REGISTRATION CONFIRMATION & BADGE SHOWCASE */}
         {isRegistered && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-6 bg-emerald-950 text-white border border-emerald-500/40 rounded-2xl sm:rounded-3xl shadow-md space-y-3"
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden"
           >
-            <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-              <CheckCircle2 size={18} />
-              <span>TEAM REGISTRATION CONFIRMED</span>
+            {/* Top Status Header */}
+            <div className="bg-slate-50/80 border-b border-slate-100 px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
+                </span>
+                <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-slate-800">
+                  Registration Confirmed
+                </span>
+                <span className="text-slate-300">&bull;</span>
+                <span className="text-xs font-semibold text-slate-500">
+                  SynapseHack &bull; Tecnoesis 2026
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 rounded-full flex items-center gap-1">
+                  <Check size={12} strokeWidth={2.5} /> Active Participant
+                </span>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-white">
-                Team: {registrationData?.teamName || 'REGISTERED'}
-              </h3>
-              <p className="text-xs sm:text-sm text-emerald-100/90 mt-1">
-                Mandatory Step: Please join the official SynapseHack WhatsApp Group now to receive hardware allocation lists, evaluation room numbers, and updates.
-              </p>
+
+            {/* Split Content: Clean Badge on Left, Information & CTAs on Right */}
+            <div className="p-6 sm:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+              
+              {/* LEFT: Clean Badge Showcase (No dark boxes, pure website background) */}
+              <div className="lg:col-span-5 flex flex-col items-center justify-center">
+                <div className="w-full max-w-[380px] group relative">
+                  {badgeDataUrl ? (
+                    <div className="relative rounded-2xl overflow-hidden bg-transparent transition-all duration-300 ease-out hover:scale-[1.015]">
+                      <img
+                        src={badgeDataUrl}
+                        alt="Official SynapseHack Badge"
+                        className="w-full h-auto object-contain drop-shadow-xl rounded-2xl"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full aspect-[4/3] rounded-2xl border border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50/60 text-slate-500 gap-2 p-6">
+                      {badgeLoading ? (
+                        <>
+                          <div className="w-7 h-7 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
+                          <p className="text-xs font-medium text-slate-600">Rendering badge canvas...</p>
+                        </>
+                      ) : (
+                        <>
+                          <Award size={32} className="text-slate-400" />
+                          <p className="text-xs font-medium text-slate-500">Generating badge...</p>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="text-center mt-3">
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+                      Official Team Pass &bull; SynapseHack
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT: Team Details, Congratulations & Social Actions */}
+              <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold font-mono tracking-wider text-slate-500 uppercase mb-1">
+                    <span>Registered Team</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight capitalize">
+                    {registrationData?.teamName || 'Your Team'}
+                  </h2>
+                  <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+                    Congratulations! Your team has successfully secured its spot in <strong className="text-slate-900 font-semibold">SynapseHack 2026</strong>. Save your official badge directly to your device and share your milestone with the community.
+                  </p>
+                </div>
+
+                {/* Direct Action Hub */}
+                <div className="space-y-4 pt-1">
+                  <div>
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block mb-2.5">
+                      Share & Download Options
+                    </span>
+                    <div className="flex flex-wrap items-center gap-3">
+                      {/* DOWNLOAD BUTTON */}
+                      <button
+                        onClick={() => {
+                          const email = registrationData?.leaderEmail || user?.email;
+                          const tName = registrationData?.teamName;
+                          if (badgeDataUrl) {
+                            downloadBadge(badgeDataUrl, email, tName);
+                          } else if (tName) {
+                            setBadgeLoading(true);
+                            generateClientBadge(tName)
+                              .then((url) => {
+                                setBadgeDataUrl(url);
+                                saveBadge(email, tName, url);
+                                downloadBadge(url, email, tName);
+                              })
+                              .finally(() => setBadgeLoading(false));
+                          }
+                        }}
+                        disabled={badgeLoading}
+                        className="inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-semibold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer"
+                      >
+                        <Download size={16} />
+                        <span>Download Badge</span>
+                      </button>
+
+                      {/* SHARE TO WHATSAPP STATUS */}
+                      <button
+                        onClick={async () => {
+                          const email = registrationData?.leaderEmail || user?.email;
+                          const tName = registrationData?.teamName;
+                          const res = await shareToWhatsApp(badgeDataUrl, email, tName);
+                          if (res?.method === 'desktop_whatsapp') {
+                            setShareFeedback('Badge image downloaded & WhatsApp opened! Attach the downloaded image to your status/message.');
+                            setTimeout(() => setShareFeedback(null), 8000);
+                          }
+                        }}
+                        className="inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-2xl font-semibold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer"
+                        title="Share badge image and caption to WhatsApp Status / Chat"
+                      >
+                        <FaWhatsapp size={17} />
+                        <span>WhatsApp Status</span>
+                      </button>
+
+                      {/* SHARE TO INSTAGRAM STORY */}
+                      <button
+                        onClick={async () => {
+                          const email = registrationData?.leaderEmail || user?.email;
+                          const tName = registrationData?.teamName;
+                          if (!badgeDataUrl) return;
+                          const res = await shareToInstagram(badgeDataUrl, email, tName);
+                          if (res?.method === 'download_fallback') {
+                            setShareFeedback('Badge image saved to your device & registration link copied! Upload the image and paste the link in your Instagram Story.');
+                            setTimeout(() => setShareFeedback(null), 8000);
+                          }
+                        }}
+                        className="inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-95 text-white rounded-2xl font-semibold text-xs tracking-wider uppercase transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98] cursor-pointer"
+                        title="Share badge image to Instagram Story"
+                      >
+                        <FaInstagram size={17} />
+                        <span>Instagram Story</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {shareFeedback && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-2 shadow-2xs"
+                    >
+                      <CheckCircle2 size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                      <span>{shareFeedback}</span>
+                    </motion.div>
+                  )}
+
+                  {/* WHATSAPP GROUP MANDATORY CALLOUT */}
+                  <div className="pt-2">
+                    <div className="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-900">
+                          <FaWhatsapp size={14} className="text-emerald-600" />
+                          <span>Mandatory Next Step</span>
+                        </div>
+                        <p className="text-xs text-emerald-800/90 leading-relaxed">
+                          Hardware allocation lists and evaluation schedules will only be published in the group.
+                        </p>
+                      </div>
+
+                      <a
+                        href={WHATSAPP_GROUP_LINK}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs whitespace-nowrap transition-colors shadow-2xs shrink-0"
+                      >
+                        <span>Join WhatsApp Group</span>
+                        <ArrowRight size={13} />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <a
-              href={WHATSAPP_GROUP_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-full font-bold text-xs uppercase tracking-wider transition-colors shadow-md mt-2"
-            >
-              <FaWhatsapp size={18} />
-              <span>JOIN OFFICIAL WHATSAPP GROUP NOW</span>
-            </a>
           </motion.div>
         )}
 
@@ -1518,7 +1733,7 @@ export default function SynapseHack() {
                     disabled={loading}
                     className="py-2.5 px-6 bg-slate-900 text-white text-xs font-semibold rounded-full hover:bg-slate-800 transition-colors"
                   >
-                    {loading ? 'SUBMITTING...' : 'SUBMIT REGISTRATION'}
+                    {loading ? (loadingMessage || 'PROCESSING REGISTRATION...') : 'SUBMIT REGISTRATION'}
                   </button>
                 </div>
               </form>
