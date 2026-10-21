@@ -584,7 +584,6 @@ export default function SynapseHack() {
           />
         </div>
 
-        {/* POST REGISTRATION CONFIRMATION & BADGE SHOWCASE */}
         {isRegistered && (
           <motion.div
             initial={{ opacity: 0, y: 15 }}
