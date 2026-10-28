@@ -9,6 +9,7 @@ import {
   FileText,
   ArrowRight,
   Download,
+  MapPin,
   AlertCircle,
   X,
   Globe,
@@ -25,7 +26,8 @@ import {
   Table,
   Cpu,
   Megaphone,
-  ChevronDown
+  ChevronDown,
+  Loader2
 } from 'lucide-react';
 import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 import { generateClientBadge, downloadBadge, getSavedBadge, saveBadge, shareToWhatsApp, shareToInstagram } from '../utils/badgeClient';
@@ -72,6 +74,7 @@ export default function SynapseHack() {
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [adminRegistrations, setAdminRegistrations] = useState([]);
   const [adminLoading, setAdminLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const [adminSearch, setAdminSearch] = useState('');
 
   const [toast, setToast] = useState(null);
@@ -80,7 +83,7 @@ export default function SynapseHack() {
   const [registrationData, setRegistrationData] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [savedBookmark, setSavedBookmark] = useState(false);
-  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(true);
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
   const [badgeDataUrl, setBadgeDataUrl] = useState(null);
   const [badgeLoading, setBadgeLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
@@ -138,7 +141,7 @@ export default function SynapseHack() {
         .select('*')
         .eq('user_id', user.id)
         .eq('event_slug', 'synapse-hack')
-        .single();
+        .maybeSingle();
 
       if (data) {
         setIsRegistered(true);
@@ -207,20 +210,75 @@ export default function SynapseHack() {
   };
 
   const fetchAdminRegistrations = async () => {
+    if (adminLoading) return;
     setAdminLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('event_registrations')
-        .select('*')
-        .eq('event_slug', 'synapse-hack')
-        .order('registered_at', { ascending: false });
-
-      if (error) throw error;
-      setAdminRegistrations(data || []);
+      // Open modal immediately so user sees the table structure & loading state
       setIsAdminModalOpen(true);
+
+      // Fetch in small chunks (pages) of 15 rows to prevent PostgreSQL statement timeout
+      // caused by megabyte-sized JSON payloads in historical rows
+      const PAGE_SIZE = 15;
+      let allRegistrations = [];
+      let page = 0;
+      let hasMore = true;
+
+      while (hasMore) {
+        const from = page * PAGE_SIZE;
+        const to = from + PAGE_SIZE - 1;
+
+        const { data, error } = await supabase
+          .from('event_registrations')
+          .select('id, user_id, event_slug, event_name, form_data, registered_at')
+          .eq('event_slug', 'synapse-hack')
+          .range(from, to);
+
+        if (error) {
+          // If even a page encounters a statement timeout, log and break with what we have
+          if (error.code === '57014' && allRegistrations.length > 0) {
+            console.warn('Timeout encountered on later page. Showing fetched records.');
+            break;
+          }
+          throw error;
+        }
+
+        if (!data || data.length === 0) {
+          hasMore = false;
+        } else {
+          allRegistrations = [...allRegistrations, ...data];
+          if (data.length < PAGE_SIZE) {
+            hasMore = false;
+          } else {
+            page++;
+          }
+        }
+      }
+
+      // Cleanse memory: strip out large badgeDataUrl in admin state
+      const cleanedData = allRegistrations.map(item => {
+        if (item.form_data?.badgeDataUrl) {
+          const { badgeDataUrl, ...restFormData } = item.form_data;
+          return { ...item, form_data: restFormData };
+        }
+        return item;
+      });
+
+      // Sort client-side by registered_at
+      cleanedData.sort((a, b) => {
+        const dateA = new Date(a.registered_at || a.form_data?.registeredAt || 0);
+        const dateB = new Date(b.registered_at || b.form_data?.registeredAt || 0);
+        return dateB - dateA;
+      });
+
+      setAdminRegistrations(cleanedData);
     } catch (err) {
       console.error('Failed to fetch admin registrations:', err);
-      setToast({ message: 'Failed to load live registrations.', type: 'error' });
+      setToast({ 
+        message: err.message?.includes('statement timeout') || err.code === '57014'
+          ? 'Database timed out reading heavy rows. Please see README/console for index optimization.' 
+          : 'Failed to load live registrations.', 
+        type: 'error' 
+      });
     } finally {
       setAdminLoading(false);
     }
@@ -260,23 +318,9 @@ export default function SynapseHack() {
     }
 
     setLoading(true);
-    setLoadingMessage('Initializing team registration...');
+    setLoadingMessage('Securing team registration...');
 
     try {
-      // Generate badge first and store it
-      setLoadingMessage('Generating custom SynapseHack badge...');
-      let generatedBadgeUrl = null;
-      try {
-        generatedBadgeUrl = await generateClientBadge(formData.teamName);
-        saveBadge(user.email, formData.teamName, generatedBadgeUrl);
-      } catch (genErr) {
-        console.warn('Initial badge generation warning:', genErr);
-      }
-
-      setLoadingMessage('Securing team spot in Tecnoesis 2026 database...');
-      // Subtle pause for smooth UX and ensuring canvas finalize
-      await new Promise(r => setTimeout(r, 1200));
-
       const payload = {
         user_id: user.id,
         event_slug: 'synapse-hack',
@@ -284,7 +328,6 @@ export default function SynapseHack() {
         form_data: {
           ...formData,
           leaderEmail: user.email,
-          badgeDataUrl: generatedBadgeUrl,
           registeredAt: new Date().toISOString()
         }
       };
@@ -305,23 +348,23 @@ export default function SynapseHack() {
         setIsRegistered(true);
         setRegistrationData(payload.form_data);
         setIsRegisterModalOpen(false);
-        setToast({ message: 'Registration submitted! You can now download your official team badge below.', type: 'success' });
+        setToast({ message: 'Registration submitted! Generating your official team badge below...', type: 'success' });
 
-        // Asynchronous/smooth client generation with progress feedback
+        // Generate badge once smoothly
         try {
           setBadgeLoading(true);
           const badgeUrl = await generateClientBadge(formData.teamName);
           setBadgeDataUrl(badgeUrl);
           saveBadge(user.email, formData.teamName, badgeUrl);
         } catch (badgeErr) {
-          console.error('Failed to generate badge in browser:', badgeErr);
+          console.warn('Could not generate badge preview immediately:', badgeErr);
         } finally {
           setBadgeLoading(false);
         }
       }
     } catch (err) {
       console.error('Registration failed:', err);
-      setToast({ message: 'Registration failed. Please try again.', type: 'error' });
+      setToast({ message: err.message || 'Registration failed. Please try again.', type: 'error' });
     } finally {
       setLoading(false);
       setLoadingMessage('');
@@ -329,11 +372,33 @@ export default function SynapseHack() {
   };
 
   const exportCSV = async () => {
+    if (exportLoading) return;
+    setExportLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('event_registrations')
-        .select('*')
-        .eq('event_slug', 'synapse-hack');
+      let data = adminRegistrations;
+      if (!data || data.length === 0) {
+        // Fetch paginated to prevent timeout
+        const PAGE_SIZE = 20;
+        let allData = [];
+        let p = 0;
+        let more = true;
+        while (more) {
+          const res = await supabase
+            .from('event_registrations')
+            .select('id, form_data, registered_at')
+            .eq('event_slug', 'synapse-hack')
+            .range(p * PAGE_SIZE, (p + 1) * PAGE_SIZE - 1);
+          if (res.error) throw res.error;
+          if (!res.data || res.data.length === 0) {
+            more = false;
+          } else {
+            allData = [...allData, ...res.data];
+            if (res.data.length < PAGE_SIZE) more = false;
+            else p++;
+          }
+        }
+        data = allData;
+      }
 
       if (error) throw error;
       if (!data || data.length === 0) {
@@ -389,7 +454,10 @@ export default function SynapseHack() {
       a.download = `SYNAPSEHACK_REGISTRATIONS_${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
     } catch (_err) {
+      console.error('Failed to export CSV:', _err);
       setToast({ message: 'Failed to export CSV.', type: 'error' });
+    } finally {
+      setExportLoading(false);
     }
   };
 
@@ -460,15 +528,37 @@ export default function SynapseHack() {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={fetchAdminRegistrations}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-purple-900 text-white rounded-full hover:bg-purple-800 transition-colors shadow-xs"
+                disabled={adminLoading}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-[11px] font-semibold bg-purple-900 text-white rounded-full hover:bg-purple-800 disabled:opacity-75 disabled:cursor-not-allowed transition-all shadow-xs cursor-pointer active:scale-95"
               >
-                <Table size={12} /> LIVE REGISTRATIONS
+                {adminLoading ? (
+                  <>
+                    <Loader2 size={12} className="animate-spin" />
+                    <span>FETCHING...</span>
+                  </>
+                ) : (
+                  <>
+                    <Table size={12} />
+                    <span>LIVE REGISTRATIONS</span>
+                  </>
+                )}
               </button>
               <button
                 onClick={exportCSV}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold bg-slate-900 text-white rounded-full hover:bg-slate-800 transition-colors"
+                disabled={exportLoading}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 text-[11px] font-semibold bg-slate-900 text-white rounded-full hover:bg-slate-800 disabled:opacity-75 disabled:cursor-not-allowed transition-all cursor-pointer active:scale-95"
               >
-                <Download size={12} /> EXPORT CSV
+                {exportLoading ? (
+                  <>
+                    <Loader2 size={12} className="animate-spin" />
+                    <span>EXPORTING...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download size={12} />
+                    <span>EXPORT CSV</span>
+                  </>
+                )}
               </button>
             </div>
           )}
@@ -881,7 +971,7 @@ export default function SynapseHack() {
                   </div>
 
                   <div className="text-xs font-semibold text-slate-500 font-mono">
-                    10 OCT 2026 – 27 OCT 2026, EOD
+                    10 OCT 2026 – 29 OCT 2026, 12:00 PM
                   </div>
 
                   <div className="border border-slate-200 rounded-2xl p-5 space-y-3 bg-slate-50/50 hover:bg-white transition-colors">
@@ -899,7 +989,7 @@ export default function SynapseHack() {
                     </p>
 
                     <div className="p-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 flex items-center justify-between font-medium">
-                      <span>Submission Cutoff: 27 October, EOD</span>
+                      <span>Submission Cutoff: 29 October, 12:00 PM</span>
                       <FileText size={15} className="text-slate-400" />
                     </div>
                   </div>
@@ -912,7 +1002,7 @@ export default function SynapseHack() {
                   </div>
 
                   <div className="text-xs font-semibold text-slate-500 font-mono">
-                    DAY 1 OF TECNOESIS 2026
+                    30 OCT 2026 • VENUE: SEMINAR HALL - 1, CS-04
                   </div>
 
                   <div className="border border-slate-200 rounded-2xl p-5 space-y-3 bg-slate-50/50 hover:bg-white transition-colors">
@@ -926,8 +1016,13 @@ export default function SynapseHack() {
                     </div>
 
                     <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      Shortlisted teams will present their ideas before the judges on Day 1 of Tecnoesis 2026 at NIT Silchar. The presentation will focus on:
+                      Shortlisted teams will present their ideas before the judges on <strong>30th October</strong> at <strong>Seminar Hall - 1, CS-04</strong>, NIT Silchar. The presentation will focus on:
                     </p>
+
+                    <div className="flex items-center gap-2 p-2.5 bg-slate-100/80 border border-slate-200 rounded-xl text-xs text-slate-800 font-medium">
+                      <MapPin size={15} className="text-rose-600 shrink-0" />
+                      <span><strong>Venue:</strong> Seminar Hall - 1, CS-04, Department of CSE, NIT Silchar</span>
+                    </div>
 
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700 pt-1">
                       <li className="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
@@ -958,7 +1053,7 @@ export default function SynapseHack() {
                   </div>
 
                   <div className="text-xs font-semibold text-slate-500 font-mono">
-                    DAY 1 → DAY 3 OF TECNOESIS 2026
+                    01 NOV 2026 • FINAL EVALUATION & DEMO
                   </div>
 
                   <div className="border border-slate-200 rounded-2xl p-5 space-y-3 bg-slate-50/50 hover:bg-white transition-colors">
@@ -972,10 +1067,10 @@ export default function SynapseHack() {
                     </div>
 
                     <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      Selected teams will get 36 hours to build and implement their solution using the provided hardware. Teams can additionally use one extra sensor of their choice, which they must arrange themselves.
+                      Selected teams will get 36 hours to build and implement their solution using the provided hardware components. Teams can additionally use one extra sensor of their choice, which they must arrange themselves.
                     </p>
                     <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      The completed prototypes will be presented and demonstrated before the judges on Day 3 of Tecnoesis 2026.
+                      Round 2 build and final prototype evaluation will take place on <strong>1st November 2026</strong> before the judging panel.
                     </p>
                   </div>
                 </div>
@@ -1044,7 +1139,7 @@ export default function SynapseHack() {
                   },
                   {
                     step: '02',
-                    date: '27 October 2026, EOD',
+                    date: '29 October 2026, 12:00 PM',
                     title: 'Registrations Close & PPT Cutoff',
                     desc: 'Final deadline to register team and upload initial Round 0 PPT.',
                     tag: 'DEADLINE',
@@ -1052,26 +1147,18 @@ export default function SynapseHack() {
                   },
                   {
                     step: '03',
-                    date: 'Day 1 of Tecnoesis 2026',
-                    title: 'Idea Presentation & Hardware Allocation',
-                    desc: 'Shortlisted teams present ideas to judges; qualifying teams get free hardware kits.',
-                    tag: 'DAY 1 ON-GROUND',
+                    date: '30 October 2026 (Seminar Hall - 1, CS-04)',
+                    title: 'Round 1 — Idea Presentation & Hardware Allocation',
+                    desc: 'Shortlisted teams present ideas to judges at Seminar Hall - 1, CS-04; qualifying teams receive free hardware kits.',
+                    tag: 'ROUND 1 • ON-GROUND',
                     statusColor: 'bg-purple-100 text-purple-900 border-purple-200'
                   },
                   {
                     step: '04',
-                    date: 'Day 1 → Day 3 of Tecnoesis 2026',
-                    title: '36-Hour Hackathon Build',
-                    desc: '36-hour prototyping and software + hardware integration phase.',
-                    tag: '36-HR BUILD',
-                    statusColor: 'bg-amber-100 text-amber-900 border-amber-200'
-                  },
-                  {
-                    step: '05',
-                    date: 'Day 3 of Tecnoesis 2026',
-                    title: 'Final Demonstration & Judging',
-                    desc: 'Live working prototype demonstration before judging panel & winner announcement.',
-                    tag: 'DAY 3 FINALE',
+                    date: '01 November 2026',
+                    title: 'Round 2 — Final Build & Demonstration',
+                    desc: 'Final round prototyping and working hardware + software demonstration before the judging panel.',
+                    tag: 'ROUND 2 • DEMO',
                     statusColor: 'bg-indigo-100 text-indigo-900 border-indigo-200'
                   }
                 ].map((item, idx) => (
@@ -1331,7 +1418,7 @@ export default function SynapseHack() {
               <div className="divide-y divide-slate-100 text-xs">
                 <div className="py-2.5 flex items-center justify-between">
                   <span className="text-slate-500 font-medium">Application Deadline</span>
-                  <span className="font-semibold text-slate-900">27 Oct 2026, EOD</span>
+                  <span className="font-semibold text-slate-900">29 Oct 2026, 12:00 PM</span>
                 </div>
                 <div className="py-2.5 flex items-center justify-between">
                   <span className="text-slate-500 font-medium">Eligibility</span>
@@ -1411,10 +1498,22 @@ export default function SynapseHack() {
                   </div>
 
                   <button
-                    onClick={exportCSV}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-full transition-colors"
+                    onClick={fetchAdminRegistrations}
+                    disabled={adminLoading}
+                    className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-full transition-colors disabled:opacity-50 cursor-pointer"
+                    title="Refresh data"
                   >
-                    <Download size={13} /> EXPORT CSV
+                    <Loader2 size={13} className={adminLoading ? 'animate-spin' : ''} />
+                    <span className="hidden sm:inline">REFRESH</span>
+                  </button>
+
+                  <button
+                    onClick={exportCSV}
+                    disabled={exportLoading}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-full transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    {exportLoading ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
+                    <span>{exportLoading ? 'EXPORTING...' : 'EXPORT CSV'}</span>
                   </button>
 
                   <button
@@ -1445,7 +1544,16 @@ export default function SynapseHack() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 bg-white font-sans">
-                    {filteredRegistrations.length === 0 ? (
+                    {adminLoading ? (
+                      <tr>
+                        <td colSpan={11} className="p-12 text-center text-slate-500">
+                          <div className="flex flex-col items-center justify-center gap-2">
+                            <Loader2 size={24} className="animate-spin text-purple-600" />
+                            <span className="text-xs font-medium">Fetching real-time registrations from database...</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : filteredRegistrations.length === 0 ? (
                       <tr>
                         <td colSpan={11} className="p-8 text-center text-slate-400 italic">
                           No registrations found matching search query.
