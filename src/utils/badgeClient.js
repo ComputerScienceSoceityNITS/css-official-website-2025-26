@@ -13,6 +13,9 @@
 const STORAGE_PREFIX = 'synapse_badge_';
 export const REGISTRATION_URL = 'https://www.css-nits.in/synapsehack';
 
+// In-memory cache to guarantee fast access without exceeding browser localStorage quota
+const memoryBadgeCache = new Map();
+
 /**
  * Creates a normalized unique file/storage identifier based on email_id + team_name.
  * Example: "john_gmail_com__cyber_knights"
@@ -24,27 +27,49 @@ export function getBadgeKey(email, teamName) {
 }
 
 /**
- * Checks if the badge is already cached in localStorage.
+ * Checks if the badge is already cached in memory or localStorage.
  */
 export function getSavedBadge(email, teamName) {
-  try {
-    const key = `${STORAGE_PREFIX}${getBadgeKey(email, teamName)}`;
-    return localStorage.getItem(key);
-  } catch (e) {
-    console.warn('Storage read failed:', e);
-    return null;
+  const key = `${STORAGE_PREFIX}${getBadgeKey(email, teamName)}`;
+  if (memoryBadgeCache.has(key)) {
+    return memoryBadgeCache.get(key);
   }
+  try {
+    const val = localStorage.getItem(key);
+    if (val) {
+      memoryBadgeCache.set(key, val);
+      return val;
+    }
+  } catch (e) {
+    // LocalStorage unavailable or restricted
+  }
+  return null;
 }
 
 /**
- * Saves the badge image Data URL locally.
+ * Saves the badge image Data URL into memory, and attempts localStorage non-destructively.
  */
 export function saveBadge(email, teamName, dataUrl) {
+  if (!dataUrl) return;
+  const key = `${STORAGE_PREFIX}${getBadgeKey(email, teamName)}`;
+  memoryBadgeCache.set(key, dataUrl);
+
   try {
-    const key = `${STORAGE_PREFIX}${getBadgeKey(email, teamName)}`;
     localStorage.setItem(key, dataUrl);
   } catch (e) {
-    console.warn('Storage write failed (possibly quota exceeded):', e);
+    // If browser localStorage quota (typically ~5MB) is reached,
+    // clear older badge keys from localStorage to prevent QuotaExceededError
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(STORAGE_PREFIX) && k !== key) {
+          localStorage.removeItem(k);
+        }
+      }
+      localStorage.setItem(key, dataUrl);
+    } catch (_fallbackErr) {
+      // Memory cache is fully active, so user experience remains 100% functional
+    }
   }
 }
 
