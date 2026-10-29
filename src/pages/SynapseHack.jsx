@@ -34,6 +34,8 @@ import { generateClientBadge, downloadBadge, getSavedBadge, saveBadge, shareToWh
 
 const LOGO = 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg';
 const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/GQ5YjNGImPiDJojFu93nfi?s=cl&p=a&mlu=4&ilr=4&iam=0';
+// 29 October 2026, 12:00 PM IST (Cutoff timestamp)
+const REGISTRATION_DEADLINE = new Date('2026-10-29T12:00:00+05:30').getTime();
 
 const Toast = ({ message, type = 'success', onClose }) => {
   useEffect(() => {
@@ -84,6 +86,7 @@ export default function SynapseHack() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [savedBookmark, setSavedBookmark] = useState(false);
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false);
+  const isRegistrationClosed = Date.now() > REGISTRATION_DEADLINE;
   const [badgeDataUrl, setBadgeDataUrl] = useState(null);
   const [badgeLoading, setBadgeLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
@@ -216,9 +219,9 @@ export default function SynapseHack() {
       // Open modal immediately so user sees the table structure & loading state
       setIsAdminModalOpen(true);
 
-      // Fetch in small chunks (pages) of 15 rows to prevent PostgreSQL statement timeout
-      // caused by megabyte-sized JSON payloads in historical rows
-      const PAGE_SIZE = 15;
+      // Fetch in small chunks (pages) of 5 rows with retry logic to avoid Postgres statement timeouts
+      // caused by megabyte-sized badge base64 strings in historic form_data JSON columns.
+      const PAGE_SIZE = 5;
       let allRegistrations = [];
       let page = 0;
       let hasMore = true;
@@ -227,16 +230,40 @@ export default function SynapseHack() {
         const from = page * PAGE_SIZE;
         const to = from + PAGE_SIZE - 1;
 
-        const { data, error } = await supabase
-          .from('event_registrations')
-          .select('id, user_id, event_slug, event_name, form_data, registered_at')
-          .eq('event_slug', 'synapse-hack')
-          .range(from, to);
+        let data = null;
+        let error = null;
+        let attempts = 0;
+        const maxAttempts = 3;
+
+        while (attempts < maxAttempts) {
+          attempts++;
+          const res = await supabase
+            .from('event_registrations')
+            .select('id, user_id, event_slug, event_name, form_data, registered_at')
+            .eq('event_slug', 'synapse-hack')
+            .range(from, to);
+
+          data = res.data;
+          error = res.error;
+
+          if (!error) break;
+
+          if (error.code === '57014' && attempts < maxAttempts) {
+            // Brief pause before retry
+            await new Promise(r => setTimeout(r, 600));
+            continue;
+          }
+          break;
+        }
 
         if (error) {
-          // If even a page encounters a statement timeout, log and break with what we have
+          // If a page encounters a statement timeout even after retry, log and break with what we have
           if (error.code === '57014' && allRegistrations.length > 0) {
             console.warn('Timeout encountered on later page. Showing fetched records.');
+            setToast({
+              message: `Loaded ${allRegistrations.length} registrations. Database timed out on later rows due to banner data size.`,
+              type: 'warning'
+            });
             break;
           }
           throw error;
@@ -312,6 +339,10 @@ export default function SynapseHack() {
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
+    if (isRegistrationClosed) {
+      setToast({ message: 'Registrations for SynapseHack 2026 closed on 29th October at 12:00 PM.', type: 'error' });
+      return;
+    }
     if (!user) {
       setToast({ message: 'Please sign in to register your team.', type: 'error' });
       return;
@@ -376,31 +407,55 @@ export default function SynapseHack() {
     setExportLoading(true);
     try {
       let data = adminRegistrations;
+
+      // If registrations haven't been loaded in admin state yet, fetch them safely in small chunks of 5
       if (!data || data.length === 0) {
-        // Fetch paginated to prevent timeout
-        const PAGE_SIZE = 20;
+        const PAGE_SIZE = 5;
         let allData = [];
         let p = 0;
         let more = true;
         while (more) {
-          const res = await supabase
-            .from('event_registrations')
-            .select('id, form_data, registered_at')
-            .eq('event_slug', 'synapse-hack')
-            .range(p * PAGE_SIZE, (p + 1) * PAGE_SIZE - 1);
-          if (res.error) throw res.error;
-          if (!res.data || res.data.length === 0) {
+          let chunk = null;
+          let fetchErr = null;
+          let attempts = 0;
+          const maxAttempts = 3;
+
+          while (attempts < maxAttempts) {
+            attempts++;
+            const res = await supabase
+              .from('event_registrations')
+              .select('id, form_data, registered_at')
+              .eq('event_slug', 'synapse-hack')
+              .range(p * PAGE_SIZE, (p + 1) * PAGE_SIZE - 1);
+
+            chunk = res.data;
+            fetchErr = res.error;
+
+            if (!fetchErr) break;
+            if (fetchErr.code === '57014' && attempts < maxAttempts) {
+              await new Promise(r => setTimeout(r, 600));
+              continue;
+            }
+            break;
+          }
+
+          if (fetchErr) {
+            console.error('Chunk fetch error during export:', fetchErr);
+            if (allData.length > 0) break; // export whatever was retrieved
+            throw fetchErr;
+          }
+
+          if (!chunk || chunk.length === 0) {
             more = false;
           } else {
-            allData = [...allData, ...res.data];
-            if (res.data.length < PAGE_SIZE) more = false;
+            allData = [...allData, ...chunk];
+            if (chunk.length < PAGE_SIZE) more = false;
             else p++;
           }
         }
         data = allData;
       }
 
-      if (error) throw error;
       if (!data || data.length === 0) {
         setToast({ message: 'No registrations found to export.', type: 'error' });
         return;
@@ -426,36 +481,43 @@ export default function SynapseHack() {
         headers.join(','),
         ...data.map(reg => {
           const f = reg.form_data || {};
+          // Exclude any badgeDataUrl / banner image bytes from CSV
           const membersStr = (f.members || [])
-            .map(m => `${m.name} (${m.scholarId || 'N/A'}, ${m.year || 'N/A'})`)
+            .map(m => `${m.name || 'Member'} (${m.scholarId || 'N/A'}, ${m.year || 'N/A'})`)
             .join(' | ');
+          const dateVal = reg.registered_at || f.registeredAt;
+          const formattedDate = dateVal ? new Date(dateVal).toLocaleString() : 'N/A';
           return [
-            `"${f.teamName || ''}"`,
-            `"${f.leaderName || ''}"`,
-            `"${f.leaderEmail || ''}"`,
-            `"${f.scholarId || ''}"`,
-            `"${f.leaderYear || ''}"`,
-            `"${f.contactNumber || ''}"`,
-            `"${f.collegeName || ''}"`,
-            `"${f.teamSize || ''}"`,
-            `"${f.pptLink || ''}"`,
+            `"${(f.teamName || '').replace(/"/g, '""')}"`,
+            `"${(f.leaderName || '').replace(/"/g, '""')}"`,
+            `"${(f.leaderEmail || '').replace(/"/g, '""')}"`,
+            `"${(f.scholarId || '').replace(/"/g, '""')}"`,
+            `"${(f.leaderYear || '').replace(/"/g, '""')}"`,
+            `"${(f.contactNumber || '').replace(/"/g, '""')}"`,
+            `"${(f.collegeName || '').replace(/"/g, '""')}"`,
+            `"${(f.teamSize || '').replace(/"/g, '""')}"`,
+            `"${(f.pptLink || '').replace(/"/g, '""')}"`,
             `"${(f.ideaSummary || '').replace(/"/g, '""')}"`,
-            `"${f.additionalSensor || ''}"`,
-            `"${membersStr}"`,
-            `"${new Date(reg.registered_at).toLocaleString()}"`
+            `"${(f.additionalSensor || '').replace(/"/g, '""')}"`,
+            `"${membersStr.replace(/"/g, '""')}"`,
+            `"${formattedDate}"`
           ].join(',');
         })
       ].join('\n');
 
-      const blob = new Blob([csvRows], { type: 'text/csv' });
+      const blob = new Blob([csvRows], { type: 'text/csv;charset=utf-8;' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `SYNAPSEHACK_REGISTRATIONS_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      setToast({ message: 'CSV exported successfully!', type: 'success' });
     } catch (_err) {
       console.error('Failed to export CSV:', _err);
-      setToast({ message: 'Failed to export CSV.', type: 'error' });
+      setToast({ message: 'Failed to export CSV: ' + (_err.message || 'unknown error'), type: 'error' });
     } finally {
       setExportLoading(false);
     }
@@ -1397,16 +1459,21 @@ export default function SynapseHack() {
                 <div className="space-y-3">
                   <button
                     onClick={() => {
+                      if (isRegistrationClosed) {
+                        setToast({ message: 'Registrations closed on 29th October at 12:00 PM.', type: 'error' });
+                        return;
+                      }
                       if (!user) {
                         setToast({ message: 'Please sign in to register your team.', type: 'error' });
                       } else {
                         setIsRegisterModalOpen(true);
                       }
                     }}
-                    className="w-full py-3.5 px-6 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-sm flex items-center justify-center gap-2"
+                    disabled={isRegistrationClosed}
+                    className={`w-full py-3.5 px-6 ${isRegistrationClosed ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-800 text-white cursor-pointer'} text-xs font-bold uppercase tracking-wider rounded-full transition-all shadow-sm flex items-center justify-center gap-2`}
                   >
-                    <span>{user ? 'REGISTER NOW' : 'SIGN IN TO REGISTER'}</span>
-                    <ArrowRight size={14} />
+                    <span>{isRegistrationClosed ? 'REGISTRATIONS CLOSED' : user ? 'REGISTER NOW' : 'SIGN IN TO REGISTER'}</span>
+                    {!isRegistrationClosed && <ArrowRight size={14} />}
                   </button>
 
                   <p className="text-[10px] text-center text-slate-400 font-mono">
@@ -1870,15 +1937,20 @@ export default function SynapseHack() {
         ) : (
           <button
             onClick={() => {
+              if (isRegistrationClosed) {
+                setToast({ message: 'Registrations closed on 29th October at 12:00 PM.', type: 'error' });
+                return;
+              }
               if (!user) {
                 setToast({ message: 'Please sign in to register your team.', type: 'error' });
               } else {
                 setIsRegisterModalOpen(true);
               }
             }}
-            className="py-2.5 px-6 bg-slate-900 text-white text-xs font-bold rounded-full shadow-xs"
+            disabled={isRegistrationClosed}
+            className={`py-2.5 px-6 ${isRegistrationClosed ? 'bg-slate-300 text-slate-500 cursor-not-allowed' : 'bg-slate-900 text-white'} text-xs font-bold rounded-full shadow-xs`}
           >
-            <span>{user ? 'REGISTER NOW' : 'SIGN IN TO REGISTER'}</span>
+            <span>{isRegistrationClosed ? 'CLOSED' : user ? 'REGISTER NOW' : 'SIGN IN TO REGISTER'}</span>
           </button>
         )}
       </div>
