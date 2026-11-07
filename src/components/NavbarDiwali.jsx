@@ -1,403 +1,306 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { FaSignInAlt } from 'react-icons/fa'
-import { MdAccountCircle } from "react-icons/md";
+import { archSpring, archTween } from '../hooks/useArchAnim'
 
 const menuItems = [
   { path: '/', label: 'Home' },
-  { path: '/developers', label: 'Developers' },
   { path: '/members', label: 'Members' },
   { path: '/events', label: 'Events' },
   { path: '/wings', label: 'Wings' },
-  { path: '/chat', label: 'Chat' },
-  { path: '/materials', label: 'Materials' }
+  { path: '/gallery', label: 'Gallery' },
+  { path: '/materials', label: 'Materials' },
+  { path: '/app-download', label: 'App' }
 ]
 
-// Color themes for the lights
-const colorThemes = [
-  { name: 'Classic', colors: ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1'] },
-  { name: 'Warm', colors: ['#ff9a3c', '#ff6b6b', '#ffd93d', '#ff9a3c'] },
-  { name: 'Cool', colors: ['#6a11cb', '#2575fc', '#2af598', '#08aeea'] },
-  { name: 'Festive', colors: ['#ff0000', '#00ff00', '#ffff00', '#ff00ff'] },
-  { name: 'Royal', colors: ['#833ab4', '#fd1d1d', '#fcb045', '#405de6'] },
+const LOGO = 'https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg'
+
+const LogoMark = ({ className = 'h-11 w-11' }) => (
+  <span className={`flex shrink-0 items-center justify-center overflow-hidden bg-black ${className}`}>
+    <img src={LOGO} alt="Computer Science Society" className="h-full w-full object-contain" />
+  </span>
+)
+
+// Elegant, refined warm Diwali palette for festive rice lights
+const festiveLights = [
+  { color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.75)', wire: 10 },
+  { color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.75)', wire: 16 },
+  { color: '#ea580c', glow: 'rgba(234, 88, 12, 0.75)', wire: 12 },
+  { color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.75)', wire: 18 },
+  { color: '#d97706', glow: 'rgba(217, 119, 6, 0.75)', wire: 14 },
+  { color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.75)', wire: 12 },
+  { color: '#ea580c', glow: 'rgba(234, 88, 12, 0.75)', wire: 17 },
+  { color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.75)', wire: 13 },
+  { color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.75)', wire: 19 },
+  { color: '#d97706', glow: 'rgba(217, 119, 6, 0.75)', wire: 11 },
+  { color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.75)', wire: 15 },
+  { color: '#ea580c', glow: 'rgba(234, 88, 12, 0.75)', wire: 13 },
+  { color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.75)', wire: 18 },
+  { color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.75)', wire: 12 },
 ]
 
 export const NavbarDemo = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState(0)
+  const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
   const { user, profile } = useAuth()
 
-  const variants = {
-    inactive: {
-      background: 'transparent',
-      boxShadow: 'none',
-      color: '#ccd6f6',
-      scale: 1,
-    },
-    active: {
-      background: 'linear-gradient(to right, #0a192f, #112240)',
-      boxShadow: '0 0 15px rgba(100, 255, 218, 0.5)',
-      color: '#64ffda',
-      transition: { duration: 0.3 },
-    },
-    authHover: {
-      scale: 1.1,
-      boxShadow: '0 0 25px rgba(100, 255, 218, 0.9)',
-      transition: { duration: 0.2, yoyo: Infinity },
-    },
-    profileHover: {
-      scale: 1.05,
-      boxShadow: '0 0 20px rgba(100, 255, 218, 0.7)',
-      transition: { duration: 0.2 },
-    },
-  }
+  const isHome = location.pathname === '/'
+  const solid = scrolled || isOpen || !isHome
 
-  const changeLights = () => {
-    setCurrentTheme((prev) => (prev + 1) % colorThemes.length)
-  }
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
-  // Generate hanging rice lights - optimized for mobile
-  const generateHangingLights = () => {
-    const lights = []
-    const totalLights = window.innerWidth < 768 ? 10 : 16 // Fewer lights on mobile
-    const currentColors = colorThemes[currentTheme].colors
-    
-    for (let i = 0; i < totalLights; i++) {
-      const color = currentColors[i % currentColors.length]
-      const position = ((i + 0.5) / totalLights) * 100
-      const delay = i * 0.15
-      const size = window.innerWidth < 768 ? 4 + (Math.random() * 3) : 6 + (Math.random() * 4) // Smaller on mobile
-      const hangHeight = window.innerWidth < 768 ? 6 + (Math.random() * 4) : 8 + (Math.random() * 6)
-      const swingAmount = window.innerWidth < 768 ? 3 + (Math.random() * 6) : 5 + (Math.random() * 10)
-      
-      lights.push(
-        <motion.div
-          key={i}
-          className="absolute flex flex-col items-center"
-          style={{
-            left: `${position}%`,
-            top: '0%',
-          }}
-        >
-          {/* Light string */}
-          <div 
-            className="w-px bg-gradient-to-b from-[#64ffda]/50 to-transparent"
-            style={{ height: `${hangHeight}px` }}
-          />
-          
-          {/* Light bulb */}
-          <motion.div
-            className="rounded-full relative"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              background: `radial-gradient(circle at 30% 30%, ${color}, ${color}dd)`,
-              boxShadow: `0 0 12px ${color}, 0 0 20px ${color}80`,
-              filter: 'brightness(1.2)',
-            }}
-            animate={{
-              opacity: [0.4, 1, 0.4],
-              scale: [0.9, 1.1, 0.9],
-              x: [-swingAmount/2, swingAmount/2, -swingAmount/2],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              delay: delay,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            {/* Light glow effect */}
-            <div 
-              className="absolute inset-0 rounded-full blur-[2px]"
-              style={{
-                background: color,
-                opacity: 0.6,
-              }}
-            />
-          </motion.div>
-        </motion.div>
-      )
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
     }
-    return lights
-  }
+  }, [isOpen])
 
   return (
     <>
-      {/* Main Navbar Container */}
-      <div className="sticky top-0 z-50">
-        {/* Navbar */}
-        <nav className="bg-[linear-gradient(to_right,#0a192f,#112240)] text-[#ccd6f6] shadow-[0_0_15px_rgba(100,255,218,0.3)] backdrop-blur-lg bg-opacity-95 font-['Rajdhani',_sans-serif]">
-          <div className="relative max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
-            {/* Corner accents - hidden on mobile */}
-            <div className="hidden sm:block absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-[#64ffda] opacity-80"></div>
-            <div className="hidden sm:block absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-[#64ffda] opacity-80"></div>
-            <div className="hidden sm:block absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-[#64ffda] opacity-80"></div>
-            <div className="hidden sm:block absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-[#64ffda] opacity-80"></div>
-
-            <div className="flex justify-between items-center h-14 md:h-16">
-              {/* Logo - Left on desktop, centered on mobile */}
-              <div className="hidden md:flex items-center relative md:flex-1">
-                <motion.span
-                  className="text-3xl font-bold text-[#ccd6f6]"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <img 
-                    src="https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg" 
-                    alt="CSS Logo" 
-                    className="mt-2 w-auto h-2 md:h-16"
-                  />
-                </motion.span>
-                <div className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-[#64ffda] rounded-full animate-ping"></div>
+      <motion.nav
+        className={`fixed top-0 left-0 z-[200] w-full font-sans transition-[background-color,border-color,backdrop-filter] duration-500 ${
+          solid
+            ? 'border-b border-arch-line bg-arch-bg/95 backdrop-blur-xl shadow-[0_4px_24px_rgba(245,158,11,0.04)]'
+            : 'border-b border-arch-line/40 bg-arch-bg/60 backdrop-blur-md'
+        }`}
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={archTween}
+      >
+        {/* Subtle festoon garland (Hanging Micro Diwali Lights across navbar bottom border) */}
+        <div className="absolute inset-x-0 bottom-0 h-0 pointer-events-none overflow-visible z-30">
+          <div className="relative w-full max-w-[1600px] mx-auto px-6 md:px-10 flex justify-between">
+            {festiveLights.map((bulb, idx) => (
+              <div
+                key={idx}
+                className="relative flex flex-col items-center"
+                style={{
+                  display: idx % 2 === 1 && typeof window !== 'undefined' && window.innerWidth < 768 ? 'none' : 'flex'
+                }}
+              >
+                {/* Micro Wire */}
+                <div
+                  className="w-px bg-amber-800/40"
+                  style={{ height: `${bulb.wire}px` }}
+                />
+                {/* Glow Bulb */}
+                <motion.div
+                  animate={{
+                    opacity: [0.75, 1, 0.65, 0.95],
+                    scale: [0.9, 1.1, 0.85, 1],
+                  }}
+                  transition={{
+                    duration: 2.2 + (idx % 4) * 0.4,
+                    repeat: Infinity,
+                    repeatType: 'mirror',
+                    ease: 'easeInOut',
+                    delay: idx * 0.14,
+                  }}
+                  className="relative -mt-0.5 rounded-full"
+                  style={{
+                    width: '5px',
+                    height: '6px',
+                    backgroundColor: bulb.color,
+                    boxShadow: `0 0 6px ${bulb.glow}, 0 0 12px ${bulb.glow}`,
+                  }}
+                />
               </div>
+            ))}
+          </div>
+        </div>
 
-              {/* Desktop Menu - Center */}
-              <div className="hidden md:flex items-center space-x-4 lg:space-x-6 relative">
-                {menuItems.map((item, index) => (
-                  <Link to={item.path} key={item.path}>
-                    <motion.div
-                      className={`relative px-3 lg:px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 group ${
-                        location.pathname === item.path
-                          ? 'text-[#64ffda] border border-[#64ffda] shadow-[0_0_15px_rgba(100,255,218,0.8)]'
-                          : 'text-[#ccd6f6] border border-[#64ffda]/30 hover:shadow-[0_0_10px_rgba(100,255,218,0.6)]'
-                      }`}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      variants={variants}
-                      variant={
-                        location.pathname === item.path ? 'active' : 'inactive'
-                      }
-                      whileHover={{ scale: 1.05 }}
-                    >
-                      <span className="relative z-10 whitespace-nowrap">{item.label}</span>
-                      {location.pathname === item.path && (
-                        <motion.div
-                          className="absolute -bottom-1 left-0 right-0 h-1 bg-[#64ffda] rounded-b-md filter blur-[1px]"
-                          layoutId="active-tab-underline"
-                          transition={{
-                            type: 'spring',
-                            stiffness: 300,
-                            damping: 25,
-                          }}
-                        />
-                      )}
-                      <div
-                        className={`absolute inset-0 bg-[#64ffda]/0 group-hover:bg-[#64ffda]/10 transition-all duration-300 rounded-lg ${
-                          location.pathname === item.path
-                            ? 'bg-[#64ffda]/20'
-                            : ''
-                        }`}
-                      ></div>
-                    </motion.div>
-                  </Link>
-                ))}
+        <div className="mx-auto flex h-[76px] w-full max-w-[1600px] items-center justify-between gap-6 px-6 md:px-10">
+          {/* Identity */}
+          <Link
+            to="/"
+            aria-label="Computer Science Society — home"
+            className="flex items-center gap-3.5 transition-opacity duration-300 hover:opacity-80"
+          >
+            <LogoMark className="h-11 w-11" />
+            <div className="hidden leading-[1.15] sm:block">
+              <div className="flex items-center gap-2">
+                <span className="block text-[15px] font-semibold tracking-[-0.02em] text-arch-ink">
+                  Computer Science Society
+                </span>
+                {/* Minimal Diwali Pill */}
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-mono tracking-widest uppercase border border-amber-600/40 bg-amber-500/10 text-amber-900 rounded-none">
+                  <span className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
+                  Diwali
+                </span>
               </div>
-
-              {/* Desktop Auth/Profile - Right */}
-              <div className="hidden md:flex items-center space-x-4 md:flex-1 justify-end">
-                {user ? (
-                  <Link to="/dashboard">
-                    <motion.div
-                      className="relative px-3 py-1 text-sm font-medium rounded-lg transition-all duration-300 group flex items-center gap-2 bg-[#64ffda]/20 border-2 border-[#64ffda] shadow-[0_0_20px_rgba(100,255,218,0.9)] text-[#64ffda]"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      variants={variants}
-                      whileHover="profileHover"
-                    >
-                      <img
-                        src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
-                        alt="Profile"
-                        className="w-7 h-7 rounded-full border border-[#64ffda]"
-                      />
-                      <span className="relative z-10 hidden lg:inline">Profile</span>
-                    </motion.div>
-                  </Link>
-                ) : (
-                  <Link to="/auth">
-                    <motion.div
-                      className="relative px-3 lg:px-4 text-sm font-medium rounded-lg transition-all duration-300 group flex items-center gap-2 bg-[#64ffda]/20 border-2 border-[#64ffda] shadow-[0_0_20px_rgba(100,255,218,0.9)] text-[#64ffda] py-2"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      variants={variants}
-                      whileHover="authHover"
-                    >
-                      <FaSignInAlt className="text-base lg:text-lg" />
-                      <span className="relative z-10 hidden lg:inline">Auth</span>
-                    </motion.div>
-                  </Link>
-                )} 
-              </div>
-
-              {/* Mobile Layout */}
-              <div className="flex md:hidden items-center justify-between w-full">
-                {/* Mobile Menu Button - Left */}
-                <div className="flex items-center">
-                  <motion.button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="p-2 rounded-full bg-[#112240]/60 border border-[#64ffda]/50 hover:bg-[#112240]/80 hover:border-[#64ffda] transition-all duration-300 relative"
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <svg
-                      className="h-5 w-5 text-[#64ffda]"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d={isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16m-7 6h7'}
-                      />
-                    </svg>
-                  </motion.button>
-                </div>
-
-                {/* Mobile Logo - Center */}
-                <div className="flex items-center absolute left-1/2 transform -translate-x-1/2">
-                  <motion.span
-                    className="text-2xl font-bold text-[#ccd6f6]"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <img 
-                      src="https://res.cloudinary.com/dp4sknsba/image/upload/v1760078712/Untitled_design_xzhopc.svg" 
-                      alt="CSS Logo" 
-                      className="h-18 w-auto"
-                    />
-                  </motion.span>
-                </div>
-
-                {/* Mobile Profile/Auth - Right */}
-                <div className="flex items-center">
-                  {user ? (
-                    <Link to="/dashboard">
-                      <motion.div
-                        variants={variants}
-                        whileHover="profileHover"
-                      >
-                        <img
-                          src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
-                          alt="Profile"
-                          className="w-8 h-8 rounded-full border border-[#64ffda]"
-                        />
-                      </motion.div>
-                    </Link>
-                  ) : (
-                    <Link to="/auth">
-                      <motion.div
-                        className="relative p-2 rounded-lg transition-all duration-300 group bg-[#64ffda]/20 border-2 border-[#64ffda] shadow-[0_0_15px_rgba(100,255,218,0.7)]"
-                        variants={variants}
-                        whileHover="authHover"
-                      >
-                        <MdAccountCircle className="text-lg size-4 text-[#64ffda]" />
-                      </motion.div>
-                    </Link>
-                  )}
-                </div>
-              </div>
+              <span className="mt-0.5 block text-[11px] font-mono uppercase tracking-[0.16em] text-arch-muted">
+                NIT Silchar
+              </span>
             </div>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden items-center gap-1 md:flex">
+            {menuItems.map((item) => {
+              const active = location.pathname === item.path
+              return (
+                <Link
+                  to={item.path}
+                  key={item.path}
+                  aria-current={active ? 'page' : undefined}
+                  className="group relative px-4 py-2.5"
+                >
+                  <span
+                    className={`relative z-10 text-[14px] font-medium tracking-[-0.01em] transition-colors duration-300 ${
+                      active ? 'text-arch-ink' : 'text-arch-muted group-hover:text-arch-ink'
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                  {active ? (
+                    <motion.span
+                      layoutId="active-nav-line"
+                      className="absolute inset-x-4 bottom-1 h-0.5 bg-arch-ink"
+                      transition={archSpring}
+                    />
+                  ) : (
+                    <span className="absolute inset-x-4 bottom-1 h-0.5 origin-right scale-x-0 bg-arch-ink/40 transition-transform duration-300 group-hover:origin-left group-hover:scale-x-100" />
+                  )}
+                </Link>
+              )
+            })}
           </div>
 
-          {/* Mobile Menu */}
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                className="md:hidden bg-[linear-gradient(to_bottom,#0a192f,#112240)] absolute top-14 left-0 w-full border-t border-[#64ffda]/40 shadow-[0_0_15px_rgba(100,255,218,0.3)] backdrop-blur-lg bg-opacity-95"
-                initial={{ y: '-100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-100%', opacity: 0 }}
-                transition={{ type: 'tween', ease: 'easeInOut', duration: 0.3 }}
-              >
-                <div className="relative px-3 pt-3 pb-4 space-y-2">
-                  <div className="absolute inset-0 bg-circuit-pattern opacity-25"></div>
-                  {menuItems.map((item, index) => (
+          {/* Desktop Account */}
+          <div className="hidden items-center md:flex">
+            {user ? (
+              <Link to="/dashboard">
+                <motion.div
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={archSpring}
+                  className="flex items-center gap-2.5 border border-arch-line bg-arch-card px-3.5 py-2 transition-colors duration-300 hover:border-arch-ink shadow-sm"
+                >
+                  <img
+                    src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
+                    alt=""
+                    className="h-6 w-6 rounded-full border border-arch-line object-cover"
+                  />
+                  <span className="text-xs font-mono font-medium text-arch-ink">
+                    {profile?.full_name?.split(' ')[0] || 'Profile'}
+                  </span>
+                </motion.div>
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  transition={archSpring}
+                  className="arch-btn arch-btn-solid px-5 py-2.5 text-xs font-mono tracking-widest uppercase"
+                >
+                  <FaSignInAlt className="text-[10px]" />
+                  <span>Sign In</span>
+                </motion.button>
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Menu Trigger */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            className="flex h-10 w-10 shrink-0 items-center justify-center border border-arch-line bg-arch-card text-arch-ink transition-colors duration-200 hover:border-arch-ink md:hidden"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="square"
+                strokeWidth="1.5"
+                d={isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 7h16M4 17h16'}
+              />
+            </svg>
+          </button>
+        </div>
+      </motion.nav>
+
+      {/* Mobile Drawer */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[190] overflow-y-auto bg-arch-bg pt-[76px] md:hidden"
+          >
+            <nav className="flex min-h-[calc(100vh-76px)] flex-col justify-between px-6 pb-10 pt-4">
+              <ul>
+                {menuItems.map((item, i) => (
+                  <motion.li
+                    key={item.path}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.04 + i * 0.03, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="border-b border-arch-line"
+                  >
                     <Link
                       to={item.path}
-                      key={item.path}
                       onClick={() => setIsOpen(false)}
+                      className={`block py-4 ${location.pathname === item.path ? 'text-arch-ink' : 'text-arch-muted'}`}
                     >
-                      <motion.div
-                        className={`relative px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 group ${
-                          location.pathname === item.path
-                            ? 'text-[#64ffda] border border-[#64ffda] shadow-[0_0_15px_rgba(100,255,218,0.8)]'
-                            : 'text-[#ccd6f6] hover:shadow-[0_0_10px_rgba(100,255,218,0.6)]'
-                        }`}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        variants={variants}
-                        variant={
-                          location.pathname === item.path ? 'active' : 'inactive'
-                        }
-                        whileHover={{ scale: 1.02 }}
-                      >
-                        <span className="relative z-10">{item.label}</span>
-                        {location.pathname === item.path && (
-                          <motion.div
-                            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#64ffda] rounded-b-md filter blur-[1px]"
-                            layoutId="active-tab-underline-mobile"
-                            transition={{
-                              type: 'spring',
-                              stiffness: 300,
-                              damping: 25,
-                            }}
-                          />
-                        )}
-                        <div
-                          className={`absolute inset-0 bg-[#64ffda]/0 group-hover:bg-[#64ffda]/10 transition-all duration-300 rounded-lg ${
-                            location.pathname === item.path
-                              ? 'bg-[#64ffda]/20'
-                              : ''
-                          }`}
-                        ></div>
-                      </motion.div>
+                      <span className="arch-title text-2xl font-medium">{item.label}</span>
                     </Link>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </nav>
+                  </motion.li>
+                ))}
+              </ul>
 
-        {/* Hanging Rice Lights Container - Optimized for mobile */}
-        <div className="relative w-full h-6 md:h-8 bg-gradient-to-b from-[#0a192f]/80 to-transparent">
-          {/* Main light string line */}
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#64ffda]/40 to-transparent shadow-[0_0_8px_rgba(100,255,218,0.3)]"></div>
-          
-          {/* Hanging Lights */}
-          {generateHangingLights()}
-          
-          {/* Change Lights Button - Positioned below the lights on the right side */}
-          <motion.button
-            onClick={changeLights}
-            className="absolute right-2 md:right-4 top-full mt-1 px-2 py-1 text-[10px] md:text-xs font-bold rounded-full bg-[#0a192f] border border-[#64ffda] text-[#64ffda] shadow-lg hover:shadow-[#64ffda]/50 transition-all duration-300 z-10 flex items-center gap-1 backdrop-blur-sm"
-            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(100, 255, 218, 0.7)' }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <motion.span
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              className="inline"
-            >
-              ✨
-            </motion.span>
-            <span className="whitespace-nowrap">Change Colours</span>
-            <motion.span
-              animate={{ scale: [1, 1.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="inline"
-            >
-              🪔
-            </motion.span>
-          </motion.button>
-        </div>
-      </div>
+              <div className="pt-8">
+                {user ? (
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3.5 border border-arch-line bg-arch-card p-3.5"
+                  >
+                    <img
+                      src={profile?.avatar_url || `https://api.dicebear.com/8.x/identicon/svg?seed=${user?.email}`}
+                      alt=""
+                      className="h-9 w-9 rounded-full border border-arch-line object-cover"
+                    />
+                    <div>
+                      <span className="block text-sm font-medium text-arch-ink">
+                        {profile?.full_name || 'Your Profile'}
+                      </span>
+                      <span className="text-xs text-arch-muted font-mono">
+                        View Dashboard &amp; Events
+                      </span>
+                    </div>
+                  </Link>
+                ) : (
+                  <Link to="/auth" onClick={() => setIsOpen(false)}>
+                    <button className="arch-btn arch-btn-solid w-full py-3.5 font-mono text-xs tracking-wider">
+                      <FaSignInAlt className="text-xs" />
+                      <span>Sign In</span>
+                    </button>
+                  </Link>
+                )}
+                <div className="mt-6 flex items-center justify-between text-[11px] font-mono text-arch-faint">
+                  <span>NIT SILCHAR</span>
+                  <span className="text-amber-800">🪔 SHUBH DEEPAVALI</span>
+                </div>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
+export default NavbarDemo

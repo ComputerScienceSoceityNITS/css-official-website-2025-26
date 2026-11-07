@@ -9,7 +9,7 @@ import {
 import { cn } from '../lib/utils'
 import Member from './pages/Member'
 import Home from './pages/Home'
-import { NavbarDemo } from './components/Navbar'
+import { NavbarDemo } from './components/NavbarDiwali'
 import Events from './pages/Events'
 import Auth from './pages/Auth'
 import OtpVerification from './pages/OtpVerification'
@@ -47,6 +47,8 @@ import WelcomeStoryPage from './pages/WelcomeStoryPage'
 import Chatbot from './components/ui/Chatbot'
 import SynapseHack from './pages/SynapseHack'
 import SynapseHackPopup from './components/SynapseHackPopup'
+import DiwaliWidget from './components/DiwaliWidget'
+import DiwaliPopup from './components/DiwaliPopup'
 const ProtectedRoute = ({
   children,
   requireProfileCompletion = false,
@@ -205,7 +207,8 @@ const App = () => {
 
           <div className="min-h-screen bg-arch-bg">
             <NavbarWrapper />
-            <SynapseHackPopup />
+            {/* <SynapseHackPopup /> */}
+            <DiwaliPopup />
 
             <div className="relative">
               <Routes>
@@ -482,7 +485,7 @@ const App = () => {
                 />
               </Routes>
             </div>
-            {/* <DiwaliWidget /> */}
+            <DiwaliWidget />
             {/* <ConditionalChatbot /> */}
             <Footer />
           </div>
