@@ -1,137 +1,122 @@
 import React, { useState } from 'react';
 import { gsap } from 'gsap';
 import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
-const MessageForm = () => {
+const MessageForm = ({ onSuccess }) => {
+  const { user, profile } = useAuth();
   const [message, setMessage] = useState('');
-  const [name, setName] = useState('');
+  const [name, setName] = useState(profile?.full_name || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!message.trim()) {
-      showToast('Please write a Diwali wish!', 'error');
+      showToast('Please enter your wish.', 'error');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
-        .from('messages')
-        .insert([
-          {
-            message: message.trim(),
-            name: name.trim() || null,
-            approved: false
-          }
-        ]);
+      const displayName = name.trim() || profile?.full_name || (user?.email ? user.email.split('@')[0] : 'Anonymous');
+
+      const { error } = await supabase.from('messages').insert([
+        {
+          message: message.trim(),
+          name: displayName,
+          approved: false,
+        },
+      ]);
 
       if (error) throw error;
 
-      // Success animation
-      gsap.fromTo('.submit-btn',
-        { scale: 1 },
-        { 
-          scale: 1.1, 
-          duration: 0.2, 
-          yoyo: true, 
-          repeat: 1,
-          ease: "power2.inOut"
-        }
-      );
-
-      showToast('Your message has been sent for approval ✨', 'success');
-      
-      // Reset form
+      showToast('Wish sent for review ✨', 'success');
       setMessage('');
-      setName('');
-      
+      if (onSuccess) onSuccess();
     } catch (error) {
-      console.error('Error submitting message:', error);
-      showToast('Failed to send message. Please try again.', 'error');
+      console.error('Error submitting Diwali wish:', error);
+      const isRlsError = error?.code === '42501' || error?.message?.includes('row-level security');
+      showToast(
+        isRlsError
+          ? 'Posting wishes is restricted by security policy. Please contact admin.'
+          : error?.message || 'Failed to send wish.',
+        'error'
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const showToast = (message, type) => {
-    // Create toast element
+  const showToast = (msg) => {
     const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg font-poppins text-white font-medium shadow-lg transform translate-x-full ${
-      type === 'success' ? 'bg-arch-card' : 'bg-arch-card'
-    }`;
-    toast.textContent = message;
-
+    toast.className =
+      'fixed bottom-6 right-6 z-[300] px-4 py-2 bg-arch-ink text-arch-bg text-xs font-mono tracking-wider uppercase border border-arch-line shadow-2xl transition-all duration-300 transform translate-y-3 opacity-0';
+    toast.textContent = msg;
     document.body.appendChild(toast);
 
-    // Animate in
-    gsap.to(toast, {
-      x: 0,
-      duration: 0.5,
-      ease: "back.out(1.7)"
+    requestAnimationFrame(() => {
+      toast.classList.remove('translate-y-3', 'opacity-0');
     });
 
-    // Animate out and remove
     setTimeout(() => {
-      gsap.to(toast, {
-        x: 300,
-        opacity: 0,
-        duration: 0.5,
-        onComplete: () => {
-          document.body.removeChild(toast);
-        }
-      });
-    }, 3000);
+      toast.classList.add('translate-y-3', 'opacity-0');
+      setTimeout(() => {
+        if (toast.parentNode) document.body.removeChild(toast);
+      }, 300);
+    }, 2400);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3.5 text-left">
       <div>
-        <label className="block text-arch-ink text-sm font-medium mb-2 font-inter">
-          Your Diwali Wish *
-        </label>
+        <div className="flex items-center justify-between mb-1.5">
+          <label className="arch-label text-[10px] text-arch-muted">
+            // Message *
+          </label>
+          <span className="text-[10px] font-mono text-arch-faint">
+            {message.length}/280
+          </span>
+        </div>
         <textarea
           value={message}
+          maxLength={280}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Write your heartfelt Diwali message or a secret wish for someone..."
-          className="w-full h-32 px-3 py-2 bg-arch-ink border border-arch-ink text-arch-bg placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent resize-none font-inter"
+          placeholder="Share a wish or festive greeting..."
+          className="w-full h-24 p-3 bg-arch-bg border border-arch-line text-arch-ink placeholder:text-arch-faint text-xs leading-relaxed font-sans focus:outline-none focus:border-arch-ink focus:bg-arch-card transition-colors resize-none"
           required
         />
       </div>
 
       <div>
-        <label className="block text-arch-ink text-sm font-medium mb-2 font-inter">
-          Your Name (Optional)
+        <label className="arch-label block text-[10px] text-arch-muted mb-1.5">
+          // Signed As
         </label>
         <input
           type="text"
           value={name}
+          maxLength={40}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Anonymous"
-          className="w-full px-3 py-2 bg-arch-ink border border-arch-ink text-arch-bg placeholder-orange-300/50 focus:outline-none focus:ring-2 focus:ring-arch-ink focus:border-transparent font-inter"
+          placeholder={user ? profile?.full_name || 'Your Name' : 'Anonymous'}
+          className="w-full px-3 py-2 bg-arch-bg border border-arch-line text-arch-ink placeholder:text-arch-faint text-xs font-mono focus:outline-none focus:border-arch-ink focus:bg-arch-card transition-colors"
         />
       </div>
 
       <button
         type="submit"
-        disabled={isSubmitting}
-        className="submit-btn w-full py-3 bg-arch-card text-arch-ink font-bold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-arch-ink focus:ring-offset-2 focus:ring-offset-purple-900 disabled:opacity-50 disabled:cursor-not-allowed font-poppins"
+        disabled={isSubmitting || !message.trim()}
+        className="arch-btn arch-btn-solid w-full py-2.5 text-xs font-mono tracking-widest uppercase disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {isSubmitting ? (
-          <span className="flex items-center justify-center">
-            <div className="w-5 h-5 border border-arch-line border-t-transparent rounded-full animate-spin mr-2"></div>
-            Sending...
+          <span className="flex items-center justify-center gap-2">
+            <span className="w-3 h-3 border border-arch-bg border-t-transparent rounded-full animate-spin" />
+            <span>Sending...</span>
           </span>
         ) : (
-          '🪔 Send with Light'
+          <span>Post Wish</span>
         )}
       </button>
-
-      <p className="text-xs text-arch-ink text-center font-inter">
-        Your message will be visible after approval by the admin team.
-      </p>
     </form>
   );
 };
